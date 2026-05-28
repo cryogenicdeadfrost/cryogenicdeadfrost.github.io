@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abhradeep Basak — CS undergraduate specializing in cybersecurity, quantum communication, and systems programming. 3× IEEE published.">
+<title>Abhradeep Basak — Security Researcher & Systems Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link rel="stylesheet" href="style.css">
+<script>if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+</head>
+<body>
+
+<!-- Scroll progress bar -->
+<div id="scroll-progress"></div>
+
+<!-- Custom cursor (dark mode) -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Particle canvas -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- Matrix rain canvas (easter egg) -->
+<canvas id="matrix-canvas"></canvas>
+
+<!-- Mode transition overlay -->
+<div id="transition-overlay"></div>
+
+<!-- Ambient orbs -->
+<div class="d-orb d-orb-1"></div>
+<div class="d-orb d-orb-2"></div>
+<div class="d-orb d-orb-3"></div>
+
+<!-- Mode toggle -->
+<button id="mode-toggle" onclick="toggleMode()" title="Switch theme">
+  <span id="toggle-icon">☽</span>
+  <span id="toggle-label">dark mode</span>
+</button>
+
+<!-- ================================================================
+     LIGHT MODE CONTENT
+     ================================================================ -->
+<div class="light-content">
+
+<table border="0" cellpadding="10" cellspacing="0">
+<tr>
+  <td valign="top">
+    <img src="photo.jpg" alt="Abhradeep Basak" width="110" height="140" border="1">
+  </td>
+  <td valign="top">
+    <h1>Abhradeep Basak</h1>
+    <b>B.Tech, Computer Science &amp; Engineering (Cybersecurity)</b><br>
+    SRM Institute of Science and Technology, Chennai<br>
+    GPA: 8.46 / 10 &nbsp;&bull;&nbsp; Expected: May 2026<br><br>
+    <b>Email:</b> abhradeepbasak03 [at] gmail.com<br>
+    <b>Phone:</b> +91 8128264258<br>
+    <b>LinkedIn:</b> <a href="https://www.linkedin.com/in/abhradeep-basak-11a1a0255/">abhradeep-basak-11a1a0255</a><br>
+    <b>GitHub:</b> <a href="https://github.com/cryogenicdeadfrost">cryogenicdeadfrost</a>
+  </td>
+</tr>
+</table>
+
+<p class="l-nav">
+  <a href="#l-about">About</a>
+  <a href="#l-education">Education</a>
+  <a href="#l-experience">Experience</a>
+  <a href="#l-publications">Publications</a>
+  <a href="#l-projects">Projects</a>
+  <a href="#l-skills">Skills</a>
+</p>
+
+<hr>
+
+<h2 id="l-about">About</h2>
+<p>
+Computer Science undergraduate specializing in cybersecurity and quantum communication systems.
+My work focuses on hardware-aware security architectures: adaptive control of superconducting single-photon
+detectors for Twin-Field QKD, lightweight authentication for UAV swarms, and hybrid DNN&ndash;GNN intrusion
+detection systems. I am interested in bridging theoretical security guarantees with real-world system
+constraints through algorithmic control, cryptographic engineering, and scalable network defense.
+</p>
+
+<h2 id="l-education">Education</h2>
+<p>
+<b>B.Tech, Computer Science Engineering</b> (Specialization: Cyber Security)<br>
+SRM Institute of Science and Technology, Chennai &mdash; Sep 2022 &ndash; May 2026<br>
+GPA: <b>8.46 / 10</b>
+</p>
+
+<h2 id="l-experience">Work Experience</h2>
+<h3>Research Intern &mdash; Tata Steel Ltd, Jamshedpur <span class="small">[Jun 2025 &ndash; Sep 2025]</span></h3>
+<ul>
+  <li>Designed a single-node log analytics engine in Rust &amp; Go, replacing a full Kafka/Flink pipeline; sustained 90,000 EPS with sub-second latency.</li>
+  <li>Built a synthetic anomaly-injection module converting unsupervised SIEM workloads into supervised classification tasks.</li>
+  <li>Deployed V2 to production, cutting QRadar's workload by 80% and consolidating distributed compute into one high-performance node.</li>
+</ul>
+
+<h3>Volunteer Teacher &mdash; Pathabavan NGO, India <span class="small">[Dec 2024 &ndash; Feb 2025]</span></h3>
+<ul>
+  <li>Delivered a CS &amp; cybersecurity curriculum for students aged 12&ndash;16, covering programming logic and digital safety practices.</li>
+</ul>
+
+<h2 id="l-publications">Publications</h2>
+
+<div class="pub">
+<b>Quantum Key Distribution for SCADA Power Grids</b><br>
+<b>Abhradeep Basak</b>, Aryan Mondal, Annapurani Panaiyappan K<br>
+<i>8th International Conference on Emerging Technologies in Computer Engineering</i>, IEEE, 2025.<br>
+<span class="accepted">[Accepted &amp; Published]</span> [<a href="https://ieeexplore.ieee.org/document/11388178/">IEEE Xplore</a>]
+</div>
+
+<div class="pub">
+<b>Lightweight Hybrid DNN-GNN Architecture for Network Intrusion Detection with Adaptive Late Fusion</b><br>
+<b>Abhradeep Basak</b>, Aryan Mondal, Aniket Ghosh, M Lakshmi<br>
+<i>3rd International Conference on Networking and Communications (ICNWC 2026)</i>, IEEE &mdash; <span class="under">[Under Publication]</span>
+</div>
+
+<div class="pub">
+<b>Lightweight Authentication Protocol for UAV Swarm Networks</b><br>
+<b>Abhradeep Basak</b> et al.<br>
+<i>12th IEEE Conference on CONNeCt Electronics, Computing and Communication Technologies 2026</i>, IEEE &mdash; <span class="accepted">[Accepted]</span>
+</div>
+
+<div class="pub">
+<b>Adaptive Feedback Architecture for Stabilizing SNSPDs in TF-QKD Networks Using an SDQN Control Plane</b><br>
+<b>Abhradeep Basak</b>, Aryan Mondal, Annapurani Panaiyappan K<br>
+<i>Under Review: IEEE Transactions on Quantum Engineering</i> &mdash; <span class="under">[Under Review]</span>
+</div>
+
+<h2 id="l-projects">Projects</h2>
+
+<div class="proj">
+<h3><a href="https://github.com/cryogenicdeadfrost/tinymoe.c">TinyMoE</a> (C, OpenMP)</h3>
+<p>A proof-of-concept Sparse Mixture-of-Experts language model implemented in pure C with no ML framework dependencies beyond OpenMP for multi-threading. Custom gating network, sparse top-k expert routing, memory-mapped weights, full forward/backward propagation, and Adam optimizer all implemented from scratch.</p>
+</div>
+
+<div class="proj">
+<h3><a href="https://github.com/cryogenicdeadfrost/ThreatWeave">ThreatWeave</a> (OCaml 5, C) &mdash; <i>Final Year Project</i></h3>
+<p>High-performance NIDS combining safe OCaml 5 orchestration with low-level C fast-paths. Implements our DNN&ndash;GNN paper: 99.64% accuracy on CIC-IDS-2017 with ~80K parameters. Deployed live at university labs.</p>
+</div>
+
+<div class="proj">
+<h3><a href="https://github.com/cryogenicdeadfrost/PoisonIvy">PoisonIvy</a> (Python)</h3>
+<p>Adversarial ML dataset poisoning framework for robustness research. Modular corruption and perturbation pipelines with synthetic adversarial data generation.</p>
+</div>
+
+<div class="proj">
+<h3><a href="https://github.com/cryogenicdeadfrost/MDCN-Military-Distributed-Communication-Network-">MDCN</a></h3>
+<p>Military Distributed Communication Network simulation with decentralized routing and fault tolerance.</p>
+</div>
+
+<div class="proj">
+<h3><a href="https://github.com/cryogenicdeadfrost/SyncStream-Encrypted-Multi-Device-CCTV-Protocol">SyncStream</a> (C/C++)</h3>
+<p>Encrypted multi-device video streaming using GStreamer, libsrtp, OpenSSL, and pthreads.</p>
+</div>
+
+<div class="proj">
+<h3><a href="https://github.com/cryogenicdeadfrost/Project_RedTooth">Project RedTooth</a> (Rust, C++)</h3>
+<p>Bluetooth management framework combining Rust and C++ with Win32/native systems integration.</p>
+</div>
+
+<div class="proj">
+<h3><a href="https://github.com/cryogenicdeadfrost/NexLog-Network-Extractor-And-Logger">NexLog</a> (C/C++)</h3>
+<p>High-performance network flow monitor processing 100,000+ packets/sec via raw sockets with inline anomaly detection.</p>
+</div>
+
+<div class="proj">
+<h3><a href="https://github.com/cryogenicdeadfrost/DirectoryNator">DirectoryNator</a> (C)</h3>
+<p>Filesystem traversal and directory indexing utility optimized around IO/syscall behavior.</p>
+</div>
+
+<h2 id="l-skills">Skills</h2>
+<p>
+<b>Languages:</b> C/C++ &bull; Rust &bull; Go &bull; Python &bull; TypeScript &bull; C# &bull; OCaml &bull; MySQL<br>
+<b>Systems:</b> Linux &bull; Docker &bull; Kubernetes &bull; Kafka &bull; Redis &bull; AWS &bull; MongoDB &bull; Prometheus<br>
+<b>Tools:</b> Git &bull; Grafana &bull; PostgreSQL &bull; OpenMP &bull; CUDA &bull; Valgrind &bull; Perf &bull; eBPF &bull; GStreamer<br>
+<b>AI/ML:</b> LangChain &bull; LlamaIndex &bull; TensorRT &bull; vLLM &bull; ONNX Runtime &bull; PyTorch<br>
+<b>Web:</b> FastAPI &bull; NestJS &bull; Svelte &bull; GraphQL &bull; WebSockets &bull; NGINX
+</p>
+
+<p><b>Certifications:</b> CompTIA Security+ (SY0-701) &mdash; December 2024</p>
+
+<hr>
+<p style="text-align:center; font-family: 'Courier New', monospace; font-size:12px; color:#444; font-style:italic;">
+&ldquo;There are only two hard things in Computer Science: cache invalidation, naming things, and off-by-one errors.&rdquo;
+</p>
+<p class="small" style="text-align:center;">Last updated: May 2026 &nbsp;|&nbsp; abhradeepbasak03 [at] gmail.com</p>
+
+</div><!-- end light-content -->
+
+
+<!-- ================================================================
+     DARK MODE CONTENT
+     ================================================================ -->
+<div class="dark-content">
+
+<!-- Sticky nav -->
+<nav class="d-nav" id="d-nav">
+  <a href="#d-hero" class="d-nav-brand">AB</a>
+  <ul class="d-nav-links">
+    <li><a href="#d-about">About</a></li>
+    <li><a href="#d-experience">Work</a></li>
+    <li><a href="#d-publications">Papers</a></li>
+    <li><a href="#d-projects">Projects</a></li>
+    <li><a href="#d-skills">Skills</a></li>
+    <li><a href="#d-github">GitHub</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="d-hero" id="d-hero">
+  <div class="d-hero-bg-text">BASAK</div>
+  <div class="d-hero-content">
+    <div class="d-hero-label" id="hero-time-label">// cs undergrad &amp; researcher</div>
+    <h1 class="d-hero-name">Abhradeep<br>Basak</h1>
+    <div class="d-hero-typed-wrap">
+      <p class="d-hero-typed"><span id="typed-text"></span><span class="typed-cursor"></span></p>
+    </div>
+    <div class="d-hero-meta">
+      <div class="d-pill"><span class="dot" style="background:#10b981;"></span> SRM Institute, Chennai</div>
+      <div class="d-pill"><span class="dot" style="background:#7c3aed;"></span> GPA 8.46 / 10</div>
+      <div class="d-pill"><span class="dot" style="background:#2563eb;"></span> CompTIA Security+</div>
+      <div class="d-pill"><span class="dot" style="background:#f59e0b;"></span> Tata Steel Research Intern</div>
+    </div>
+    <div class="d-hero-links">
+      <a href="https://github.com/cryogenicdeadfrost" class="d-btn d-btn-primary" target="_blank">GitHub ↗</a>
+      <a href="https://www.linkedin.com/in/abhradeep-basak-11a1a0255/" class="d-btn d-btn-ghost" target="_blank">LinkedIn ↗</a>
+      <a href="mailto:abhradeepbasak03@gmail.com" class="d-btn d-btn-ghost">Email ↗</a>
+    </div>
+  </div>
+  <div class="d-scroll-hint">
+    <span>scroll</span>
+    <div class="d-scroll-line"></div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,30 C200,60 400,0 600,30 C800,60 1000,0 1200,30 L1200,60 L0,60 Z" fill="#7c3aed"/>
+  </svg>
+</div>
+
+<!-- About -->
+<section class="d-section" id="d-about">
+  <div class="d-section-label reveal">01 — about</div>
+  <div class="d-section-subtitle reveal">// warning: contains opinions</div>
+  <h2 class="d-section-title reveal">Who I Am</h2>
+  <div class="d-about-grid">
+    <div class="d-about-text reveal">
+      <p>
+        I'm a final-year Computer Science undergraduate at SRM Institute, specializing in cybersecurity
+        and quantum communication. My research lives at the intersection of theory and real hardware constraints
+        &mdash; I care about systems that actually work in production, not just in simulation.
+      </p>
+      <p>
+        Currently I work on adaptive control for superconducting single-photon detectors in TF-QKD networks,
+        lightweight DNN&ndash;GNN intrusion detection for edge deployment, and UAV swarm authentication protocols.
+        Three IEEE papers in. One under journal review.
+      </p>
+      <p>
+        Outside research: I build things in C, Rust, OCaml, and Go. I volunteer-taught cybersecurity
+        to 12&ndash;16 year olds. I interned at Tata Steel building a log analytics engine that killed a
+        Kafka/Flink cluster and ran faster on a single node.
+      </p>
+    </div>
+    <div class="d-stats-grid reveal reveal-delay-2">
+      <div class="d-stat-card">
+        <div class="d-stat-number" data-count="3" data-suffix="×">0</div>
+        <div class="d-stat-label">IEEE Published</div>
+      </div>
+      <div class="d-stat-card">
+        <div class="d-stat-number" data-count="8.46" data-suffix="">0</div>
+        <div class="d-stat-label">GPA / 10</div>
+      </div>
+      <div class="d-stat-card">
+        <div class="d-stat-number" data-count="90" data-suffix="K">0</div>
+        <div class="d-stat-label">EPS Sustained</div>
+      </div>
+      <div class="d-stat-card">
+        <div class="d-stat-number" data-count="99.6" data-suffix="%">0</div>
+        <div class="d-stat-label">NIDS Accuracy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Education -->
+<section class="d-section" id="d-education" style="padding-top:0;">
+  <div class="d-section-label reveal">02 — education</div>
+  <div class="d-section-subtitle reveal">// the origin story</div>
+  <h2 class="d-section-title reveal">Where I Studied</h2>
+  <div class="d-edu-card reveal reveal-delay-1">
+    <div class="d-edu-degree">B.Tech — Computer Science Engineering</div>
+    <div class="d-edu-inst">SRM Institute of Science and Technology, Chennai &nbsp;&bull;&nbsp; Sep 2022 &ndash; May 2026</div>
+    <div style="margin-bottom:12px;">
+      <span style="font-family:var(--font-mono);font-size:12px;color:#9ca3af;">Specialization: Cyber Security</span>
+    </div>
+    <span class="d-edu-gpa">GPA: 8.46 / 10</span>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,30 C300,0 500,60 700,20 C900,0 1100,50 1200,30 L1200,60 L0,60 Z" fill="#2563eb"/>
+  </svg>
+</div>
+
+<!-- Experience -->
+<section class="d-section" id="d-experience">
+  <div class="d-section-label reveal">03 — experience</div>
+  <div class="d-section-subtitle reveal">// survived the corporate machine</div>
+  <h2 class="d-section-title reveal">Work</h2>
+
+  <div class="d-exp-item reveal reveal-delay-1">
+    <div class="d-exp-year">Jun 2025<br>Sep 2025</div>
+    <div class="d-exp-body">
+      <div class="d-exp-title">Research Intern</div>
+      <div class="d-exp-company">Tata Steel Ltd &mdash; Jamshedpur, India</div>
+      <ul>
+        <li>Designed a single-node log analytics engine in Rust &amp; Go, replacing a full Kafka/Flink pipeline; sustained 90,000 EPS with sub-second latency.</li>
+        <li>Built a synthetic anomaly-injection module converting unsupervised SIEM workloads into supervised classification tasks.</li>
+        <li>Deployed V2 to production, cutting QRadar's workload by 80% and consolidating distributed compute into one high-performance node.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="d-exp-item reveal reveal-delay-2">
+    <div class="d-exp-year">Dec 2024<br>Feb 2025</div>
+    <div class="d-exp-body">
+      <div class="d-exp-title">Volunteer Teacher</div>
+      <div class="d-exp-company">Pathabavan NGO &mdash; India</div>
+      <ul>
+        <li>Designed and delivered a CS &amp; cybersecurity curriculum for students aged 12&ndash;16.</li>
+        <li>Translated complex security concepts into accessible, hands-on modules to improve community digital literacy.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,20 C150,50 350,0 600,40 C850,60 1050,10 1200,30 L1200,60 L0,60 Z" fill="#0ea5e9"/>
+  </svg>
+</div>
+
+<!-- Publications -->
+<section class="d-section" id="d-publications">
+  <div class="d-section-label reveal">04 — research</div>
+  <div class="d-section-subtitle reveal">// peer-reviewed, battle-tested</div>
+  <h2 class="d-section-title reveal">Publications</h2>
+  <div class="d-pub-grid">
+    <div class="d-pub-card reveal reveal-delay-1">
+      <div class="d-pub-title">Quantum Key Distribution for SCADA Power Grids</div>
+      <div class="d-pub-authors"><strong>Abhradeep Basak</strong>, Aryan Mondal, Annapurani Panaiyappan K</div>
+      <div class="d-pub-venue">8th Intl. Conf. Emerging Technologies in Computer Engineering — IEEE 2025</div>
+      <div class="d-pub-badges">
+        <span class="d-badge d-badge-accepted">Published</span>
+        <a href="https://ieeexplore.ieee.org/document/11388178/" class="d-pub-link" target="_blank">IEEE Xplore ↗</a>
+      </div>
+    </div>
+    <div class="d-pub-card reveal reveal-delay-2">
+      <div class="d-pub-title">Lightweight Hybrid DNN-GNN Architecture for Network Intrusion Detection with Adaptive Late Fusion</div>
+      <div class="d-pub-authors"><strong>Abhradeep Basak</strong>, Aryan Mondal, Aniket Ghosh, M Lakshmi</div>
+      <div class="d-pub-venue">3rd Intl. Conf. Networking and Communications (ICNWC 2026) — IEEE</div>
+      <div class="d-pub-badges"><span class="d-badge d-badge-under">Under Publication</span></div>
+    </div>
+    <div class="d-pub-card reveal reveal-delay-3">
+      <div class="d-pub-title">Lightweight Authentication Protocol for UAV Swarm Networks</div>
+      <div class="d-pub-authors"><strong>Abhradeep Basak</strong> et al.</div>
+      <div class="d-pub-venue">12th IEEE Conf. CONNeCt Electronics, Computing and Communication Technologies 2026</div>
+      <div class="d-pub-badges"><span class="d-badge d-badge-accepted">Accepted</span></div>
+    </div>
+    <div class="d-pub-card reveal reveal-delay-4">
+      <div class="d-pub-title">Adaptive Feedback Architecture for Stabilizing SNSPDs in TF-QKD Networks Using an SDQN Control Plane</div>
+      <div class="d-pub-authors"><strong>Abhradeep Basak</strong>, Aryan Mondal, Annapurani Panaiyappan K</div>
+      <div class="d-pub-venue">Under Review — IEEE Transactions on Quantum Engineering</div>
+      <div class="d-pub-badges"><span class="d-badge d-badge-review">Under Review</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,40 C200,10 400,50 600,20 C800,0 1000,40 1200,15 L1200,60 L0,60 Z" fill="#10b981"/>
+  </svg>
+</div>
+
+<!-- Projects -->
+<section class="d-section" id="d-projects">
+  <div class="d-section-label reveal">05 — projects</div>
+  <div class="d-section-subtitle reveal">// things I built instead of sleeping</div>
+  <h2 class="d-section-title reveal">What I Build</h2>
+  <div class="d-proj-grid">
+
+    <!-- TinyMoE -->
+    <div class="d-proj-card reveal reveal-delay-1">
+      <div class="d-proj-icon">⚡</div>
+      <div class="d-proj-name">TinyMoE</div>
+      <div class="d-proj-lang">C · OpenMP · BLAS</div>
+      <div class="d-proj-desc">Pure C Mixture-of-Experts Transformer. Sparse top-k expert routing, Adam optimizer, and full backprop — all from scratch. No framework dependencies.</div>
+      <div class="d-proj-tags">
+        <span class="d-proj-tag">sparse-moe</span>
+        <span class="d-proj-tag">systems-ml</span>
+        <span class="d-proj-tag">bare-metal</span>
+      </div>
+      <div class="d-proj-reveal">
+        <div class="d-proj-arch">
+          <span class="d-proj-arch-node">Tokenizer</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Embed</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Gating</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Top-K Experts</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Output</span>
+        </div>
+        <div class="d-proj-lang-bar">
+          <span style="width:95%;background:#555555;"></span>
+          <span style="width:5%;background:#f59e0b;"></span>
+        </div>
+        <div class="d-proj-quip">"No frameworks. No excuses. Just malloc and ambition."</div>
+      </div>
+      <div class="d-proj-footer">
+        <a href="https://github.com/cryogenicdeadfrost/tinymoe.c" class="d-proj-link" target="_blank">github ↗</a>
+      </div>
+    </div>
+
+    <!-- ThreatWeave -->
+    <div class="d-proj-card reveal reveal-delay-2">
+      <div class="d-proj-icon">🛡️</div>
+      <div class="d-proj-name">ThreatWeave</div>
+      <div class="d-proj-lang">OCaml 5 · C</div>
+      <div class="d-proj-desc">High-performance NIDS combining safe OCaml 5 orchestration with low-level C fast-paths. 99.64% accuracy on CIC-IDS-2017. Deployed at university labs.</div>
+      <div class="d-proj-tags">
+        <span class="d-proj-tag">nids</span>
+        <span class="d-proj-tag">dnn-gnn</span>
+        <span class="d-proj-tag">ieee</span>
+      </div>
+      <div class="d-proj-reveal">
+        <div class="d-proj-arch">
+          <span class="d-proj-arch-node">Packets</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">C Fast-Path</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">DNN-GNN</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">OCaml Orchestrator</span>
+        </div>
+        <div class="d-proj-lang-bar">
+          <span style="width:55%;background:#3be133;"></span>
+          <span style="width:45%;background:#555555;"></span>
+        </div>
+        <div class="d-proj-quip">"99.64% accuracy. The remaining 0.36% keeps me up at night."</div>
+      </div>
+      <div class="d-proj-footer">
+        <a href="https://github.com/cryogenicdeadfrost/ThreatWeave" class="d-proj-link" target="_blank">github ↗</a>
+      </div>
+    </div>
+
+    <!-- PoisonIvy -->
+    <div class="d-proj-card reveal reveal-delay-3">
+      <div class="d-proj-icon">☠️</div>
+      <div class="d-proj-name">PoisonIvy</div>
+      <div class="d-proj-lang">Python · ML Research</div>
+      <div class="d-proj-desc">Adversarial ML dataset poisoning framework. Modular corruption pipelines with synthetic adversarial data generation for robustness research.</div>
+      <div class="d-proj-tags">
+        <span class="d-proj-tag">adversarial-ml</span>
+        <span class="d-proj-tag">poisoning</span>
+      </div>
+      <div class="d-proj-reveal">
+        <div class="d-proj-arch">
+          <span class="d-proj-arch-node">Dataset</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Corrupt</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Perturb</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Evaluate</span>
+        </div>
+        <div class="d-proj-lang-bar">
+          <span style="width:100%;background:#3572A5;"></span>
+        </div>
+        <div class="d-proj-quip">"Teaching ML models that the world is hostile, one poisoned sample at a time."</div>
+      </div>
+      <div class="d-proj-footer">
+        <a href="https://github.com/cryogenicdeadfrost/PoisonIvy" class="d-proj-link" target="_blank">github ↗</a>
+      </div>
+    </div>
+
+    <!-- MDCN -->
+    <div class="d-proj-card reveal reveal-delay-4">
+      <div class="d-proj-icon">📡</div>
+      <div class="d-proj-name">MDCN</div>
+      <div class="d-proj-lang">Distributed Systems</div>
+      <div class="d-proj-desc">Military Distributed Communication Network simulation. Resilient topology with decentralized routing and fault tolerance.</div>
+      <div class="d-proj-tags">
+        <span class="d-proj-tag">distributed</span>
+        <span class="d-proj-tag">fault-tolerant</span>
+      </div>
+      <div class="d-proj-reveal">
+        <div class="d-proj-arch">
+          <span class="d-proj-arch-node">Discovery</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Mesh</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Encrypt</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Route</span>
+        </div>
+        <div class="d-proj-lang-bar">
+          <span style="width:70%;background:#f34b7d;"></span>
+          <span style="width:30%;background:#3572A5;"></span>
+        </div>
+        <div class="d-proj-quip">"If one node falls, the network doesn't notice. That's the point."</div>
+      </div>
+      <div class="d-proj-footer">
+        <a href="https://github.com/cryogenicdeadfrost/MDCN-Military-Distributed-Communication-Network-" class="d-proj-link" target="_blank">github ↗</a>
+      </div>
+    </div>
+
+    <!-- SyncStream -->
+    <div class="d-proj-card reveal reveal-delay-5">
+      <div class="d-proj-icon">📷</div>
+      <div class="d-proj-name">SyncStream</div>
+      <div class="d-proj-lang">C/C++ · GStreamer · OpenSSL</div>
+      <div class="d-proj-desc">Encrypted synchronized multi-device CCTV streaming. SRTP end-to-end, TLS control via libwebsockets, pthreads-isolated per-device streams.</div>
+      <div class="d-proj-tags">
+        <span class="d-proj-tag">gstreamer</span>
+        <span class="d-proj-tag">srtp</span>
+        <span class="d-proj-tag">low-latency</span>
+      </div>
+      <div class="d-proj-reveal">
+        <div class="d-proj-arch">
+          <span class="d-proj-arch-node">Cameras</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">GStreamer</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">SRTP</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">TLS Sync</span>
+        </div>
+        <div class="d-proj-lang-bar">
+          <span style="width:80%;background:#555555;"></span>
+          <span style="width:20%;background:#f34b7d;"></span>
+        </div>
+        <div class="d-proj-quip">"End-to-end encrypted, pthreads-isolated, Valgrind-approved."</div>
+      </div>
+      <div class="d-proj-footer">
+        <a href="https://github.com/cryogenicdeadfrost/SyncStream-Encrypted-Multi-Device-CCTV-Protocol" class="d-proj-link" target="_blank">github ↗</a>
+      </div>
+    </div>
+
+    <!-- Project RedTooth -->
+    <div class="d-proj-card reveal reveal-delay-1">
+      <div class="d-proj-icon">🦷</div>
+      <div class="d-proj-name">Project RedTooth</div>
+      <div class="d-proj-lang">Rust · C++ · Win32</div>
+      <div class="d-proj-desc">Bluetooth management framework with safer abstractions over native Win32 Bluetooth operations. Cross-language interoperability.</div>
+      <div class="d-proj-tags">
+        <span class="d-proj-tag">bluetooth</span>
+        <span class="d-proj-tag">rust</span>
+        <span class="d-proj-tag">systems</span>
+      </div>
+      <div class="d-proj-reveal">
+        <div class="d-proj-arch">
+          <span class="d-proj-arch-node">Rust API</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">FFI</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">C++ Win32</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">BT Stack</span>
+        </div>
+        <div class="d-proj-lang-bar">
+          <span style="width:60%;background:#dea584;"></span>
+          <span style="width:40%;background:#f34b7d;"></span>
+        </div>
+        <div class="d-proj-quip">"Making Bluetooth slightly less painful, one safe abstraction at a time."</div>
+      </div>
+      <div class="d-proj-footer">
+        <a href="https://github.com/cryogenicdeadfrost/Project_RedTooth" class="d-proj-link" target="_blank">github ↗</a>
+      </div>
+    </div>
+
+    <!-- NexLog -->
+    <div class="d-proj-card reveal reveal-delay-2">
+      <div class="d-proj-icon">🔍</div>
+      <div class="d-proj-name">NexLog</div>
+      <div class="d-proj-lang">C/C++ · Raw Sockets</div>
+      <div class="d-proj-desc">Network flow monitor at 100K+ packets/sec via raw sockets. Inline Shannon entropy anomaly detection, TCP flag analysis.</div>
+      <div class="d-proj-tags">
+        <span class="d-proj-tag">pcap</span>
+        <span class="d-proj-tag">entropy</span>
+        <span class="d-proj-tag">100k-pps</span>
+      </div>
+      <div class="d-proj-reveal">
+        <div class="d-proj-arch">
+          <span class="d-proj-arch-node">Raw Socket</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Parse</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Entropy</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Alert</span>
+        </div>
+        <div class="d-proj-lang-bar">
+          <span style="width:100%;background:#555555;"></span>
+        </div>
+        <div class="d-proj-quip">"100K packets/sec. Shannon would be proud."</div>
+      </div>
+      <div class="d-proj-footer">
+        <a href="https://github.com/cryogenicdeadfrost/NexLog-Network-Extractor-And-Logger" class="d-proj-link" target="_blank">github ↗</a>
+      </div>
+    </div>
+
+    <!-- DirectoryNator -->
+    <div class="d-proj-card reveal reveal-delay-3">
+      <div class="d-proj-icon">📂</div>
+      <div class="d-proj-name">DirectoryNator</div>
+      <div class="d-proj-lang">C · syscalls</div>
+      <div class="d-proj-desc">Filesystem traversal and directory indexing utility optimized around IO/syscall behavior. Maximum traversal efficiency.</div>
+      <div class="d-proj-tags">
+        <span class="d-proj-tag">filesystem</span>
+        <span class="d-proj-tag">io</span>
+        <span class="d-proj-tag">syscalls</span>
+      </div>
+      <div class="d-proj-reveal">
+        <div class="d-proj-arch">
+          <span class="d-proj-arch-node">Syscalls</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Scanner</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Index</span><span class="d-proj-arch-arrow">→</span>
+          <span class="d-proj-arch-node">Output</span>
+        </div>
+        <div class="d-proj-lang-bar">
+          <span style="width:100%;background:#555555;"></span>
+        </div>
+        <div class="d-proj-quip">"Because ls -R wasn't fast enough."</div>
+      </div>
+      <div class="d-proj-footer">
+        <a href="https://github.com/cryogenicdeadfrost/DirectoryNator" class="d-proj-link" target="_blank">github ↗</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,15 C200,50 400,0 600,35 C800,55 1000,10 1200,40 L1200,60 L0,60 Z" fill="#f59e0b"/>
+  </svg>
+</div>
+
+<!-- Skills -->
+<section class="d-section" id="d-skills">
+  <div class="d-section-label reveal">06 — skills</div>
+  <div class="d-section-subtitle reveal">// tools of mass construction</div>
+  <h2 class="d-section-title reveal">Toolbox</h2>
+  <div class="d-skills-grid">
+    <div class="d-skill-group reveal reveal-delay-1">
+      <div class="d-skill-group-title">Languages</div>
+      <div class="d-skill-items">
+        <span class="d-skill-item">C/C++</span>
+        <span class="d-skill-item">Rust</span>
+        <span class="d-skill-item">Go</span>
+        <span class="d-skill-item">Python</span>
+        <span class="d-skill-item">TypeScript</span>
+        <span class="d-skill-item">OCaml</span>
+        <span class="d-skill-item">C#</span>
+      </div>
+    </div>
+    <div class="d-skill-group reveal reveal-delay-2">
+      <div class="d-skill-group-title">Systems</div>
+      <div class="d-skill-items">
+        <span class="d-skill-item">Linux</span>
+        <span class="d-skill-item">Docker</span>
+        <span class="d-skill-item">Kubernetes</span>
+        <span class="d-skill-item">Kafka</span>
+        <span class="d-skill-item">Redis</span>
+        <span class="d-skill-item">AWS</span>
+        <span class="d-skill-item">MongoDB</span>
+      </div>
+    </div>
+    <div class="d-skill-group reveal reveal-delay-3">
+      <div class="d-skill-group-title">Perf Tools</div>
+      <div class="d-skill-items">
+        <span class="d-skill-item">Perf</span>
+        <span class="d-skill-item">Valgrind</span>
+        <span class="d-skill-item">eBPF</span>
+        <span class="d-skill-item">CUDA</span>
+        <span class="d-skill-item">OpenMP</span>
+        <span class="d-skill-item">BLAS</span>
+        <span class="d-skill-item">io_uring</span>
+      </div>
+    </div>
+    <div class="d-skill-group reveal reveal-delay-4">
+      <div class="d-skill-group-title">AI / ML</div>
+      <div class="d-skill-items">
+        <span class="d-skill-item">PyTorch</span>
+        <span class="d-skill-item">TensorRT</span>
+        <span class="d-skill-item">vLLM</span>
+        <span class="d-skill-item">ONNX</span>
+        <span class="d-skill-item">LangChain</span>
+        <span class="d-skill-item">LlamaIndex</span>
+      </div>
+    </div>
+    <div class="d-skill-group reveal reveal-delay-5">
+      <div class="d-skill-group-title">Web / Backend</div>
+      <div class="d-skill-items">
+        <span class="d-skill-item">FastAPI</span>
+        <span class="d-skill-item">NestJS</span>
+        <span class="d-skill-item">Svelte</span>
+        <span class="d-skill-item">GraphQL</span>
+        <span class="d-skill-item">WebSockets</span>
+        <span class="d-skill-item">NGINX</span>
+      </div>
+    </div>
+    <div class="d-skill-group reveal reveal-delay-1">
+      <div class="d-skill-group-title">Certifications</div>
+      <div class="d-skill-items">
+        <span class="d-skill-item">CompTIA Sec+</span>
+        <span class="d-skill-item">SY0-701</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,30 C200,0 400,55 600,20 C800,0 1000,45 1200,25 L1200,60 L0,60 Z" fill="#ec4899"/>
+  </svg>
+</div>
+
+<!-- GitHub Activity -->
+<section class="d-section d-github-section" id="d-github">
+  <div class="d-section-label reveal">07 — github</div>
+  <div class="d-section-subtitle reveal">// proof that I actually code</div>
+  <h2 class="d-section-title reveal">Open Source</h2>
+
+  <!-- Profile card -->
+  <div class="d-gh-profile reveal reveal-delay-1">
+    <div class="d-gh-avatar">
+      <img id="gh-avatar-img" src="" alt="GitHub Avatar" style="display:none;">
+      <div id="gh-avatar-fallback" class="d-gh-avatar-fallback">AB</div>
+    </div>
+    <div class="d-gh-info">
+      <h3>Abhradeep Basak</h3>
+      <div class="d-gh-handle">@cryogenicdeadfrost</div>
+      <div class="d-gh-stats-row" id="gh-stats-dynamic">
+        <span class="d-gh-stat"><strong>8</strong> public repos</span>
+        <span class="d-gh-stat">Systems · Security · ML</span>
+        <a href="https://github.com/cryogenicdeadfrost" target="_blank" class="d-gh-stat" style="color:#a78bfa;text-decoration:none;">View Profile ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contribution Heatmap -->
+  <div class="d-gh-heatmap-container reveal reveal-delay-2">
+    <h4>📊 Contribution Activity</h4>
+    <img src="https://ghchart.rshah.org/7c3aed/cryogenicdeadfrost" alt="GitHub Contribution Graph" loading="lazy">
+  </div>
+
+  <!-- Language chart + Repo grid -->
+  <div class="d-gh-bottom-row">
+    <div class="d-gh-sidebar-col">
+      <!-- Languages Card -->
+      <div class="d-gh-lang-card reveal reveal-delay-3">
+        <h4>🔤 Languages</h4>
+        <div class="d-gh-donut-wrap">
+          <div class="d-gh-donut" id="gh-donut" style="background: conic-gradient(#555 0% 40%, #dea584 40% 60%, #3572A5 60% 75%, #3be133 75% 85%, #00ADD8 85% 95%, #6b7280 95% 100%)"></div>
+          <div class="d-gh-lang-legend" id="gh-lang-legend">
+            <div class="d-gh-lang-item"><span class="d-gh-lang-dot" style="background:#555"></span> C/C++ <span style="color:#4b5563">40%</span></div>
+            <div class="d-gh-lang-item"><span class="d-gh-lang-dot" style="background:#dea584"></span> Rust <span style="color:#4b5563">20%</span></div>
+            <div class="d-gh-lang-item"><span class="d-gh-lang-dot" style="background:#3572A5"></span> Python <span style="color:#4b5563">15%</span></div>
+            <div class="d-gh-lang-item"><span class="d-gh-lang-dot" style="background:#3be133"></span> OCaml <span style="color:#4b5563">10%</span></div>
+            <div class="d-gh-lang-item"><span class="d-gh-lang-dot" style="background:#00ADD8"></span> Go <span style="color:#4b5563">10%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Stats Card -->
+      <div class="d-gh-stats-card reveal reveal-delay-3">
+        <h4>🔥 Activity Stats</h4>
+        <div class="d-gh-stats-list">
+          <div class="d-gh-stat-item">
+            <span class="d-gh-stat-icon">⚡</span>
+            <div class="d-gh-stat-info">
+              <span class="d-gh-stat-val" id="gh-stat-streak">Calculating...</span>
+              <span class="d-gh-stat-lbl">Current Active Streak</span>
+            </div>
+          </div>
+          <div class="d-gh-stat-item">
+            <span class="d-gh-stat-icon">👑</span>
+            <div class="d-gh-stat-info">
+              <span class="d-gh-stat-val" id="gh-stat-most-used">C/C++</span>
+              <span class="d-gh-stat-lbl">Primary Language</span>
+            </div>
+          </div>
+          <div class="d-gh-stat-item">
+            <span class="d-gh-stat-icon">📈</span>
+            <div class="d-gh-stat-info">
+              <span class="d-gh-stat-val" id="gh-stat-commits">Evaluating...</span>
+              <span class="d-gh-stat-lbl">Recent Event Count</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-gh-repos-grid reveal reveal-delay-4" id="gh-repos-grid">
+      <!-- Populated by JS, fallback cards below -->
+      <a href="https://github.com/cryogenicdeadfrost/tinymoe.c" target="_blank" class="d-gh-repo-card">
+        <div class="d-gh-repo-name">tinymoe.c</div>
+        <div class="d-gh-repo-desc">Sparse MoE Transformer in pure C</div>
+        <div class="d-gh-repo-meta"><span style="color:#555">● C</span> <span>⭐ 0</span></div>
+      </a>
+      <a href="https://github.com/cryogenicdeadfrost/ThreatWeave" target="_blank" class="d-gh-repo-card">
+        <div class="d-gh-repo-name">ThreatWeave</div>
+        <div class="d-gh-repo-desc">OCaml 5 + C high-performance NIDS</div>
+        <div class="d-gh-repo-meta"><span style="color:#3be133">● OCaml</span> <span>⭐ 0</span></div>
+      </a>
+      <a href="https://github.com/cryogenicdeadfrost/PoisonIvy" target="_blank" class="d-gh-repo-card">
+        <div class="d-gh-repo-name">PoisonIvy</div>
+        <div class="d-gh-repo-desc">Adversarial ML poisoning framework</div>
+        <div class="d-gh-repo-meta"><span style="color:#3572A5">● Python</span> <span>⭐ 0</span></div>
+      </a>
+      <a href="https://github.com/cryogenicdeadfrost/NexLog-Network-Extractor-And-Logger" target="_blank" class="d-gh-repo-card">
+        <div class="d-gh-repo-name">NexLog</div>
+        <div class="d-gh-repo-desc">100K+ pps network flow monitor</div>
+        <div class="d-gh-repo-meta"><span style="color:#555">● C</span> <span>⭐ 0</span></div>
+      </a>
+      <a href="https://github.com/cryogenicdeadfrost/Project_RedTooth" target="_blank" class="d-gh-repo-card">
+        <div class="d-gh-repo-name">Project RedTooth</div>
+        <div class="d-gh-repo-desc">Rust + C++ Bluetooth management</div>
+        <div class="d-gh-repo-meta"><span style="color:#dea584">● Rust</span> <span>⭐ 0</span></div>
+      </a>
+      <a href="https://github.com/cryogenicdeadfrost/DirectoryNator" target="_blank" class="d-gh-repo-card">
+        <div class="d-gh-repo-name">DirectoryNator</div>
+        <div class="d-gh-repo-desc">Fast filesystem traversal utility</div>
+        <div class="d-gh-repo-meta"><span style="color:#555">● C</span> <span>⭐ 0</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="d-footer">
+  <div class="d-footer-jokes">
+    <div class="d-joke-text" id="joke-text"></div>
+    <button class="d-joke-btn" onclick="nextJoke()">next joke →</button>
+  </div>
+  <div class="d-footer-meta">
+    Last updated: May 2026<br>
+    <a href="mailto:abhradeepbasak03@gmail.com" style="color:#4b5563;">abhradeepbasak03@gmail.com</a><br>
+    <span style="font-size:9px;color:#374151;">psst... try ↑↑↓↓←→←→BA</span>
+  </div>
+</footer>
+
+</div><!-- end dark-content -->
+
+<script src="main.js"></script>
+</body>
+</html>
