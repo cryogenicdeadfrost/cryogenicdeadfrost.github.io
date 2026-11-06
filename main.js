@@ -450,47 +450,86 @@
     let rafPending = false;
     let previousY = window.scrollY;
     let velocity = 0;
+    let lastPulse = 0;
+
     sections.forEach(section => {
       section.style.setProperty('--fluid-speed', (15 + Math.random() * 14).toFixed(1) + 's');
       section.style.setProperty('--fluid-speed-alt', (22 + Math.random() * 18).toFixed(1) + 's');
       section.style.setProperty('--fluid-delay', (-Math.random() * 18).toFixed(1) + 's');
     });
+
     const beam = document.querySelector('.rhythm-laser-beam');
     const state = document.getElementById('rhythm-state');
+    const nodes = document.querySelectorAll('.rhythm-laser-node');
 
     function update() {
       const y = window.scrollY;
       velocity = velocity * 0.72 + (y - previousY) * 0.28;
       previousY = y;
+
+      const viewportCenter = window.innerHeight * 0.5;
       sections.forEach((section, index) => {
         const rect = section.getBoundingClientRect();
-        const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-        const wave = Math.sin((progress + index * 0.19) * Math.PI * 2);
+        const center = rect.top + rect.height * 0.5;
+        const distance = (center - viewportCenter) / Math.max(window.innerHeight, rect.height);
+        const clamped = Math.max(-1, Math.min(1, distance));
+        const shift = clamped * 34;
+        const opacity = 1 - Math.min(0.34, Math.abs(clamped) * 0.34);
+        section.style.setProperty('--section-distance', shift.toFixed(2));
+        section.style.setProperty('--section-opacity', opacity.toFixed(3));
+
+        if (Math.abs(clamped) < 0.42) {
+          section.classList.add('section-active');
+          section.classList.remove('section-near-edge');
+        } else {
+          section.classList.remove('section-active');
+          section.classList.add('section-near-edge');
+        }
+
+        const wave = Math.sin((distance + index * 0.19) * Math.PI * 2);
         section.style.setProperty('--fluid-x', (wave * 2.6).toFixed(2) + '%');
-        section.style.setProperty('--fluid-y', (Math.cos(progress * Math.PI * 2) * 2.2).toFixed(2) + '%');
+        section.style.setProperty('--fluid-y', (Math.cos(distance * Math.PI * 2) * 2.2).toFixed(2) + '%');
       });
+
       if (beam) {
         const projects = document.getElementById('d-projects');
         const rect = projects ? projects.getBoundingClientRect() : null;
-        const progress = rect ? Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height))) : 0;
-        const intensity = Math.min(1, Math.abs(velocity) / 24);
-        beam.style.left = (5 + progress * 90).toFixed(1) + '%';
-        beam.style.width = (20 + intensity * 22).toFixed(1) + '%';
-        beam.style.opacity = (0.55 + intensity * 0.45).toFixed(2);
-        beam.style.transform = 'translate(-50%, -50%) scaleX(' + (1 + intensity * 0.65).toFixed(2) + ')';
-        if (state) state.textContent = Math.abs(velocity) > 1.2 ? 'PULSE / SCROLL INPUT DETECTED' : 'IDLE / LOW-ENERGY FLOW';
+        const progress = rect
+          ? Math.max(0, Math.min(1, (viewportCenter - rect.top) / Math.max(rect.height, 1)))
+          : 0;
+        const intensity = Math.min(1, Math.abs(velocity) / 18);
+        beam.style.left = (5 + progress * 90).toFixed(2) + '%';
+        beam.style.opacity = (0.48 + intensity * 0.52).toFixed(2);
+        if (state) {
+          state.textContent = Math.abs(velocity) > 1.2
+            ? 'PULSE / SCROLL INPUT DETECTED'
+            : 'FLOW / POSITION TRACKING';
+        }
+
+        const now = performance.now();
+        if (Math.abs(velocity) > 1.5 && now - lastPulse > 95) {
+          lastPulse = now;
+          nodes.forEach(node => {
+            node.classList.remove('pulse');
+            void node.offsetWidth;
+            node.classList.add('pulse');
+          });
+        }
       }
+
       rafPending = false;
     }
+
     window.addEventListener('scroll', () => {
       if (!rafPending) {
         rafPending = true;
         requestAnimationFrame(update);
       }
     }, { passive: true });
+
+    window.addEventListener('resize', update, { passive: true });
     update();
   }
-
   // ============================================================
   // 10. SYSTEM INIT
   // ============================================================
