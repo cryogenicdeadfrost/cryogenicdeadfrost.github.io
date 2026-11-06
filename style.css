@@ -1865,3 +1865,186 @@ a {
   transform-origin: center;
   transition: left .18s linear, width .18s linear, opacity .18s ease;
 }
+
+/* ============================================================
+   CLASSIC NORMAL MODE — deliberately plain, early-web academic
+   ============================================================ */
+[data-theme="light"] body {
+  padding: 18px 0 50px 38px !important;
+  margin: 0 !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-family: "Times New Roman", Times, serif !important;
+  font-size: 16px !important;
+  line-height: 1.45 !important;
+}
+[data-theme="light"] .light-content {
+  display: block !important;
+  width: 860px;
+  max-width: calc(100vw - 60px);
+  margin: 0 !important;
+  padding: 0 !important;
+}
+[data-theme="light"] .light-content table {
+  width: auto !important;
+  border-collapse: collapse !important;
+}
+[data-theme="light"] .light-content table td {
+  padding: 0 !important;
+  text-align: left !important;
+}
+[data-theme="light"] h1 {
+  font-family: "Times New Roman", Times, serif !important;
+  font-size: 26px !important;
+  font-weight: bold !important;
+  margin: 0 0 3px !important;
+}
+[data-theme="light"] h2 {
+  font-family: "Times New Roman", Times, serif !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  border: 0 !important;
+  text-decoration: underline !important;
+  padding: 0 !important;
+  margin: 24px 0 7px !important;
+}
+[data-theme="light"] h3 {
+  font-family: "Times New Roman", Times, serif !important;
+  font-size: 16px !important;
+  margin: 12px 0 3px !important;
+}
+[data-theme="light"] p,
+[data-theme="light"] li {
+  max-width: 850px;
+}
+[data-theme="light"] .l-nav {
+  margin: 12px 0 !important;
+  font-size: 16px !important;
+}
+[data-theme="light"] .l-nav a {
+  color: #0000ee !important;
+  margin-right: 16px !important;
+  text-decoration: underline !important;
+}
+[data-theme="light"] hr {
+  border: 0 !important;
+  border-top: 1px solid #000000 !important;
+  margin: 18px 0 !important;
+}
+[data-theme="light"] .small {
+  font-size: 13px !important;
+  color: #333333 !important;
+}
+[data-theme="light"] .accepted {
+  color: #006400 !important;
+  font-weight: bold !important;
+}
+[data-theme="light"] .under {
+  color: #8b4500 !important;
+  font-weight: bold !important;
+}
+[data-theme="light"] .normal-dimension-trigger {
+  margin: 22px 0 0 0 !important;
+  opacity: .10 !important;
+  font-family: "Times New Roman", Times, serif !important;
+}
+[data-theme="light"] #mode-toggle-container {
+  display: none !important;
+}
+
+/* ============================================================
+   MODERN SECTION-TO-SECTION DISTANCE MOTION
+   ============================================================ */
+[data-theme="dark"] .d-section,
+[data-theme="dark"] .d-hero {
+  --section-distance: 0;
+  --section-opacity: 1;
+  transform: translate3d(0, calc(var(--section-distance) * 1px), 0) scale(calc(1 - (var(--section-opacity) * -0.004)));
+  opacity: var(--section-opacity);
+  transition: transform .16s linear, opacity .16s linear, filter .16s linear;
+  will-change: transform, opacity, filter;
+}
+[data-theme="dark"] .d-section.section-near-edge,
+[data-theme="dark"] .d-hero.section-near-edge {
+  filter: blur(.25px);
+}
+[data-theme="dark"] .d-section.section-active,
+[data-theme="dark"] .d-hero.section-active {
+  filter: blur(0);
+}
+[data-theme="dark"] .d-section .reveal {
+  transition-duration: 1.05s;
+}
+
+/* ============================================================
+   REAL SCROLL LASER — osu!/Beat-Saber inspired
+   ============================================================ */
+[data-theme="dark"] .rhythm-laser-panel {
+  margin: 54px 0 0;
+  padding: 20px 22px;
+  border: 1px solid rgba(57,255,20,.42);
+  background: rgba(2,13,4,.72);
+  box-shadow: 0 0 30px rgba(57,255,20,.12), inset 0 0 24px rgba(57,255,20,.06);
+  overflow: hidden;
+}
+[data-theme="dark"] .rhythm-laser-track {
+  height: 74px;
+  margin-top: 14px;
+  border: 1px solid rgba(57,255,20,.25);
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(57,255,20,.025), rgba(0,240,255,.08), rgba(57,255,20,.025));
+}
+[data-theme="dark"] .rhythm-laser-track::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(57,255,20,.25);
+  box-shadow: 0 0 8px rgba(57,255,20,.45);
+}
+[data-theme="dark"] .rhythm-laser-beam {
+  position: absolute;
+  top: 0;
+  left: 6%;
+  width: 3px;
+  height: 100%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, transparent 0%, #39ff14 22%, #ffffff 50%, #00f0ff 78%, transparent 100%);
+  box-shadow: 0 0 6px #39ff14, 0 0 16px #39ff14, 0 0 28px rgba(0,240,255,.9);
+  opacity: .92;
+  transition: left .08s linear, opacity .12s ease;
+  z-index: 4;
+}
+[data-theme="dark"] .rhythm-laser-beam::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -13px;
+  width: 29px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(57,255,20,.16), transparent);
+  filter: blur(5px);
+}
+[data-theme="dark"] .rhythm-laser-node {
+  width: 10px;
+  height: 10px;
+  z-index: 3;
+  border: 1px solid #39ff14;
+  background: rgba(57,255,20,.08);
+  box-shadow: 0 0 9px rgba(57,255,20,.8), inset 0 0 5px rgba(57,255,20,.5);
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+[data-theme="dark"] .rhythm-laser-node.pulse {
+  transform: translate(-50%,-50%) scale(2.4);
+  box-shadow: 0 0 18px #39ff14, 0 0 35px rgba(0,240,255,.8);
+}
+[data-theme="dark"] .rhythm-laser-head {
+  margin-bottom: 4px;
+}
+[data-theme="dark"] .rhythm-laser-panel p {
+  margin: 12px 0 0;
+}
