@@ -36,8 +36,16 @@
 <!-- Matrix rain canvas (easter egg) -->
 <canvas id="matrix-canvas"></canvas>
 
-<!-- Mode transition overlay -->
-<div id="transition-overlay"></div>
+<!-- Cinema / Anime Dimension Gate Overlay -->
+<div id="anime-gate-overlay">
+  <div class="gate-strip gate-strip-top"></div>
+  <div class="gate-strip gate-strip-bottom"></div>
+  <div class="gate-content">
+    <div class="gate-kanji">領域展開 // PROTOCOL SHIFT</div>
+    <div class="gate-title">EVANGELION // SYNCHRONIZATION 100%</div>
+    <div class="gate-sub">CONNECTING TO MODERN DIMENSION &bull; GRENOBLE NODE</div>
+  </div>
+</div>
 
 <!-- Ambient orbs -->
 <div class="d-orb d-orb-1"></div>
@@ -62,16 +70,17 @@
      ================================================================ -->
 <div class="light-content">
 
-<table border="0" cellpadding="10" cellspacing="0">
+<table border="0" cellpadding="8" cellspacing="0" width="100%">
 <tr>
   <td valign="top">
-    <h1>Abhradeep Basak</h1>
-    <b>B.Tech, Computer Science &amp; Engineering (Cybersecurity)</b><br>
-    SRM Institute of Science and Technology, Chennai<br>
-    GPA: 8.46 / 10 &nbsp;&bull;&nbsp; Expected: May 2026<br><br>
+    <h1 style="margin:0 0 4px 0; font-size:24px;">Abhradeep Basak</h1>
+    <b>Graduate Student in Informatics (MoSIG)</b><br>
+    Grenoble INP &ndash; Université Grenoble Alpes, France<br>
+    <i>Formerly:</i> B.Tech, Computer Science (Cybersecurity), SRM IST, Chennai<br>
+    <b>Current Location:</b> Grenoble, Auvergne-Rhône-Alpes, France 🇫🇷<br><br>
     <b>Email:</b> abhradeepbasak03 [at] gmail.com<br>
-    <b>LinkedIn:</b> <a href="https://www.linkedin.com/in/abhradeep-basak-11a1a0255/">abhradeep-basak-11a1a0255</a><br>
-    <b>GitHub:</b> <a href="https://github.com/cryogenicdeadfrost">cryogenicdeadfrost</a>
+    <b>Office/Lab:</b> Ensimag / LIG, Saint-Martin-d'Hères, Grenoble<br>
+    <b>GitHub:</b> <a href="https://github.com/cryogenicdeadfrost">cryogenicdeadfrost</a> &bull; <b>LinkedIn:</b> <a href="https://www.linkedin.com/in/abhradeep-basak-11a1a0255/">abhradeep-basak-11a1a0255</a>
   </td>
 </tr>
 </table>
@@ -241,10 +250,10 @@ GPA: <b>8.46 / 10</b>
       <p class="d-hero-typed"><span id="typed-text"></span><span class="typed-cursor"></span></p>
     </div>
     <div class="d-hero-meta">
-      <div class="d-pill"><span class="dot" style="background:#10b981;"></span> SRM Institute, Chennai</div>
-      <div class="d-pill"><span class="dot" style="background:#7c3aed;"></span> GPA 8.46 / 10</div>
-      <div class="d-pill"><span class="dot" style="background:#2563eb;"></span> CompTIA Security+</div>
-      <div class="d-pill"><span class="dot" style="background:#f59e0b;"></span> Tata Steel Research Intern</div>
+      <div class="d-pill"><span class="dot" style="background:#10b981;"></span> Grenoble, France 🇫🇷</div>
+      <div class="d-pill"><span class="dot" style="background:#00f0ff;"></span> Grenoble INP - Ensimag</div>
+      <div class="d-pill"><span class="dot" style="background:#ffe600;"></span> M1 MoSIG (Informatics)</div>
+      <div class="d-pill"><span class="dot" style="background:#ff0055;"></span> Security &amp; Low-Level C/Rust</div>
     </div>
     <div class="d-hero-links">
       <a href="https://github.com/cryogenicdeadfrost" class="d-btn d-btn-primary" target="_blank">GitHub ↗</a>
@@ -268,37 +277,41 @@ GPA: <b>8.46 / 10</b>
 <!-- About -->
 <section class="d-section" id="d-about">
   <div class="d-section-label reveal">01 — about</div>
-  <div class="d-section-subtitle reveal">// warning: contains opinions</div>
+  <div class="d-section-subtitle reveal">// warning: unhinged caffeine-fueled opinions</div>
   <h2 class="d-section-title reveal">Who I Am</h2>
   <div class="d-about-grid">
     <div class="d-about-text reveal">
       <p>
-        I'm a M1 Student at Universite Grenoble Alpes and Grenoble INP - Ensimag (École nationale supérieure d'informatique et de mathématiques appliquées). My research is just security
-        &mdash; I care about secure systems.
+        I'm an M1 Informatics student at Université Grenoble Alpes &amp; Grenoble INP - Ensimag in France. 
+        I don't do hype-driven web frameworks or corporate slide decks; I care about systems that don't segfault 
+        when the network breaks and cryptographic primitives that survive hardware noise.
       </p>
       <p>
-        Currently I work on adaptive control for superconducting single-photon detectors in TF-QKD networks,
-        lightweight DNN&ndash;GNN intrusion detection for edge deployment, and UAV swarm authentication protocols. 
-        
-        All Things Security.
+        My research focuses on stabilizing superconducting single-photon detectors (SNSPDs) for Twin-Field QKD networks, 
+        designing lightweight hybrid DNN&ndash;GNN intrusion detection for edge devices, and building secure UAV swarm authentication. 
+        If it touches kernel space, photon counters, or raw sockets, I'm already interested.
       </p>
       <p>
-        Outside research: I build things in C, Rust, OCaml, and Go. I volunteer-taught cybersecurity
-        to 12&ndash;16 year olds.
+        Outside the terminal: based in Grenoble surrounded by the Alps. Watching House M.D., debugging C memory layouts, 
+        and convincing the compiler that yes, my pointer arithmetic is actually intentional.
       </p>
     </div>
     <div class="d-stats-grid reveal reveal-delay-2">
-      <div class="d-stat-card">
-        <div class="d-stat-number" data-count="8.46" data-suffix="">0</div>
-        <div class="d-stat-label">GPA / 10</div>
+      <div class="d-stat-card zig-1">
+        <div class="d-stat-number">House M.D.</div>
+        <div class="d-stat-label">Favorite Show &bull; "Everybody lies"</div>
       </div>
-      <div class="d-stat-card">
-        <div class="d-stat-number" data-count="90" data-suffix="K">0</div>
-        <div class="d-stat-label">EPS Sustained</div>
+      <div class="d-stat-card zig-2">
+        <div class="d-stat-number">Grenoble 🇫🇷</div>
+        <div class="d-stat-label">Current Habitat &bull; Alps &amp; Ensimag</div>
       </div>
-      <div class="d-stat-card">
-        <div class="d-stat-number" data-count="99.6" data-suffix="%">0</div>
-        <div class="d-stat-label">NIDS Accuracy</div>
+      <div class="d-stat-card zig-3">
+        <div class="d-stat-number">Valgrind Clean</div>
+        <div class="d-stat-label">Zero Leaks &bull; No Frameworks Harmed</div>
+      </div>
+      <div class="d-stat-card zig-4">
+        <div class="d-stat-number">3× IEEE</div>
+        <div class="d-stat-label">SCADA QKD &bull; UAVs &bull; GNN NIDS</div>
       </div>
     </div>
   </div>
@@ -442,7 +455,7 @@ GPA: <b>8.46 / 10</b>
     <div class="d-proj-card reveal reveal-delay-1">
       <div class="d-proj-name">TinyMoE</div>
       <div class="d-proj-lang">C · OpenMP · BLAS</div>
-      <div class="d-proj-desc">Pure C Mixture-of-Experts Transformer. Sparse top-k expert routing, Adam optimizer, and full backprop — all from scratch. No framework dependencies.</div>
+      <div class="d-proj-desc">A bare-metal, dependency-free Sparse Mixture-of-Experts transformer written entirely in C99. Implements custom softmax top-k gating, vectorized matrix-vector kernels, memory-mapped checkpoint loading, dynamic expert dispatch, and mini-batch backpropagation with Adam optimization without touching PyTorch or libtorch.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">sparse-moe</span>
         <span class="d-proj-tag">systems-ml</span>
@@ -460,7 +473,7 @@ GPA: <b>8.46 / 10</b>
           <span style="width:95%;background:#555555;"></span>
           <span style="width:5%;background:#f59e0b;"></span>
         </div>
-        <div class="d-proj-quip">"No frameworks. No excuses. Just malloc and ambition."</div>
+        <div class="d-proj-quip">"No frameworks. No excuses. Just raw malloc, cache lines, and ambition."</div>
       </div>
       <div class="d-proj-footer">
         <a href="https://github.com/cryogenicdeadfrost/tinymoe.c" class="d-proj-link" target="_blank">github ↗</a>
@@ -471,7 +484,7 @@ GPA: <b>8.46 / 10</b>
     <div class="d-proj-card reveal reveal-delay-2">
       <div class="d-proj-name">ThreatWeave</div>
       <div class="d-proj-lang">OCaml 5 · C</div>
-      <div class="d-proj-desc">High-performance NIDS combining safe OCaml 5 orchestration with low-level C fast-paths. 99.64% accuracy on CIC-IDS-2017. Deployed at university labs.</div>
+      <div class="d-proj-desc">High-throughput Network Intrusion Detection System coupling functional OCaml 5 multicore domain orchestrators with low-level C fast-paths. Implements our published IEEE hybrid DNN-GNN architecture, hitting 99.64% detection accuracy on CIC-IDS-2017 using under 80,000 parameters for wire-speed edge deployment.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">nids</span>
         <span class="d-proj-tag">dnn-gnn</span>
@@ -488,7 +501,7 @@ GPA: <b>8.46 / 10</b>
           <span style="width:55%;background:#3be133;"></span>
           <span style="width:45%;background:#555555;"></span>
         </div>
-        <div class="d-proj-quip">"99.64% accuracy. The remaining 0.36% keeps me up at night."</div>
+        <div class="d-proj-quip">"99.64% accuracy. The remaining 0.36% keeps me awake in the lab."</div>
       </div>
       <div class="d-proj-footer">
         <a href="https://github.com/cryogenicdeadfrost/ThreatWeave" class="d-proj-link" target="_blank">github ↗</a>
@@ -499,7 +512,7 @@ GPA: <b>8.46 / 10</b>
     <div class="d-proj-card reveal reveal-delay-3">
       <div class="d-proj-name">PoisonIvy</div>
       <div class="d-proj-lang">Python · ML Research</div>
-      <div class="d-proj-desc">Adversarial ML dataset poisoning framework. Modular corruption pipelines with synthetic adversarial data generation for robustness research.</div>
+      <div class="d-proj-desc">Modular adversarial dataset poisoning and perturbation framework. Simulates targeted clean-label attacks, gradient-crafted noise injections, and label flips across tabular and graph datasets to measure real-world security degradation in industrial ML pipelines.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">adversarial-ml</span>
         <span class="d-proj-tag">poisoning</span>
@@ -514,7 +527,7 @@ GPA: <b>8.46 / 10</b>
         <div class="d-proj-lang-bar">
           <span style="width:100%;background:#3572A5;"></span>
         </div>
-        <div class="d-proj-quip">"Teaching ML models that the world is hostile, one poisoned sample at a time."</div>
+        <div class="d-proj-quip">"Teaching neural nets that their training data is actively hostile."</div>
       </div>
       <div class="d-proj-footer">
         <a href="https://github.com/cryogenicdeadfrost/PoisonIvy" class="d-proj-link" target="_blank">github ↗</a>
@@ -524,8 +537,8 @@ GPA: <b>8.46 / 10</b>
     <!-- MDCN -->
     <div class="d-proj-card reveal reveal-delay-4">
       <div class="d-proj-name">MDCN</div>
-      <div class="d-proj-lang">Distributed Systems</div>
-      <div class="d-proj-desc">Military Distributed Communication Network simulation. Resilient topology with decentralized routing and fault tolerance.</div>
+      <div class="d-proj-lang">Solidity · Hardhat · Distributed</div>
+      <div class="d-proj-desc">Military Distributed Communication Network architecture simulated over an EVM-orchestrated consensus mesh. Implements cryptographically verified peer discovery, multi-hop path recovery, and decentralized gossip propagation that remains resilient against single-node blackouts.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">distributed</span>
         <span class="d-proj-tag">fault-tolerant</span>
@@ -541,7 +554,7 @@ GPA: <b>8.46 / 10</b>
           <span style="width:70%;background:#f34b7d;"></span>
           <span style="width:30%;background:#3572A5;"></span>
         </div>
-        <div class="d-proj-quip">"If one node falls, the network doesn't notice. That's the point."</div>
+        <div class="d-proj-quip">"If one node gets wiped out, the topology doesn't flinch. As intended."</div>
       </div>
       <div class="d-proj-footer">
         <a href="https://github.com/cryogenicdeadfrost/MDCN-Military-Distributed-Communication-Network-" class="d-proj-link" target="_blank">github ↗</a>
@@ -552,7 +565,7 @@ GPA: <b>8.46 / 10</b>
     <div class="d-proj-card reveal reveal-delay-5">
       <div class="d-proj-name">SyncStream</div>
       <div class="d-proj-lang">C/C++ · GStreamer · OpenSSL</div>
-      <div class="d-proj-desc">Encrypted synchronized multi-device CCTV streaming. SRTP end-to-end, TLS control via libwebsockets, pthreads-isolated per-device streams.</div>
+      <div class="d-proj-desc">Synchronous, zero-trust multi-camera stream aggregator. Utilizes libsrtp for authenticated end-to-end payload encryption, OpenSSL TLS session controls over libwebsockets, and isolated POSIX thread pools per ingest pipeline to eliminate jitter across asynchronous capture devices.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">gstreamer</span>
         <span class="d-proj-tag">srtp</span>
@@ -569,7 +582,7 @@ GPA: <b>8.46 / 10</b>
           <span style="width:80%;background:#555555;"></span>
           <span style="width:20%;background:#f34b7d;"></span>
         </div>
-        <div class="d-proj-quip">"End-to-end encrypted, pthreads-isolated, Valgrind-approved."</div>
+        <div class="d-proj-quip">"End-to-end encrypted, pthreads-isolated, clean valgrind memcheck."</div>
       </div>
       <div class="d-proj-footer">
         <a href="https://github.com/cryogenicdeadfrost/SyncStream-Encrypted-Multi-Device-CCTV-Protocol" class="d-proj-link" target="_blank">github ↗</a>
@@ -580,7 +593,7 @@ GPA: <b>8.46 / 10</b>
     <div class="d-proj-card reveal reveal-delay-1">
       <div class="d-proj-name">Project RedTooth</div>
       <div class="d-proj-lang">Rust · C++ · Win32</div>
-      <div class="d-proj-desc">Bluetooth management framework with safer abstractions over native Win32 Bluetooth operations. Cross-language interoperability.</div>
+      <div class="d-proj-desc">High-performance native Bluetooth device orchestration suite. Provides safe Rust wrappers and zero-cost FFI bindings over raw Win32 Bluetooth API endpoints, exposing reliable socket pairing, automated service discovery, and low-latency serial communication without legacy driver crashes.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">bluetooth</span>
         <span class="d-proj-tag">rust</span>
@@ -597,7 +610,7 @@ GPA: <b>8.46 / 10</b>
           <span style="width:60%;background:#dea584;"></span>
           <span style="width:40%;background:#f34b7d;"></span>
         </div>
-        <div class="d-proj-quip">"Making Bluetooth slightly less painful, one safe abstraction at a time."</div>
+        <div class="d-proj-quip">"Making Bluetooth slightly less painful, one memory-safe FFI at a time."</div>
       </div>
       <div class="d-proj-footer">
         <a href="https://github.com/cryogenicdeadfrost/Project_RedTooth" class="d-proj-link" target="_blank">github ↗</a>
@@ -608,7 +621,7 @@ GPA: <b>8.46 / 10</b>
     <div class="d-proj-card reveal reveal-delay-2">
       <div class="d-proj-name">NexLog</div>
       <div class="d-proj-lang">C/C++ · Raw Sockets</div>
-      <div class="d-proj-desc">Network flow monitor at 100K+ packets/sec via raw sockets. Inline Shannon entropy anomaly detection, TCP flag analysis.</div>
+      <div class="d-proj-desc">High-throughput network flow sensor operating on raw AF_PACKET sockets. Capable of parsing 100,000+ packets/sec with zero copy, computing real-time Shannon entropy over TCP payload windows to catch encrypted C2 beacons and automated scanning attacks inline.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">pcap</span>
         <span class="d-proj-tag">entropy</span>
@@ -624,7 +637,7 @@ GPA: <b>8.46 / 10</b>
         <div class="d-proj-lang-bar">
           <span style="width:100%;background:#555555;"></span>
         </div>
-        <div class="d-proj-quip">"100K packets/sec. Shannon would be proud."</div>
+        <div class="d-proj-quip">"100K packets/sec with zero drops. Shannon would approve."</div>
       </div>
       <div class="d-proj-footer">
         <a href="https://github.com/cryogenicdeadfrost/NexLog-Network-Extractor-And-Logger" class="d-proj-link" target="_blank">github ↗</a>
@@ -634,8 +647,8 @@ GPA: <b>8.46 / 10</b>
     <!-- DirectoryNator -->
     <div class="d-proj-card reveal reveal-delay-3">
       <div class="d-proj-name">DirectoryNator</div>
-      <div class="d-proj-lang">C · syscalls</div>
-      <div class="d-proj-desc">Filesystem traversal and directory indexing utility optimized around IO/syscall behavior. Maximum traversal efficiency.</div>
+      <div class="d-proj-lang">C · Syscalls · POSIX</div>
+      <div class="d-proj-desc">Sub-millisecond directory walker and recursive indexer written in pure C. Minimizes kernel transition overhead through direct getdents64 syscalls, branch-predicted path buffers, and lock-free thread queues, outperforming standard recursive traversal utilities across massive directory trees.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">filesystem</span>
         <span class="d-proj-tag">io</span>
@@ -651,7 +664,7 @@ GPA: <b>8.46 / 10</b>
         <div class="d-proj-lang-bar">
           <span style="width:100%;background:#555555;"></span>
         </div>
-        <div class="d-proj-quip">"Because ls -R wasn't fast enough."</div>
+        <div class="d-proj-quip">"Because waiting for standard recursive tools is a waste of CPU cycles."</div>
       </div>
       <div class="d-proj-footer">
         <a href="https://github.com/cryogenicdeadfrost/DirectoryNator" class="d-proj-link" target="_blank">github ↗</a>
@@ -871,7 +884,7 @@ GPA: <b>8.46 / 10</b>
   <div class="d-footer-meta">
     <div class="d-footer-status">
       <span class="status-indicator-dot"></span>
-      <span>SYSTEM OPERATIONAL &bull; MAY 2026</span>
+      <span>M1 INF &bull; GRENOBLE, FRANCE</span>
     </div>
     <a href="mailto:abhradeepbasak03@gmail.com" class="d-footer-email">abhradeepbasak03@gmail.com</a>
     <span class="d-footer-easter">psst... try ↑↑↓↓←→←→BA</span>
