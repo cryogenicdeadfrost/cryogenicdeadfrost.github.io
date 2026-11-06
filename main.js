@@ -42,10 +42,10 @@
     animeGate.classList.add('active');
     setTimeout(() => {
       if (onComplete) onComplete();
-    }, 450);
+    }, 720);
     setTimeout(() => {
       animeGate.classList.remove('active');
-    }, 1100);
+    }, 1680);
   }
 
   function applyLight() {
@@ -438,6 +438,46 @@
   }
 
   // ============================================================
+  // 9.5 SECTION LIQUID MOTION + SCROLL RHYTHM VISUALIZER
+  // ============================================================
+  function initSectionMotion() {
+    const sections = document.querySelectorAll('.dark-content .d-section, .dark-content .d-hero');
+    if (!sections.length) return;
+
+    let rafPending = false;
+    let previousY = window.scrollY;
+    let velocity = 0;
+    const beam = document.querySelector('.rhythm-laser-beam');
+    const state = document.getElementById('rhythm-state');
+
+    function update() {
+      const y = window.scrollY;
+      velocity = velocity * 0.72 + (y - previousY) * 0.28;
+      previousY = y;
+      sections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        const wave = Math.sin((progress + index * 0.19) * Math.PI * 2);
+        section.style.setProperty('--fluid-x', (wave * 2.6).toFixed(2) + '%');
+        section.style.setProperty('--fluid-y', (Math.cos(progress * Math.PI * 2) * 2.2).toFixed(2) + '%');
+      });
+      if (beam) {
+        const amount = Math.max(0, Math.min(100, Math.abs(velocity) * 3.2 + 8));
+        beam.style.clipPath = 'inset(0 ' + (100 - amount).toFixed(1) + '% 0 0)';
+        if (state) state.textContent = Math.abs(velocity) > 1.2 ? 'PULSE / SCROLL INPUT DETECTED' : 'IDLE / LOW-ENERGY FLOW';
+      }
+      rafPending = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(update);
+      }
+    }, { passive: true });
+    update();
+  }
+
+  // ============================================================
   // 10. SYSTEM INIT
   // ============================================================
   function initModernSystems() {
@@ -446,6 +486,7 @@
     initParallax();
     initTypedText();
     initTilt();
+    initSectionMotion();
     setTimeout(triggerReveals, 150);
   }
 
