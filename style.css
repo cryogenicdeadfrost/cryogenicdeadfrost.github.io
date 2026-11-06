@@ -1700,3 +1700,168 @@ a {
   .d-footer-status { justify-content: flex-start; }
   #mode-toggle-container { top: 14px; right: 14px; }
 }
+
+
+/* ============================================================
+   SUBTLE WATER / FLUID LAYERING — keeps each section palette
+   ============================================================ */
+.dark-content .d-section,
+.dark-content .d-hero {
+  isolation: isolate;
+  overflow: hidden;
+}
+.dark-content .d-section::before,
+.dark-content .d-section::after {
+  content: "";
+  position: absolute;
+  inset: -18% -12%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .16;
+  background:
+    radial-gradient(ellipse at 18% 32%, currentColor 0%, transparent 37%),
+    radial-gradient(ellipse at 80% 68%, currentColor 0%, transparent 34%);
+  filter: blur(48px);
+  transform: translate3d(var(--fluid-x, 0), var(--fluid-y, 0), 0) scale(1.08);
+  animation: section-water-drift 19s ease-in-out infinite alternate;
+}
+.dark-content .d-section::after {
+  opacity: .10;
+  animation-duration: 27s;
+  animation-direction: alternate-reverse;
+  background:
+    radial-gradient(ellipse at 72% 18%, currentColor 0%, transparent 32%),
+    radial-gradient(ellipse at 24% 82%, currentColor 0%, transparent 36%);
+}
+.dark-content .d-section:nth-of-type(odd)::before { animation-delay: -7s; }
+.dark-content .d-section:nth-of-type(even)::after { animation-delay: -13s; }
+@keyframes section-water-drift {
+  0% { transform: translate3d(-2%, -1%, 0) scale(1.04) rotate(-2deg); }
+  50% { transform: translate3d(2%, 1.5%, 0) scale(1.10) rotate(1deg); }
+  100% { transform: translate3d(-1%, 2%, 0) scale(1.06) rotate(3deg); }
+}
+
+/* Gentle parallax-depth reveals */
+.dark-content .reveal {
+  transform: translate3d(0, 38px, 0) scale(.985);
+  filter: blur(4px);
+  transition:
+    opacity 1.05s cubic-bezier(.16, 1, .3, 1),
+    transform 1.15s cubic-bezier(.16, 1, .3, 1),
+    filter 1.15s cubic-bezier(.16, 1, .3, 1);
+}
+.dark-content .reveal.visible {
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+}
+.dark-content .d-section-title.reveal { transition-delay: .06s; }
+.dark-content .d-section-subtitle.reveal { transition-delay: .025s; }
+.dark-content .d-exp-item,
+.dark-content .d-pub-card,
+.dark-content .d-proj-card,
+.dark-content .d-skill-group,
+.dark-content .d-gh-repo-card {
+  transition-duration: .65s;
+}
+
+/* Scroll-synchronized osu!/Beat-Saber-inspired laser toy */
+.rhythm-laser-panel {
+  margin-top: 58px;
+  padding: 22px 24px;
+  border: 1px solid rgba(57,255,20,.42);
+  background: rgba(2,13,4,.72);
+  box-shadow: 0 0 30px rgba(57,255,20,.12), inset 0 0 24px rgba(57,255,20,.06);
+  position: relative;
+  z-index: 3;
+}
+.rhythm-laser-head {
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  color:#39ff14;
+  font:700 11px var(--font-mono);
+  letter-spacing:.14em;
+  margin-bottom:18px;
+}
+.rhythm-laser-track {
+  height:52px;
+  position:relative;
+  overflow:hidden;
+  border-top:1px solid rgba(57,255,20,.2);
+  border-bottom:1px solid rgba(57,255,20,.2);
+  background:linear-gradient(90deg, transparent, rgba(57,255,20,.06), transparent);
+}
+.rhythm-laser-beam {
+  position:absolute;
+  top:50%;
+  left:5%;
+  width:24%;
+  height:2px;
+  transform:translate(-50%,-50%);
+  transform-origin:center;
+  background:linear-gradient(90deg, transparent, #39ff14, #00f0ff, transparent);
+  box-shadow:0 0 9px #39ff14, 0 0 22px rgba(0,240,255,.6);
+  transition:left .18s linear,width .18s linear,opacity .18s ease;
+}
+.rhythm-laser-node {
+  position:absolute;
+  top:50%;
+  width:7px;height:7px;
+  border:1px solid #39ff14;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 12px rgba(57,255,20,.65);
+}
+.rhythm-laser-node:nth-of-type(2){left:12%}
+.rhythm-laser-node:nth-of-type(3){left:31%}
+.rhythm-laser-node:nth-of-type(4){left:50%}
+.rhythm-laser-node:nth-of-type(5){left:69%}
+.rhythm-laser-node:nth-of-type(6){left:88%}
+.rhythm-laser-panel p {
+  margin-top:13px;color:#a7f3d0;font:11px var(--font-mono);letter-spacing:.02em;
+}
+
+/* Barely visible normal-mode dimension switch */
+.normal-dimension-trigger {
+  display:block;
+  margin:28px auto 0;
+  width:24px;height:24px;
+  border:0;background:transparent;color:#a3a3a3;
+  opacity:.12;cursor:pointer;font-size:19px;line-height:1;
+  transition:opacity .45s ease, transform .9s cubic-bezier(.16,1,.3,1);
+}
+.normal-dimension-trigger:hover,
+.normal-dimension-trigger:focus-visible {
+  opacity:.72;transform:rotate(180deg) scale(1.08);outline:1px dotted currentColor;outline-offset:5px;
+}
+
+/* Respect motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .dark-content .d-section::before,
+  .dark-content .d-section::after { animation:none; }
+  .dark-content .reveal,
+  .dark-content .reveal.visible { transition-duration:.01ms; transform:none; filter:none; }
+  .normal-dimension-trigger { transition:none; }
+}
+@media (max-width:768px) {
+  .rhythm-laser-panel { padding:16px; margin-top:36px; }
+  .rhythm-laser-head { flex-direction:column; gap:6px; }
+}
+
+/* The quiet normal-mode exit lives only at the very end of the page. */
+[data-theme="light"] #mode-toggle-container { display:none !important; }
+.dark-content .d-section > *,
+.dark-content .d-hero > * {
+  position: relative;
+  z-index: 2;
+}
+.dark-content .d-section::before { animation-duration: var(--fluid-speed, 19s); animation-delay: var(--fluid-delay, 0s); }
+.dark-content .d-section::after { animation-duration: var(--fluid-speed-alt, 27s); animation-delay: calc(var(--fluid-delay, 0s) * -0.65); }
+.rhythm-laser-beam {
+  left: 5%;
+  width: 24%;
+  clip-path: none;
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  transition: left .18s linear, width .18s linear, opacity .18s ease;
+}
