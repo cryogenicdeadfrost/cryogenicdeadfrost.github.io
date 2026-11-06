@@ -1710,11 +1710,6 @@ a {
   isolation: isolate;
   overflow: hidden;
 }
-.dark-content .d-section > :not(.section-fluid):not(.section-fluid::before),
-.dark-content .d-hero > * {
-  position: relative;
-  z-index: 2;
-}
 .dark-content .d-section::before,
 .dark-content .d-section::after {
   content: "";
@@ -1799,14 +1794,14 @@ a {
 .rhythm-laser-beam {
   position:absolute;
   top:50%;
-  left:0;
-  width:100%;
+  left:5%;
+  width:24%;
   height:2px;
-  transform:translateY(-50%);
-  transform-origin:left;
+  transform:translate(-50%,-50%);
+  transform-origin:center;
   background:linear-gradient(90deg, transparent, #39ff14, #00f0ff, transparent);
   box-shadow:0 0 9px #39ff14, 0 0 22px rgba(0,240,255,.6);
-  clip-path:inset(0 100% 0 0);
+  transition:left .18s linear,width .18s linear,opacity .18s ease;
 }
 .rhythm-laser-node {
   position:absolute;
@@ -1851,4 +1846,22 @@ a {
 @media (max-width:768px) {
   .rhythm-laser-panel { padding:16px; margin-top:36px; }
   .rhythm-laser-head { flex-direction:column; gap:6px; }
+}
+
+/* The quiet normal-mode exit lives only at the very end of the page. */
+[data-theme="light"] #mode-toggle-container { display:none !important; }
+.dark-content .d-section > *,
+.dark-content .d-hero > * {
+  position: relative;
+  z-index: 2;
+}
+.dark-content .d-section::before { animation-duration: var(--fluid-speed, 19s); }
+.dark-content .d-section::after { animation-duration: var(--fluid-speed-alt, 27s); }
+.rhythm-laser-beam {
+  left: 5%;
+  width: 24%;
+  clip-path: none;
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  transition: left .18s linear, width .18s linear, opacity .18s ease;
 }
