@@ -1,0 +1,16 @@
+{
+  "name": "Abhradeep Basak — Security Researcher",
+  "short_name": "AB Research",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#06090e",
+  "theme_color": "#06090e",
+  "description": "Personal research portfolio of Abhradeep Basak — Security Researcher & Systems Engineer.",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2306090e'/><text y='.75em' x='.2em' font-size='70'>⚡</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

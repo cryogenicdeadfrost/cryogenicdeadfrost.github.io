@@ -1,832 +1,597 @@
 // ============================================================
-// PORTFOLIO — main.js
-// All interactive behavior for Abhradeep Basak's portfolio.
-// Pure vanilla JS. No dependencies. GitHub Pages compatible.
+// PORTFOLIO — main.js (High-Performance Engine)
+// Hardware-accelerated, zero-dependency, RAF batching
 // ============================================================
 
-// ============================================================
-// 1. CONSTANTS & STATE
-// ============================================================
-const html = document.documentElement;
-const overlay = document.getElementById('transition-overlay');
-const toggleLabel = document.getElementById('toggle-label');
-const toggleIcon = document.getElementById('toggle-icon');
-const scrollProgress = document.getElementById('scroll-progress');
-const particleCanvas = document.getElementById('particle-canvas');
-const matrixCanvas = document.getElementById('matrix-canvas');
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
+(function () {
+  'use strict';
 
-let cursorInitialized = false;
-let parallaxInitialized = false;
-let particlesInitialized = false;
-let counterAnimated = false;
+  // State & Elements
+  const html = document.documentElement;
+  const overlay = document.getElementById('transition-overlay');
+  const toggleBtn = document.getElementById('mode-toggle');
+  const toggleLabel = document.getElementById('toggle-label');
+  const scrollProgress = document.getElementById('scroll-progress');
+  const particleCanvas = document.getElementById('particle-canvas');
+  const matrixCanvas = document.getElementById('matrix-canvas');
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  const themeColorMeta = document.getElementById('theme-color-meta');
 
-// ============================================================
-// 2. CONSOLE EASTER EGG
-// ============================================================
-console.log(`
-%c  ╔══════════════════════════════════════════╗
-  ║                                          ║
-  ║   👋 Hey, you opened DevTools!            ║
-  ║                                          ║
-  ║   Built with pure HTML/CSS/JS.           ║
-  ║   No frameworks were harmed.             ║
-  ║                                          ║
-  ║   github.com/cryogenicdeadfrost          ║
-  ║                                          ║
-  ╚══════════════════════════════════════════╝
-`, 'color: #7c3aed; font-family: monospace; font-size: 12px;');
+  let cursorInitialized = false;
+  let particlesInitialized = false;
+  let parallaxInitialized = false;
+  let tiltInitialized = false;
+  let counterAnimated = false;
+  let particleCtx = null;
+  let particleAnimationId = null;
 
-console.log('%c🔍 Inspecting my code? Brave. I respect that.', 'color: #a78bfa; font-size: 11px;');
-
-// ============================================================
-// 3. THEME TOGGLE
-// ============================================================
-const saved = localStorage.getItem('theme') || 'light';
-
-function toggleMode() {
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  overlay.classList.add('flash');
-  setTimeout(() => overlay.classList.remove('flash'), 400);
-  if (isDark) {
-    applyLight();
-  } else {
-    applyDark(true);
-  }
-}
-
-function applyLight() {
-  html.setAttribute('data-theme', 'light');
-  if (toggleLabel) toggleLabel.textContent = 'dark mode';
-  if (toggleIcon) toggleIcon.textContent = '☽';
-  localStorage.setItem('theme', 'light');
-}
-
-function applyDark(animate) {
-  html.setAttribute('data-theme', 'dark');
-  if (toggleLabel) toggleLabel.textContent = 'light mode';
-  if (toggleIcon) toggleIcon.textContent = '☀';
-  localStorage.setItem('theme', 'dark');
-  if (animate) requestAnimationFrame(triggerReveals);
-  initDark();
-}
-
-// ============================================================
-// 4. SCROLL REVEAL — IntersectionObserver
-// ============================================================
-function initRevealObserver() {
-  const reveals = document.querySelectorAll('.reveal');
-  if (!reveals.length) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -40px 0px'
-  });
-
-  reveals.forEach(el => observer.observe(el));
-}
-
-function triggerReveals() {
-  const reveals = document.querySelectorAll('.reveal');
-  const h = window.innerHeight;
-  reveals.forEach(el => {
-    if (el.getBoundingClientRect().top < h - 40) {
-      el.classList.add('visible');
+  // ============================================================
+  // 1. THEME SWITCHING (Interactive Tactical Switch)
+  // ============================================================
+  function updateThemeUI(isDark) {
+    if (toggleLabel) {
+      toggleLabel.textContent = isDark ? 'DARK [ACTIVE]' : 'LIGHT [RETRO]';
     }
-  });
-}
-
-// ============================================================
-// 5. DARK MODE INIT
-// ============================================================
-function initDark() {
-  initCursor();
-  initParticles();
-  initParallax();
-  initTypedText();
-  initTiltCards();
-  initCounterAnimation();
-  setTimeout(triggerReveals, 200);
-}
-
-// ============================================================
-// 6. CUSTOM CURSOR
-// ============================================================
-let cursorX = 0, cursorY = 0;
-let ringX = 0, ringY = 0;
-
-function initCursor() {
-  if (cursorInitialized || !cursor || !ring) return;
-  cursorInitialized = true;
-
-  document.addEventListener('mousemove', (e) => {
-    cursorX = e.clientX;
-    cursorY = e.clientY;
-    cursor.style.left = cursorX + 'px';
-    cursor.style.top = cursorY + 'px';
-  });
-
-  function animateRing() {
-    ringX += (cursorX - ringX) * 0.12;
-    ringY += (cursorY - ringY) * 0.12;
-    ring.style.left = ringX + 'px';
-    ring.style.top = ringY + 'px';
-    requestAnimationFrame(animateRing);
+    if (toggleBtn) {
+      toggleBtn.classList.toggle('is-dark', isDark);
+    }
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute('content', isDark ? '#06090e' : '#ffffff');
+    }
   }
-  animateRing();
 
-  // Hover expansion on interactive elements
-  const interactiveEls = document.querySelectorAll('a, button, .d-proj-card, .d-stat-card, .d-pub-card, .d-skill-item, .d-gh-repo-card');
-  interactiveEls.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.width = '24px';
-      cursor.style.height = '24px';
-      cursor.style.boxShadow = '0 0 25px rgba(124,58,237,0.8), 0 0 50px rgba(124,58,237,0.4)';
-      ring.style.width = '56px';
-      ring.style.height = '56px';
-      ring.style.borderColor = 'rgba(167,139,250,0.7)';
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.width = '16px';
-      cursor.style.height = '16px';
-      cursor.style.boxShadow = '0 0 15px rgba(124,58,237,0.6), 0 0 30px rgba(124,58,237,0.3)';
-      ring.style.width = '40px';
-      ring.style.height = '40px';
-      ring.style.borderColor = 'rgba(167,139,250,0.5)';
-    });
-  });
-}
-
-// ============================================================
-// 7. PARTICLE SYSTEM
-// ============================================================
-function initParticles() {
-  if (particlesInitialized || !particleCanvas) return;
-  particlesInitialized = true;
-
-  const ctx = particleCanvas.getContext('2d');
-  let w, h;
-  const particles = [];
-  const PARTICLE_COUNT = 60;
-  const CONNECTION_DIST = 120;
-  let mouseX = -1000, mouseY = -1000;
-
-  function resize() {
-    w = particleCanvas.width = window.innerWidth;
-    h = particleCanvas.height = window.innerHeight;
+  function applyLight() {
+    html.setAttribute('data-theme', 'light');
+    localStorage.setItem('theme', 'light');
+    updateThemeUI(false);
+    if (particleAnimationId) {
+      cancelAnimationFrame(particleAnimationId);
+      particleAnimationId = null;
+    }
   }
-  resize();
-  window.addEventListener('resize', resize);
 
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
+  function applyDark(animate) {
+    html.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+    updateThemeUI(true);
+    initDarkSystems();
+    if (animate) {
+      requestAnimationFrame(triggerReveals);
+    }
+  }
 
-  // Create particles
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    particles.push({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
-      r: Math.random() * 2 + 1,
-      alpha: Math.random() * 0.3 + 0.1
+  function toggleMode() {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    if (overlay) {
+      overlay.classList.add('flash');
+      setTimeout(() => overlay.classList.remove('flash'), 350);
+    }
+    if (isDark) {
+      applyLight();
+    } else {
+      applyDark(true);
+    }
+  }
+
+  // ============================================================
+  // 2. ULTRA-SMOOTH CUSTOM CURSOR & MAGNETIC EFFECT
+  // ============================================================
+  let mouseX = -100, mouseY = -100;
+  let curX = -100, curY = -100;
+  let ringX = -100, ringY = -100;
+  let isMoving = false;
+
+  function initCursor() {
+    if (cursorInitialized || !cursor || !ring) return;
+    if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
+    cursorInitialized = true;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!isMoving) {
+        isMoving = true;
+        curX = mouseX;
+        curY = mouseY;
+        ringX = mouseX;
+        ringY = mouseY;
+      }
+      cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+    }, { passive: true });
+
+    function renderRing() {
+      if (html.getAttribute('data-theme') === 'dark') {
+        ringX += (mouseX - ringX) * 0.15;
+        ringY += (mouseY - ringY) * 0.15;
+        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+      }
+      requestAnimationFrame(renderRing);
+    }
+    requestAnimationFrame(renderRing);
+
+    // Hover interactive elements
+    const hoverTargets = 'a, button, .d-stat-card, .d-pub-card, .d-proj-card, .d-skill-item, .d-gh-repo-card, .d-edu-card';
+    document.querySelectorAll(hoverTargets).forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        cursor.classList.add('active');
+        ring.classList.add('active');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.classList.remove('active');
+        ring.classList.remove('active');
+      });
     });
   }
 
-  function animate() {
-    if (html.getAttribute('data-theme') !== 'dark') {
-      requestAnimationFrame(animate);
-      return;
+  // ============================================================
+  // 3. ELEGANT NEBULA / ORGANIC PARTICLE CONSTELLATION
+  // ============================================================
+  function initParticles() {
+    if (particlesInitialized || !particleCanvas) return;
+    particlesInitialized = true;
+
+    particleCtx = particleCanvas.getContext('2d', { alpha: true });
+    let w, h;
+    const particles = [];
+    // Balanced count for zero frame-drop
+    const isMobile = window.innerWidth < 768;
+    const count = isMobile ? 25 : 55;
+    const connectionDist = 130;
+
+    function resize() {
+      w = particleCanvas.width = window.innerWidth;
+      h = particleCanvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    // Organic color hues: Emerald, Cyan, Violet, Amber
+    const colors = [
+      'rgba(16, 185, 129,',   // Emerald
+      'rgba(6, 182, 212,',    // Cyan
+      'rgba(168, 85, 247,',   // Purple
+      'rgba(59, 130, 246,'    // Blue
+    ];
+
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 1.8 + 0.8,
+        color: colors[i % colors.length],
+        alpha: Math.random() * 0.4 + 0.2
+      });
     }
 
-    ctx.clearRect(0, 0, w, h);
-
-    particles.forEach(p => {
-      // Mouse repulsion
-      const dx = mouseX - p.x;
-      const dy = mouseY - p.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 150) {
-        const force = (150 - dist) / 150;
-        p.vx -= (dx / dist) * force * 0.3;
-        p.vy -= (dy / dist) * force * 0.3;
+    function animateParticles() {
+      if (html.getAttribute('data-theme') !== 'dark') {
+        particleAnimationId = null;
+        return;
       }
 
-      // Damping
-      p.vx *= 0.99;
-      p.vy *= 0.99;
+      particleCtx.clearRect(0, 0, w, h);
 
-      p.x += p.vx;
-      p.y += p.vy;
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
 
-      // Wrap around edges
-      if (p.x < 0) p.x = w;
-      if (p.x > w) p.x = 0;
-      if (p.y < 0) p.y = h;
-      if (p.y > h) p.y = 0;
-
-      // Draw particle
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(167, 139, 250, ${p.alpha})`;
-      ctx.fill();
-    });
-
-    // Draw connections
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
+        // Soft cursor deflection
+        const dx = mouseX - p.x;
+        const dy = mouseY - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < CONNECTION_DIST) {
-          const alpha = (1 - dist / CONNECTION_DIST) * 0.15;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(124, 58, 237, ${alpha})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
+        if (dist < 140) {
+          const force = (140 - dist) / 140;
+          p.vx -= (dx / dist) * force * 0.15;
+          p.vy -= (dy / dist) * force * 0.15;
+        }
+
+        p.vx *= 0.99;
+        p.vy *= 0.99;
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0) p.x = w;
+        if (p.x > w) p.x = 0;
+        if (p.y < 0) p.y = h;
+        if (p.y > h) p.y = 0;
+
+        // Draw particle node
+        particleCtx.beginPath();
+        particleCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        particleCtx.fillStyle = p.color + p.alpha + ')';
+        particleCtx.fill();
+
+        // Connect nearby nodes with subtle fiber lines
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dist2 = Math.hypot(p.x - p2.x, p.y - p2.y);
+          if (dist2 < connectionDist) {
+            const lineAlpha = (1 - dist2 / connectionDist) * 0.12;
+            particleCtx.beginPath();
+            particleCtx.moveTo(p.x, p.y);
+            particleCtx.lineTo(p2.x, p2.y);
+            particleCtx.strokeStyle = `rgba(148, 163, 184, ${lineAlpha})`;
+            particleCtx.lineWidth = 0.75;
+            particleCtx.stroke();
+          }
         }
       }
+
+      particleAnimationId = requestAnimationFrame(animateParticles);
     }
 
-    requestAnimationFrame(animate);
+    animateParticles();
   }
-  animate();
-}
 
-// ============================================================
-// 8. TYPED TEXT EFFECT
-// ============================================================
-let typedInitialized = false;
-function initTypedText() {
-  if (typedInitialized) return;
-  typedInitialized = true;
+  // ============================================================
+  // 4. PARALLAX SYSTEM (Attached to Mouse & Scroll)
+  // ============================================================
+  function initParallax() {
+    if (parallaxInitialized) return;
+    parallaxInitialized = true;
 
-  const el = document.getElementById('typed-text');
-  if (!el) return;
+    const orb1 = document.querySelector('.d-orb-1');
+    const orb2 = document.querySelector('.d-orb-2');
+    const orb3 = document.querySelector('.d-orb-3');
+    const bgText = document.querySelector('.d-hero-bg-text');
 
-  const phrases = [
-    'Cybersecurity & Quantum Communication.',
-    'Building hardware-aware security architectures.',
-    'DNN–GNN intrusion detection for edge deployment.',
-    '3× IEEE published researcher.',
-    'Interned at Tata Steel. Killed a Kafka cluster.',
-    'Writing C so you don\'t have to.',
-  ];
+    let targetMouseX = 0, targetMouseY = 0;
+    let smoothMouseX = 0, smoothMouseY = 0;
 
-  let phraseIdx = 0;
-  let charIdx = 0;
-  let isDeleting = false;
-  let speed = 50;
+    window.addEventListener('mousemove', (e) => {
+      const halfW = window.innerWidth / 2;
+      const halfH = window.innerHeight / 2;
+      targetMouseX = (e.clientX - halfW) / halfW;
+      targetMouseY = (e.clientY - halfH) / halfH;
+    }, { passive: true });
 
-  function type() {
-    const current = phrases[phraseIdx];
+    function tickParallax() {
+      if (html.getAttribute('data-theme') === 'dark') {
+        smoothMouseX += (targetMouseX - smoothMouseX) * 0.05;
+        smoothMouseY += (targetMouseY - smoothMouseY) * 0.05;
 
-    if (!isDeleting) {
-      el.textContent = current.substring(0, charIdx + 1);
-      charIdx++;
-      if (charIdx === current.length) {
-        isDeleting = true;
-        speed = 2000; // Pause at end
-      } else {
-        speed = 40 + Math.random() * 30;
+        const scrollY = window.scrollY;
+
+        if (orb1) {
+          orb1.style.transform = `translate3d(${smoothMouseX * 35}px, ${scrollY * 0.12 + smoothMouseY * 35}px, 0)`;
+        }
+        if (orb2) {
+          orb2.style.transform = `translate3d(${-smoothMouseX * 45}px, ${-scrollY * 0.08 - smoothMouseY * 45}px, 0)`;
+        }
+        if (orb3) {
+          orb3.style.transform = `translate3d(${smoothMouseX * 25}px, ${scrollY * 0.06 + smoothMouseY * 25}px, 0)`;
+        }
+        if (bgText) {
+          bgText.style.transform = `translate(-50%, -50%) translate3d(${-smoothMouseX * 20}px, ${scrollY * 0.25 - smoothMouseY * 20}px, 0)`;
+        }
       }
-    } else {
-      el.textContent = current.substring(0, charIdx - 1);
-      charIdx--;
-      if (charIdx === 0) {
+      requestAnimationFrame(tickParallax);
+    }
+    requestAnimationFrame(tickParallax);
+  }
+
+  // ============================================================
+  // 5. 3D TACTILE TILT ON CARDS
+  // ============================================================
+  function initTiltCards() {
+    if (tiltInitialized || window.matchMedia('(hover: none)').matches) return;
+    tiltInitialized = true;
+
+    const cards = document.querySelectorAll('.d-stat-card, .d-pub-card, .d-proj-card');
+    cards.forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -6;
+        const rotateY = ((x - centerX) / centerX) * 6;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+      });
+    });
+  }
+
+  // ============================================================
+  // 6. TYPEWRITER EFFECT
+  // ============================================================
+  let typedInitialized = false;
+  function initTypedText() {
+    if (typedInitialized) return;
+    const typedEl = document.getElementById('typed-text');
+    if (!typedEl) return;
+    typedInitialized = true;
+
+    const phrases = [
+      'Hardware-aware systems & security engineering.',
+      'Superconducting detector feedback in TF-QKD networks.',
+      'High-throughput packet parsing at 100K+ pps.',
+      'Deep learning security & graph neural networks.',
+      'M1 Informatics @ Grenoble INP / Université Grenoble Alpes.'
+    ];
+
+    let phraseIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    let speed = 55;
+
+    function type() {
+      if (html.getAttribute('data-theme') !== 'dark') {
+        setTimeout(type, 500);
+        return;
+      }
+
+      const current = phrases[phraseIdx];
+      if (isDeleting) {
+        typedEl.textContent = current.substring(0, charIdx - 1);
+        charIdx--;
+        speed = 28;
+      } else {
+        typedEl.textContent = current.substring(0, charIdx + 1);
+        charIdx++;
+        speed = 55;
+      }
+
+      if (!isDeleting && charIdx === current.length) {
+        speed = 2200; // Pause at end of sentence
+        isDeleting = true;
+      } else if (isDeleting && charIdx === 0) {
         isDeleting = false;
         phraseIdx = (phraseIdx + 1) % phrases.length;
-        speed = 300;
-      } else {
-        speed = 20;
+        speed = 400;
       }
-    }
 
-    setTimeout(type, speed);
+      setTimeout(type, speed);
+    }
+    type();
   }
 
-  // Start after a brief delay
-  setTimeout(type, 1500);
-}
+  // ============================================================
+  // 7. INTERSECTION OBSERVER REVEAL & COUNTERS
+  // ============================================================
+  function initRevealObserver() {
+    const reveals = document.querySelectorAll('.reveal');
+    if (!reveals.length) return;
 
-// ============================================================
-// 9. TILT EFFECT ON GLASS CARDS
-// ============================================================
-let tiltInitialized = false;
-function initTiltCards() {
-  if (tiltInitialized) return;
-  tiltInitialized = true;
-
-  const tiltEls = document.querySelectorAll('.d-stat-card, .d-edu-card, .d-exp-body, .d-pub-card, .d-proj-card, .d-skill-group');
-
-  tiltEls.forEach(el => {
-    el.addEventListener('mousemove', (e) => {
-      if (html.getAttribute('data-theme') !== 'dark') return;
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -4;
-      const rotateY = ((x - centerX) / centerX) * 4;
-      el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-    });
-
-    el.addEventListener('mouseleave', () => {
-      el.style.transform = '';
-    });
-  });
-}
-
-// ============================================================
-// 10. NUMBER COUNTER ANIMATION
-// ============================================================
-function initCounterAnimation() {
-  if (counterAnimated) return;
-
-  const counters = document.querySelectorAll('[data-count]');
-  if (!counters.length) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        counterAnimated = true;
-        animateCounter(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  counters.forEach(el => observer.observe(el));
-}
-
-function animateCounter(el) {
-  const target = el.getAttribute('data-count');
-  const suffix = el.getAttribute('data-suffix') || '';
-  const isFloat = target.includes('.');
-  const targetNum = parseFloat(target);
-  const duration = 1500;
-  const start = performance.now();
-
-  function step(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    // Ease out cubic
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const current = isFloat
-      ? (targetNum * eased).toFixed(2)
-      : Math.floor(targetNum * eased);
-    el.textContent = current + suffix;
-
-    if (progress < 1) {
-      requestAnimationFrame(step);
-    } else {
-      el.textContent = target + suffix;
-    }
-  }
-
-  requestAnimationFrame(step);
-}
-
-// ============================================================
-// 11. SCROLL PROGRESS BAR
-// ============================================================
-function updateScrollProgress() {
-  if (!scrollProgress) return;
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-  scrollProgress.style.width = progress + '%';
-}
-
-window.addEventListener('scroll', updateScrollProgress, { passive: true });
-
-// ============================================================
-// 12. PARALLAX
-// ============================================================
-function initParallax() {
-  if (parallaxInitialized) return;
-  parallaxInitialized = true;
-
-  const orb1 = document.querySelector('.d-orb-1');
-  const orb2 = document.querySelector('.d-orb-2');
-  const orb3 = document.querySelector('.d-orb-3');
-  const bgText = document.querySelector('.d-hero-bg-text');
-
-  window.addEventListener('scroll', () => {
-    if (html.getAttribute('data-theme') !== 'dark') return;
-    const y = window.scrollY;
-    if (orb1) orb1.style.transform = `translateY(${y * 0.15}px)`;
-    if (orb2) orb2.style.transform = `translateY(${-y * 0.1}px)`;
-    if (orb3) orb3.style.transform = `translateY(${y * 0.08}px)`;
-    if (bgText) bgText.style.transform = `translate(-50%, calc(-50% + ${y * 0.3}px))`;
-  }, { passive: true });
-}
-
-// ============================================================
-// 13. NAV SCROLL BEHAVIOR
-// ============================================================
-let lastScroll = 0;
-const nav = document.getElementById('d-nav');
-
-window.addEventListener('scroll', () => {
-  if (!nav) return;
-  const current = window.scrollY;
-  if (current > lastScroll && current > 100) {
-    nav.style.transform = 'translateY(-100%)';
-  } else {
-    nav.style.transform = 'translateY(0)';
-  }
-  lastScroll = current;
-}, { passive: true });
-
-// ============================================================
-// 14. GITHUB API — LIVE STATS
-// ============================================================
-async function fetchGitHubData() {
-  const profileEl = document.getElementById('gh-profile-data');
-  const reposGrid = document.getElementById('gh-repos-grid');
-  const donut = document.getElementById('gh-donut');
-  const legend = document.getElementById('gh-lang-legend');
-  const statsRow = document.getElementById('gh-stats-dynamic');
-  const avatarEl = document.getElementById('gh-avatar-img');
-
-  try {
-    // Fetch user profile
-    const userRes = await fetch('https://api.github.com/users/cryogenicdeadfrost');
-    const user = await userRes.json();
-
-    // Update avatar
-    if (avatarEl && user.avatar_url) {
-      avatarEl.src = user.avatar_url;
-      avatarEl.style.display = 'block';
-      const fallback = document.getElementById('gh-avatar-fallback');
-      if (fallback) fallback.style.display = 'none';
-    }
-
-    // Update stats
-    if (statsRow) {
-      statsRow.innerHTML = `
-        <span class="d-gh-stat"><strong>${user.public_repos}</strong> repos</span>
-        <span class="d-gh-stat"><strong>${user.followers}</strong> followers</span>
-        <span class="d-gh-stat"><strong>${user.following}</strong> following</span>
-        <a href="${user.html_url}" target="_blank" class="d-gh-stat" style="color:#a78bfa;text-decoration:none;">View Profile ↗</a>
-      `;
-    }
-
-    // Fetch repos
-    const reposRes = await fetch('https://api.github.com/users/cryogenicdeadfrost/repos?per_page=30&sort=updated');
-    const repos = await reposRes.json();
-
-    // Language stats
-    const langCounts = {};
-    repos.forEach(r => {
-      if (r.language) {
-        langCounts[r.language] = (langCounts[r.language] || 0) + 1;
-      }
-    });
-
-    const langColors = {
-      'C': '#555555',
-      'C++': '#f34b7d',
-      'Rust': '#dea584',
-      'Python': '#3572A5',
-      'OCaml': '#3be133',
-      'Go': '#00ADD8',
-      'TypeScript': '#3178c6',
-      'JavaScript': '#f1e05a',
-      'HTML': '#e34c26',
-      'C#': '#178600',
-    };
-
-    const totalLangs = Object.values(langCounts).reduce((a, b) => a + b, 0);
-    const sorted = Object.entries(langCounts).sort((a, b) => b[1] - a[1]);
-
-    // Build donut gradient
-    if (donut && sorted.length > 0) {
-      let gradParts = [];
-      let cumPercent = 0;
-      sorted.forEach(([lang, count]) => {
-        const pct = (count / totalLangs) * 100;
-        const color = langColors[lang] || '#6b7280';
-        gradParts.push(`${color} ${cumPercent}% ${cumPercent + pct}%`);
-        cumPercent += pct;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
       });
-      donut.style.background = `conic-gradient(${gradParts.join(', ')})`;
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    reveals.forEach(el => observer.observe(el));
+  }
+
+  function triggerReveals() {
+    const reveals = document.querySelectorAll('.reveal:not(.visible)');
+    const h = window.innerHeight;
+    reveals.forEach(el => {
+      if (el.getBoundingClientRect().top < h - 20) {
+        el.classList.add('visible');
+      }
+    });
+  }
+
+  function initCounterAnimation() {
+    if (counterAnimated) return;
+    const counters = document.querySelectorAll('[data-count]');
+    if (!counters.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          counterAnimated = true;
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    counters.forEach(el => observer.observe(el));
+  }
+
+  function animateCounter(el) {
+    const target = el.getAttribute('data-count');
+    const suffix = el.getAttribute('data-suffix') || '';
+    const isFloat = target.includes('.');
+    const targetNum = parseFloat(target);
+    const duration = 1400;
+    const start = performance.now();
+
+    function step(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Quintic ease out
+      const eased = 1 - Math.pow(1 - progress, 4);
+      const current = isFloat
+        ? (targetNum * eased).toFixed(2)
+        : Math.floor(targetNum * eased);
+      el.textContent = current + suffix;
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = target + suffix;
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ============================================================
+  // 8. SCROLL PROGRESS & AUTO-HIDE NAV
+  // ============================================================
+  let lastScroll = 0;
+  const nav = document.getElementById('d-nav');
+
+  function onScroll() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollProgress && docHeight > 0) {
+      scrollProgress.style.width = ((scrollTop / docHeight) * 100).toFixed(2) + '%';
     }
 
-    // Build legend
-    if (legend) {
-      legend.innerHTML = sorted.map(([lang, count]) => {
-        const pct = Math.round((count / totalLangs) * 100);
-        const color = langColors[lang] || '#6b7280';
-        return `<div class="d-gh-lang-item">
-          <span class="d-gh-lang-dot" style="background:${color}"></span>
-          ${lang} <span style="color:#4b5563">${pct}%</span>
-        </div>`;
-      }).join('');
+    if (nav) {
+      if (scrollTop > lastScroll && scrollTop > 120) {
+        nav.style.transform = 'translateY(-100%)';
+      } else {
+        nav.style.transform = 'translateY(0)';
+      }
     }
+    lastScroll = scrollTop;
+  }
 
-    // Build repo cards (top 6 by most recently updated)
-    if (reposGrid) {
-      const topRepos = repos
-        .filter(r => !r.fork)
-        .slice(0, 6);
+  window.addEventListener('scroll', onScroll, { passive: true });
 
-      reposGrid.innerHTML = topRepos.map(r => `
-        <a href="${r.html_url}" target="_blank" class="d-gh-repo-card">
-          <div class="d-gh-repo-name">${r.name}</div>
-          <div class="d-gh-repo-desc">${r.description || 'No description'}</div>
-          <div class="d-gh-repo-meta">
-            <span style="color:${langColors[r.language] || '#6b7280'}">● ${r.language || 'N/A'}</span>
-            <span>⭐ ${r.stargazers_count}</span>
-            <span>🍴 ${r.forks_count}</span>
-          </div>
-        </a>
-      `).join('');
-    }
-
-    // Fetch user events to calculate actual commit streak
+  // ============================================================
+  // 9. DYNAMIC GITHUB API LOADER
+  // ============================================================
+  async function fetchGitHubData() {
     try {
-      const eventsRes = await fetch('https://api.github.com/users/cryogenicdeadfrost/events?per_page=100');
-      let streakDays = 0;
-      let recentEventCount = 0;
+      const username = 'cryogenicdeadfrost';
+      const [userRes, reposRes] = await Promise.all([
+        fetch(`https://api.github.com/users/${username}`),
+        fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=pushed`)
+      ]);
 
-      if (eventsRes.ok) {
-        const events = await eventsRes.json();
-        // Filter events that indicate activity (commits, PRs, issues, creation)
-        const activityEvents = events.filter(evt => 
-          evt.type === 'PushEvent' || 
-          evt.type === 'CreateEvent' || 
-          evt.type === 'PullRequestEvent' || 
-          evt.type === 'IssuesEvent'
-        );
-        recentEventCount = activityEvents.length;
+      if (userRes.ok) {
+        const user = await userRes.json();
+        const avatarImg = document.getElementById('gh-avatar-img');
+        const fallback = document.getElementById('gh-avatar-fallback');
+        if (avatarImg && user.avatar_url) {
+          avatarImg.src = user.avatar_url;
+          avatarImg.style.display = 'block';
+          if (fallback) fallback.style.display = 'none';
+        }
 
-        const activeDates = new Set();
-        activityEvents.forEach(evt => {
-          if (evt.created_at) {
-            const dateStr = evt.created_at.split('T')[0]; // YYYY-MM-DD
-            activeDates.add(dateStr);
-          }
-        });
-
-        const today = new Date();
-        let checkDate = new Date(today);
-
-        const formatDate = (d) => {
-          const year = d.getFullYear();
-          const month = String(d.getMonth() + 1).padStart(2, '0');
-          const day = String(d.getDate()).padStart(2, '0');
-          return `${year}-${month}-${day}`;
-        };
-
-        // Calculate streak
-        let dateStr = formatDate(checkDate);
-        if (activeDates.has(dateStr)) {
-          streakDays++;
-          checkDate.setDate(checkDate.getDate() - 1);
-          while (activeDates.has(formatDate(checkDate))) {
-            streakDays++;
-            checkDate.setDate(checkDate.getDate() - 1);
-          }
-        } else {
-          // Check if streak ended today but was active yesterday
-          checkDate.setDate(checkDate.getDate() - 1);
-          if (activeDates.has(formatDate(checkDate))) {
-            streakDays++;
-            checkDate.setDate(checkDate.getDate() - 1);
-            while (activeDates.has(formatDate(checkDate))) {
-              streakDays++;
-              checkDate.setDate(checkDate.getDate() - 1);
-            }
-          }
+        const statsContainer = document.getElementById('gh-stats-dynamic');
+        if (statsContainer) {
+          statsContainer.innerHTML = `
+            <span class="d-gh-stat"><strong>${user.public_repos || 8}</strong> repositories</span>
+            <span class="d-gh-stat"><strong>${user.followers || 0}</strong> followers</span>
+            <a href="${user.html_url}" target="_blank" rel="noopener noreferrer" class="d-gh-stat" style="color:var(--c-accent);text-decoration:none;">Profile ↗</a>
+          `;
         }
       }
 
-      // Update streak UI
-      const streakEl = document.getElementById('gh-stat-streak');
-      if (streakEl) {
-        streakEl.textContent = streakDays > 0 ? `${streakDays} day${streakDays > 1 ? 's' : ''}` : '0 days';
-      }
-
-      // Update events count UI
-      const commitsEl = document.getElementById('gh-stat-commits');
-      if (commitsEl) {
-        commitsEl.textContent = `${recentEventCount} events`;
-      }
-
-      // Update most used language UI
-      const mostUsedEl = document.getElementById('gh-stat-most-used');
-      if (mostUsedEl && sorted.length > 0) {
-        mostUsedEl.textContent = sorted[0][0];
+      if (reposRes.ok) {
+        const repos = await reposRes.json();
+        if (Array.isArray(repos) && repos.length > 0) {
+          const commitsEl = document.getElementById('gh-stat-commits');
+          if (commitsEl) commitsEl.textContent = `${repos.length} Public Repos`;
+          
+          const streakEl = document.getElementById('gh-stat-streak');
+          if (streakEl) streakEl.textContent = 'Active (2026)';
+        }
       }
     } catch (e) {
-      console.warn("Could not calculate streak from events:", e);
-      setFallbackStats(sorted);
+      // Graceful fallback to static data
+      console.log('GitHub API offline or rate limited; using fallback UI');
     }
-
-  } catch (err) {
-    console.warn('GitHub API fetch failed (likely rate-limited):', err);
-    setFallbackStats(null);
   }
-}
 
-function setFallbackStats(sorted) {
-  const streakEl = document.getElementById('gh-stat-streak');
-  if (streakEl) streakEl.textContent = '14 days (cached)';
-  const commitsEl = document.getElementById('gh-stat-commits');
-  if (commitsEl) commitsEl.textContent = '42 events';
-  const mostUsedEl = document.getElementById('gh-stat-most-used');
-  if (mostUsedEl) {
-    mostUsedEl.textContent = (sorted && sorted.length > 0) ? sorted[0][0] : 'C/C++';
+  // ============================================================
+  // 10. SYSTEM INIT
+  // ============================================================
+  function initDarkSystems() {
+    initCursor();
+    initParticles();
+    initParallax();
+    initTypedText();
+    initTiltCards();
+    initCounterAnimation();
+    setTimeout(triggerReveals, 150);
   }
-}
 
-// ============================================================
-// 15. KONAMI CODE → MATRIX RAIN
-// ============================================================
-const konamiSequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-let konamiIndex = 0;
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === konamiSequence[konamiIndex]) {
-    konamiIndex++;
-    if (konamiIndex === konamiSequence.length) {
-      konamiIndex = 0;
-      triggerMatrixRain();
-    }
-  } else {
-    konamiIndex = 0;
+  function setTimeGreeting() {
+    const label = document.getElementById('hero-time-label');
+    if (!label) return;
+    const hour = new Date().getHours();
+    let text = '// research log: systems & security';
+    if (hour >= 23 || hour < 5) text = '// late night session: low-level debugging';
+    else if (hour < 12) text = '// morning workspace: compiler & papers';
+    else if (hour < 17) text = '// afternoon build: telemetry & testing';
+    else text = '// evening focus: architectural review';
+    label.textContent = text;
   }
-});
 
-function triggerMatrixRain() {
-  if (!matrixCanvas) return;
-  matrixCanvas.classList.add('active');
-
-  const ctx = matrixCanvas.getContext('2d');
-  matrixCanvas.width = window.innerWidth;
-  matrixCanvas.height = window.innerHeight;
-
-  const columns = Math.floor(matrixCanvas.width / 14);
-  const drops = new Array(columns).fill(1);
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘ'.split('');
-
-  let frameCount = 0;
-  const maxFrames = 180; // ~3 seconds at 60fps
-
-  function draw() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-    ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-    ctx.fillStyle = '#0F0';
-    ctx.font = '14px monospace';
-
-    for (let i = 0; i < drops.length; i++) {
-      const char = chars[Math.floor(Math.random() * chars.length)];
-      ctx.fillText(char, i * 14, drops[i] * 14);
-      if (drops[i] * 14 > matrixCanvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
+  // Konami code matrix easter egg
+  const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let konamiIdx = 0;
+  document.addEventListener('keydown', (e) => {
+    if (e.key === konamiSeq[konamiIdx]) {
+      konamiIdx++;
+      if (konamiIdx === konamiSeq.length) {
+        konamiIdx = 0;
+        triggerMatrix();
       }
-      drops[i]++;
-    }
-
-    frameCount++;
-    if (frameCount < maxFrames) {
-      requestAnimationFrame(draw);
     } else {
-      matrixCanvas.classList.remove('active');
-      ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+      konamiIdx = 0;
     }
-  }
+  });
 
-  draw();
-}
+  function triggerMatrix() {
+    if (!matrixCanvas) return;
+    matrixCanvas.classList.add('active');
+    const ctx = matrixCanvas.getContext('2d');
+    matrixCanvas.width = window.innerWidth;
+    matrixCanvas.height = window.innerHeight;
+    const cols = Math.floor(matrixCanvas.width / 16);
+    const drops = new Array(cols).fill(1);
+    const chars = '01010101XYZQKDCRYPTOSHANNON_RUST_C_OCAML'.split('');
+    let frames = 0;
 
-// ============================================================
-// 16. FOOTER JOKE ROTATION
-// ============================================================
-const jokes = [
-  '"There are only two hard things in Computer Science: cache invalidation, naming things, and off-by-one errors."',
-  '"A SQL query walks into a bar, sees two tables, and asks: \'Can I JOIN you?\'"',
-  '"!false — it\'s funny because it\'s true."',
-  '"Debugging is being the detective in a crime movie where you are also the murderer."',
-  '"It works on my machine. ¯\\_(ツ)_/¯"',
-  '"// TODO: write better jokes"',
-  '"99 little bugs in the code. 99 little bugs. Take one down, patch it around... 127 little bugs in the code."',
-  '"I don\'t always test my code, but when I do, I do it in production."',
-  '"The best thing about a boolean is that even if you\'re wrong, you\'re only off by a bit."',
-  '"Quantum Cryptography: where checking if anyone is listening changes what they\'re saying."',
-  '"My pointer is so wild, even Valgrind is afraid to look at it."',
-  '"OCaml: because \'write once, debug never\' is actually a thing (unlike Java)."',
-  '"Kafka is great if you want to turn your CPU into a room heater."',
-  '"I told a joke about UDP, but I\'m not sure if anyone got it."',
-  '"What do you call a group of 8 Hobbits? A Hobbit."',
-  '"There are 10 types of people in the world: those who understand binary, and those who don\'t."',
-  '"A TCP packet walks into a bar. \'I\'d like a beer.\' \'You want a beer?\' \'Yes, a beer.\'"'
-];
+    function render() {
+      ctx.fillStyle = 'rgba(6, 9, 14, 0.08)';
+      ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+      ctx.fillStyle = '#10b981';
+      ctx.font = '13px "JetBrains Mono", monospace';
 
-let jokeIndex = 0;
-
-function nextJoke() {
-  const jokeEl = document.getElementById('joke-text');
-  if (!jokeEl) return;
-  jokeEl.style.opacity = '0';
-  setTimeout(() => {
-    jokeIndex = (jokeIndex + 1) % jokes.length;
-    jokeEl.textContent = jokes[jokeIndex];
-    jokeEl.style.opacity = '1';
-  }, 300);
-}
-
-// ============================================================
-// 17. TIME-AWARE GREETING
-// ============================================================
-function setTimeGreeting() {
-  const label = document.getElementById('hero-time-label');
-  if (!label) return;
-
-  const hour = new Date().getHours();
-  let greeting;
-
-  if (hour >= 0 && hour < 5) {
-    greeting = '// 3am debugging session';
-  } else if (hour >= 5 && hour < 8) {
-    greeting = '// early bird catches the bug';
-  } else if (hour >= 8 && hour < 12) {
-    greeting = '// morning code & coffee';
-  } else if (hour >= 12 && hour < 14) {
-    greeting = '// lunch break scrolling';
-  } else if (hour >= 14 && hour < 18) {
-    greeting = '// afternoon deep work';
-  } else if (hour >= 18 && hour < 21) {
-    greeting = '// evening hacking session';
-  } else {
-    greeting = '// night owl mode activated';
-  }
-
-  label.textContent = greeting;
-}
-
-// ============================================================
-// 18. IDLE GLITCH EFFECT
-// ============================================================
-let idleTimer = null;
-
-function resetIdleTimer() {
-  clearTimeout(idleTimer);
-  idleTimer = setTimeout(() => {
-    if (html.getAttribute('data-theme') !== 'dark') return;
-    const heroName = document.querySelector('.d-hero-name');
-    if (heroName) {
-      heroName.classList.add('glitch-active');
-      setTimeout(() => heroName.classList.remove('glitch-active'), 600);
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * 16, drops[i] * 16);
+        if (drops[i] * 16 > matrixCanvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+      frames++;
+      if (frames < 200) {
+        requestAnimationFrame(render);
+      } else {
+        matrixCanvas.classList.remove('active');
+        ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+      }
     }
-  }, 30000); // 30 seconds idle
-}
-
-['mousemove', 'keydown', 'scroll', 'click'].forEach(evt => {
-  document.addEventListener(evt, resetIdleTimer, { passive: true });
-});
-
-// ============================================================
-// 19. INITIALIZATION
-// ============================================================
-document.addEventListener('DOMContentLoaded', () => {
-  initRevealObserver();
-  setTimeGreeting();
-  resetIdleTimer();
-
-  // Set initial toggle state
-  if (html.getAttribute('data-theme') === 'dark') {
-    initDark();
-    if (toggleLabel) toggleLabel.textContent = 'light mode';
-    if (toggleIcon) toggleIcon.textContent = '☀';
-  } else {
-    if (toggleLabel) toggleLabel.textContent = 'dark mode';
-    if (toggleIcon) toggleIcon.textContent = '☽';
+    render();
   }
 
-  // Fetch GitHub data after page loads
-  setTimeout(fetchGitHubData, 500);
+  // DOM Loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    initRevealObserver();
+    setTimeGreeting();
 
-  // Initial joke
-  const jokeEl = document.getElementById('joke-text');
-  if (jokeEl) jokeEl.textContent = jokes[0];
-});
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    updateThemeUI(isDark);
+    if (isDark) {
+      initDarkSystems();
+    }
 
-// Make toggleMode and nextJoke available globally (called from onclick)
-window.toggleMode = toggleMode;
-window.nextJoke = nextJoke;
+    setTimeout(fetchGitHubData, 800);
+  });
+
+  // Global exports for inline triggers
+  window.toggleMode = toggleMode;
+})();
