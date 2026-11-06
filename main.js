@@ -20,6 +20,7 @@
   let lavaInitialized = false;
   let parallaxInitialized = false;
   let tiltInitialized = false;
+  let sectionMotionInitialized = false;
   let lavaAnimationId = null;
 
   // ============================================================
@@ -441,12 +442,19 @@
   // 9.5 SECTION LIQUID MOTION + SCROLL RHYTHM VISUALIZER
   // ============================================================
   function initSectionMotion() {
+    if (sectionMotionInitialized) return;
     const sections = document.querySelectorAll('.dark-content .d-section, .dark-content .d-hero');
     if (!sections.length) return;
+    sectionMotionInitialized = true;
 
     let rafPending = false;
     let previousY = window.scrollY;
     let velocity = 0;
+    sections.forEach(section => {
+      section.style.setProperty('--fluid-speed', (15 + Math.random() * 14).toFixed(1) + 's');
+      section.style.setProperty('--fluid-speed-alt', (22 + Math.random() * 18).toFixed(1) + 's');
+      section.style.setProperty('--fluid-delay', (-Math.random() * 18).toFixed(1) + 's');
+    });
     const beam = document.querySelector('.rhythm-laser-beam');
     const state = document.getElementById('rhythm-state');
 
@@ -462,8 +470,14 @@
         section.style.setProperty('--fluid-y', (Math.cos(progress * Math.PI * 2) * 2.2).toFixed(2) + '%');
       });
       if (beam) {
-        const amount = Math.max(0, Math.min(100, Math.abs(velocity) * 3.2 + 8));
-        beam.style.clipPath = 'inset(0 ' + (100 - amount).toFixed(1) + '% 0 0)';
+        const projects = document.getElementById('d-projects');
+        const rect = projects ? projects.getBoundingClientRect() : null;
+        const progress = rect ? Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height))) : 0;
+        const intensity = Math.min(1, Math.abs(velocity) / 24);
+        beam.style.left = (5 + progress * 90).toFixed(1) + '%';
+        beam.style.width = (20 + intensity * 22).toFixed(1) + '%';
+        beam.style.opacity = (0.55 + intensity * 0.45).toFixed(2);
+        beam.style.transform = 'translate(-50%, -50%) scaleX(' + (1 + intensity * 0.65).toFixed(2) + ')';
         if (state) state.textContent = Math.abs(velocity) > 1.2 ? 'PULSE / SCROLL INPUT DETECTED' : 'IDLE / LOW-ENERGY FLOW';
       }
       rafPending = false;
