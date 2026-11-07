@@ -692,6 +692,8 @@
     setTimeout(triggerReveals, 150);
   }
 
+  function initAdminAccess() { const button=document.getElementById("admin-access"); if(button) button.addEventListener("click",()=>window.location.assign("/admin/")); }
+
   function setTimeGreeting() {
     const label = document.getElementById('hero-time-label');
     if (!label) return;
@@ -763,6 +765,7 @@
 
     initRevealObserver();
     initNormalNavigation();
+    initAdminAccess();
     setTimeGreeting();
 
     html.setAttribute('data-theme', 'light');

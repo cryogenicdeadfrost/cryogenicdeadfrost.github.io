@@ -1,0 +1,6 @@
+# Private/local admin panel
+admin/
+admin.local/
+.env
+.env.*
+*.local
