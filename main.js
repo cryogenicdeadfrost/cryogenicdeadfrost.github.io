@@ -693,12 +693,13 @@
   }
 
   function initAdminAccess() {
-    const button = document.getElementById('admin-access');
-    if (button) {
-      button.addEventListener('click', () => {
+    const buttons = document.querySelectorAll('#admin-access, #admin-access-normal');
+    buttons.forEach(button => {
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
         window.location.assign('https://thanatos.tail721b17.ts.net/admin');
       });
-    }
+    });
   }
 
   function setTimeGreeting() {
