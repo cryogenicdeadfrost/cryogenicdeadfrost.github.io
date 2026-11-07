@@ -9,13 +9,6 @@
   const html = document.documentElement;
   const toggleBtn = document.getElementById('mode-toggle');
   const toggleLabel = document.getElementById('toggle-label');
-  const normalDimensionTrigger = document.querySelector('.normal-dimension-trigger');
-
-  // The normal-mode "WANT MORE" text is intentionally separate from the
-  // modern-mode toggle, but must still invoke the same dimension transition.
-  if (normalDimensionTrigger) {
-    normalDimensionTrigger.addEventListener('click', toggleMode);
-  }
   const scrollProgress = document.getElementById('scroll-progress');
   const particleCanvas = document.getElementById('particle-canvas');
   const matrixCanvas = document.getElementById('matrix-canvas');
@@ -639,6 +632,11 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    const normalDimensionTrigger = document.querySelector('.normal-dimension-trigger');
+    if (normalDimensionTrigger) {
+      normalDimensionTrigger.addEventListener('click', toggleMode);
+    }
+
     initRevealObserver();
     setTimeGreeting();
 
