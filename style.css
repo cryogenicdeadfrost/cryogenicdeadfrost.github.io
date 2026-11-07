@@ -102,6 +102,29 @@
   font-size: 12px;
   color: #444444;
 }
+
+[data-theme="light"] .normal-admin-button {
+  display: inline-block;
+  margin-top: 8px;
+  color: #000000;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+[data-theme="light"] .normal-admin-button:hover,
+[data-theme="light"] .normal-admin-button:focus-visible {
+  color: #000000;
+  text-decoration-thickness: 2px;
+  outline: none;
+}
 [data-theme="light"] .accepted {
   color: #006600;
   font-weight: bold;
