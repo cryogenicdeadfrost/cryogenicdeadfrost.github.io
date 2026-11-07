@@ -2077,3 +2077,148 @@ a {
   outline: 1px dotted currentColor;
   outline-offset: 4px;
 }
+
+/* ============================================================
+   CONTINUOUS FLUID BACKGROUND + SECTION COLOR TRANSITIONS
+   ============================================================ */
+[data-theme="dark"] .dark-content {
+  --fluid-a: #00f0ff;
+  --fluid-b: #39ff14;
+  --fluid-c: #ff007f;
+  position: relative;
+  isolation: isolate;
+}
+[data-theme="dark"] .dark-content::before {
+  content: "";
+  position: fixed;
+  inset: -35vh -25vw;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .26;
+  background:
+    radial-gradient(ellipse 34vw 26vh at 18% 24%, var(--fluid-a) 0%, transparent 72%),
+    radial-gradient(ellipse 38vw 30vh at 78% 58%, var(--fluid-b) 0%, transparent 72%),
+    radial-gradient(ellipse 30vw 24vh at 48% 88%, var(--fluid-c) 0%, transparent 72%);
+  filter: blur(42px) saturate(1.15);
+  animation: fluid-ocean-drift 24s ease-in-out infinite alternate;
+  will-change: transform, background;
+}
+[data-theme="dark"] .dark-content::after {
+  content: "";
+  position: fixed;
+  inset: -30vh -20vw;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .12;
+  background:
+    radial-gradient(ellipse 28vw 22vh at 70% 18%, var(--fluid-c) 0%, transparent 70%),
+    radial-gradient(ellipse 34vw 26vh at 26% 72%, var(--fluid-a) 0%, transparent 70%);
+  filter: blur(56px);
+  animation: fluid-ocean-drift-reverse 31s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes fluid-ocean-drift {
+  0% { transform: translate3d(-2%, -1%, 0) scale(1); }
+  33% { transform: translate3d(3%, 2%, 0) scale(1.06); }
+  66% { transform: translate3d(-1%, 4%, 0) scale(1.11); }
+  100% { transform: translate3d(4%, 1%, 0) scale(1.04); }
+}
+@keyframes fluid-ocean-drift-reverse {
+  0% { transform: translate3d(3%, 2%, 0) rotate(-1deg) scale(1.04); }
+  50% { transform: translate3d(-3%, -2%, 0) rotate(1deg) scale(1.09); }
+  100% { transform: translate3d(2%, -4%, 0) rotate(-1deg) scale(1.02); }
+}
+
+/* Every section gets its own liquid palette and moving light field. */
+[data-theme="dark"] .d-section,
+[data-theme="dark"] .d-hero {
+  --section-fluid-a: #00f0ff;
+  --section-fluid-b: #39ff14;
+  --section-fluid-c: #ff007f;
+}
+[data-theme="dark"] #d-about {
+  --section-fluid-a: #ffe600;
+  --section-fluid-b: #ffffff;
+  --section-fluid-c: #ff8a00;
+}
+[data-theme="dark"] #d-education {
+  --section-fluid-a: #ffaa00;
+  --section-fluid-b: #ff6a00;
+  --section-fluid-c: #fff0a8;
+}
+[data-theme="dark"] #d-experience {
+  --section-fluid-a: #ff007f;
+  --section-fluid-b: #ff8800;
+  --section-fluid-c: #ffe600;
+}
+[data-theme="dark"] #d-publications {
+  --section-fluid-a: #ff0033;
+  --section-fluid-b: #ff99aa;
+  --section-fluid-c: #ffffff;
+}
+[data-theme="dark"] #d-projects {
+  --section-fluid-a: #39ff14;
+  --section-fluid-b: #00f0ff;
+  --section-fluid-c: #a7f3d0;
+}
+[data-theme="dark"] #d-skills {
+  --section-fluid-a: #00f0ff;
+  --section-fluid-b: #ff007f;
+  --section-fluid-c: #ffe600;
+}
+
+[data-theme="dark"] .d-section::before,
+[data-theme="dark"] .d-section::after {
+  opacity: .22;
+  background:
+    radial-gradient(ellipse 42% 34% at 15% 28%, var(--section-fluid-a) 0%, transparent 72%),
+    radial-gradient(ellipse 38% 30% at 82% 70%, var(--section-fluid-b) 0%, transparent 70%);
+  filter: blur(46px) saturate(1.15);
+  mix-blend-mode: screen;
+  animation-name: section-liquid-flow;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+[data-theme="dark"] .d-section::after {
+  opacity: .14;
+  background:
+    radial-gradient(ellipse 34% 28% at 74% 18%, var(--section-fluid-c) 0%, transparent 70%),
+    radial-gradient(ellipse 32% 26% at 25% 84%, var(--section-fluid-a) 0%, transparent 68%);
+  animation-name: section-liquid-flow-reverse;
+  animation-duration: 29s;
+}
+@keyframes section-liquid-flow {
+  0% { transform: translate3d(-4%, -2%, 0) scale(1.02) rotate(-2deg); }
+  35% { transform: translate3d(3%, 3%, 0) scale(1.10) rotate(1deg); }
+  70% { transform: translate3d(-2%, 6%, 0) scale(1.16) rotate(3deg); }
+  100% { transform: translate3d(5%, 1%, 0) scale(1.07) rotate(-1deg); }
+}
+@keyframes section-liquid-flow-reverse {
+  0% { transform: translate3d(4%, 3%, 0) scale(1.08) rotate(2deg); }
+  50% { transform: translate3d(-4%, -2%, 0) scale(1.15) rotate(-2deg); }
+  100% { transform: translate3d(2%, -5%, 0) scale(1.04) rotate(1deg); }
+}
+
+/* A moving liquid seam at the start of every section makes the scroll
+   between palettes feel continuous instead of like a hard page cut. */
+[data-theme="dark"] .d-section {
+  position: relative;
+}
+[data-theme="dark"] .d-section:not(:first-of-type)::marker { content: ""; }
+[data-theme="dark"] .d-section:not(:first-of-type) {
+  border-top: 0;
+}
+[data-theme="dark"] .d-section:not(:first-of-type)::after {
+  box-shadow:
+    0 -26px 50px -26px var(--section-fluid-a),
+    0 -12px 30px -18px var(--section-fluid-b);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="dark"] .dark-content::before,
+  [data-theme="dark"] .dark-content::after,
+  [data-theme="dark"] .d-section::before,
+  [data-theme="dark"] .d-section::after {
+    animation: none !important;
+  }
+}

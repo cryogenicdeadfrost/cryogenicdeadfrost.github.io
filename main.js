@@ -558,6 +558,56 @@
   // ============================================================
   // 10. SYSTEM INIT
   // ============================================================
+  function initFluidSectionPalette() {
+    const sections = document.querySelectorAll('.dark-content .d-hero, .dark-content .d-section');
+    const darkContent = document.querySelector('.dark-content');
+    if (!sections.length || !darkContent) return;
+
+    const palettes = new Map([
+      ['d-about', ['#ffe600', '#ffffff', '#ff8a00']],
+      ['d-education', ['#ffaa00', '#ff6a00', '#fff0a8']],
+      ['d-experience', ['#ff007f', '#ff8800', '#ffe600']],
+      ['d-publications', ['#ff0033', '#ff99aa', '#ffffff']],
+      ['d-projects', ['#39ff14', '#00f0ff', '#a7f3d0']],
+      ['d-skills', ['#00f0ff', '#ff007f', '#ffe600']]
+    ]);
+
+    let raf = 0;
+    let active = '';
+    function updatePalette() {
+      raf = 0;
+      const center = window.innerHeight * 0.5;
+      let best = null;
+      let bestDistance = Infinity;
+
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        const sectionCenter = rect.top + rect.height * 0.5;
+        const distance = Math.abs(sectionCenter - center);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = section;
+        }
+      });
+
+      if (!best || best.id === active) return;
+      active = best.id;
+      const palette = palettes.get(active);
+      if (!palette) return;
+      darkContent.style.setProperty('--fluid-a', palette[0]);
+      darkContent.style.setProperty('--fluid-b', palette[1]);
+      darkContent.style.setProperty('--fluid-c', palette[2]);
+    }
+
+    function schedule() {
+      if (!raf) raf = requestAnimationFrame(updatePalette);
+    }
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    updatePalette();
+  }
+
   function initModernSystems() {
     initCursor();
     initLavaLamp();
@@ -565,6 +615,7 @@
     initTypedText();
     initTilt();
     initSectionMotion();
+    initFluidSectionPalette();
     setTimeout(triggerReveals, 150);
   }
 
