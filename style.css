@@ -2222,3 +2222,86 @@ a {
     animation: none !important;
   }
 }
+
+/* ============================================================
+   SECTION-TO-SECTION CINEMATIC MOTION
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+}
+[data-theme="dark"] .dark-content {
+  perspective: 1200px;
+}
+[data-theme="dark"] .d-hero,
+[data-theme="dark"] .d-section {
+  --section-depth: 0;
+  --section-scale: 1;
+  --section-blur: 0px;
+  transform:
+    translate3d(0, calc(var(--section-distance, 0px)), 0)
+    scale(var(--section-scale));
+  filter: blur(var(--section-blur));
+  transition:
+    transform .32s cubic-bezier(.16,1,.3,1),
+    opacity .32s ease,
+    filter .32s ease;
+  will-change: transform, opacity, filter;
+}
+[data-theme="dark"] .d-section::before {
+  transition: opacity .55s ease, transform .7s cubic-bezier(.16,1,.3,1);
+}
+[data-theme="dark"] .d-section.section-near-edge {
+  --section-scale: .965;
+  --section-blur: 2.2px;
+}
+[data-theme="dark"] .d-section.section-active {
+  --section-scale: 1;
+  --section-blur: 0px;
+}
+[data-theme="dark"] .d-hero.section-near-edge {
+  --section-scale: .975;
+  --section-blur: 1.5px;
+}
+[data-theme="dark"] .section-active::before {
+  transform: translate3d(var(--fluid-x, 0%), var(--fluid-y, 0%), 0) scale(1.05);
+  opacity: .30;
+}
+[data-theme="dark"] .section-near-edge::before {
+  transform: translate3d(calc(var(--fluid-x, 0%) * -1), calc(var(--fluid-y, 0%) * -1), 0) scale(1.18);
+  opacity: .16;
+}
+
+/* The boundary itself becomes a moving liquid horizon. */
+[data-theme="dark"] .d-section:not(:first-of-type)::after {
+  content: "";
+  position: absolute;
+  left: -12%;
+  top: -38px;
+  width: 124%;
+  height: 76px;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse at 20% 50%, var(--section-fluid-a, #00f0ff) 0%, transparent 38%),
+    radial-gradient(ellipse at 72% 50%, var(--section-fluid-b, #39ff14) 0%, transparent 42%);
+  opacity: .16;
+  filter: blur(22px);
+  transform: translate3d(calc(var(--fluid-x, 0%) * 2), 0, 0) scaleY(.72);
+  animation: section-horizon-drift 8s ease-in-out infinite alternate;
+}
+@keyframes section-horizon-drift {
+  0% { transform: translate3d(-3%, 0, 0) scaleY(.68); }
+  100% { transform: translate3d(3%, 8px, 0) scaleY(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [data-theme="dark"] .d-hero,
+  [data-theme="dark"] .d-section {
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  [data-theme="dark"] .d-section:not(:first-of-type)::after {
+    animation: none !important;
+  }
+}
