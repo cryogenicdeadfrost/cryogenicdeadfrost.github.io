@@ -65,6 +65,7 @@
       html.setAttribute('data-theme', 'dark');
       updateThemeUI(true);
       initModernSystems();
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
       requestAnimationFrame(triggerReveals);
     });
   }
@@ -79,12 +80,11 @@
   }
 
   function initNormalNavigation() {
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
+    document.querySelectorAll('.light-content a[href^="#l-"]').forEach(link => {
       link.addEventListener('click', (event) => {
-        const raw = link.getAttribute('href');
-        if (!raw || raw === '#') return;
+        const targetId = link.getAttribute('href');
+        if (!targetId || targetId === '#') return;
 
-        const targetId = raw.startsWith('#d-') ? '#l-' + raw.slice(3) : raw;
         const target = document.querySelector(targetId);
         if (!target) return;
 
@@ -589,16 +589,59 @@
     if (!sections.length || !darkContent) return;
 
     const palettes = new Map([
+      ['d-hero', ['#00f0ff', '#ff0055', '#ffe600']],
       ['d-about', ['#ffe600', '#ffffff', '#ff8a00']],
       ['d-education', ['#ffaa00', '#ff6a00', '#fff0a8']],
       ['d-experience', ['#ff007f', '#ff8800', '#ffe600']],
       ['d-publications', ['#ff0033', '#ff99aa', '#ffffff']],
       ['d-projects', ['#39ff14', '#00f0ff', '#a7f3d0']],
-      ['d-skills', ['#00f0ff', '#ff007f', '#ffe600']]
+      ['d-skills', ['#00f0ff', '#ff007f', '#ffe600']],
+      ['d-github', ['#00f0ff', '#7c3aed', '#ffffff']]
     ]);
 
     let raf = 0;
     let active = '';
+    let current = ['#00f0ff', '#ff0055', '#ffe600'];
+    let target = current.slice();
+    let transitionStart = performance.now();
+    const transitionDuration = 1800;
+
+    function hexToRgb(hex) {
+      const value = hex.replace('#', '');
+      return [
+        parseInt(value.slice(0, 2), 16),
+        parseInt(value.slice(2, 4), 16),
+        parseInt(value.slice(4, 6), 16)
+      ];
+    }
+
+    function rgbToHex(rgb) {
+      return '#' + rgb.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+    }
+
+    function mix(a, b, t) {
+      const ar = hexToRgb(a);
+      const br = hexToRgb(b);
+      return rgbToHex(ar.map((v, i) => v + (br[i] - v) * t));
+    }
+
+    function animatePalette(now) {
+      const raw = Math.min(1, (now - transitionStart) / transitionDuration);
+      const eased = raw < 0.5
+        ? 2 * raw * raw
+        : 1 - Math.pow(-2 * raw + 2, 2) / 2;
+
+      darkContent.style.setProperty('--fluid-a', mix(current[0], target[0], eased));
+      darkContent.style.setProperty('--fluid-b', mix(current[1], target[1], eased));
+      darkContent.style.setProperty('--fluid-c', mix(current[2], target[2], eased));
+
+      if (raw < 1) {
+        requestAnimationFrame(animatePalette);
+      } else {
+        current = target.slice();
+      }
+    }
+
     function updatePalette() {
       raf = 0;
       const center = window.innerHeight * 0.5;
@@ -619,9 +662,15 @@
       active = best.id;
       const palette = palettes.get(active);
       if (!palette) return;
-      darkContent.style.setProperty('--fluid-a', palette[0]);
-      darkContent.style.setProperty('--fluid-b', palette[1]);
-      darkContent.style.setProperty('--fluid-c', palette[2]);
+
+      current = [
+        getComputedStyle(darkContent).getPropertyValue('--fluid-a').trim() || current[0],
+        getComputedStyle(darkContent).getPropertyValue('--fluid-b').trim() || current[1],
+        getComputedStyle(darkContent).getPropertyValue('--fluid-c').trim() || current[2]
+      ];
+      target = palette.slice();
+      transitionStart = performance.now();
+      requestAnimationFrame(animatePalette);
     }
 
     function schedule() {
@@ -632,7 +681,6 @@
     window.addEventListener('resize', schedule, { passive: true });
     updatePalette();
   }
-
   function initModernSystems() {
     initCursor();
     initLavaLamp();
