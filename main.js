@@ -416,11 +416,36 @@
 
         const statsContainer = document.getElementById('gh-stats-dynamic');
         if (statsContainer) {
-          statsContainer.innerHTML = `
-            <span class="d-gh-stat"><strong>${user.public_repos || 8}</strong> repos</span>
-            <span class="d-gh-stat"><strong>${user.followers || 0}</strong> followers</span>
-            <a href="${user.html_url}" target="_blank" rel="noopener noreferrer" class="d-gh-stat" style="color:#00f0ff;text-decoration:none;">GitHub ↗</a>
-          `;
+          const repoCount = Number.isFinite(Number(user.public_repos)) ? Number(user.public_repos) : 8;
+          const followerCount = Number.isFinite(Number(user.followers)) ? Number(user.followers) : 0;
+          const githubUrl = typeof user.html_url === 'string' && /^https:\/\/github\.com\/cryogenicdeadfrost\/?$/i.test(user.html_url)
+            ? user.html_url
+            : 'https://github.com/cryogenicdeadfrost';
+
+          statsContainer.replaceChildren();
+
+          const reposStat = document.createElement('span');
+          reposStat.className = 'd-gh-stat';
+          reposStat.append(document.createTextNode(' '));
+          const reposStrong = document.createElement('strong');
+          reposStrong.textContent = String(repoCount);
+          reposStat.replaceChildren(reposStrong, document.createTextNode(' repos'));
+
+          const followersStat = document.createElement('span');
+          followersStat.className = 'd-gh-stat';
+          const followersStrong = document.createElement('strong');
+          followersStrong.textContent = String(followerCount);
+          followersStat.append(followersStrong, document.createTextNode(' followers'));
+
+          const githubLink = document.createElement('a');
+          githubLink.href = githubUrl;
+          githubLink.target = '_blank';
+          githubLink.rel = 'noopener noreferrer';
+          githubLink.className = 'd-gh-stat';
+          githubLink.style.cssText = 'color:#00f0ff;text-decoration:none;';
+          githubLink.textContent = 'GitHub ↗';
+
+          statsContainer.append(reposStat, followersStat, githubLink);
         }
       }
 
