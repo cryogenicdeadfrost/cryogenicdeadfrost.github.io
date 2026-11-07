@@ -52,7 +52,6 @@
   function applyLight() {
     triggerAnimeGate(() => {
       html.setAttribute('data-theme', 'light');
-      localStorage.setItem('theme', 'light');
       updateThemeUI(false);
       if (lavaAnimationId) {
         cancelAnimationFrame(lavaAnimationId);
@@ -64,7 +63,6 @@
   function applyDark() {
     triggerAnimeGate(() => {
       html.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
       updateThemeUI(true);
       initModernSystems();
       requestAnimationFrame(triggerReveals);
@@ -78,6 +76,33 @@
     } else {
       applyDark();
     }
+  }
+
+  function initNormalNavigation() {
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (event) => {
+        const raw = link.getAttribute('href');
+        if (!raw || raw === '#') return;
+
+        const targetId = raw.startsWith('#d-') ? '#l-' + raw.slice(3) : raw;
+        const target = document.querySelector(targetId);
+        if (!target) return;
+
+        event.preventDefault();
+
+        const go = () => {
+          history.replaceState(null, '', targetId);
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        if (html.getAttribute('data-theme') === 'dark') {
+          applyLight();
+          setTimeout(go, 760);
+        } else {
+          go();
+        }
+      });
+    });
   }
 
   // ============================================================
@@ -689,13 +714,11 @@
     }
 
     initRevealObserver();
+    initNormalNavigation();
     setTimeGreeting();
 
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    updateThemeUI(isDark);
-    if (isDark) {
-      initModernSystems();
-    }
+    html.setAttribute('data-theme', 'light');
+    updateThemeUI(false);
 
     setTimeout(fetchGitHubData, 800);
   });
