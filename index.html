@@ -12,14 +12,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Bebas+Neue&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 <link rel="stylesheet" href="style.css">
-<script>
-  (function(){
-    var t = localStorage.getItem('theme');
-    if (t === 'dark' || (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  })();
-</script>
 </head>
 <body>
 
@@ -155,42 +147,42 @@ GPA: <b>8.46 / 10</b>
 
 <div class="proj">
 <h3><a href="https://github.com/cryogenicdeadfrost/tinymoe.c">TinyMoE</a> (C, OpenMP)</h3>
-<p>A proof-of-concept Sparse Mixture-of-Experts language model implemented in pure C with no ML framework dependencies beyond OpenMP for multi-threading. Custom gating network, sparse top-k expert routing, memory-mapped weights, full forward/backward propagation, and Adam optimizer all implemented from scratch.</p>
+<p>A compact GPT-2-style Sparse Mixture-of-Experts Transformer implemented from scratch in C. The implementation includes self-attention, a learned top-k gating network, sparse expert routing, auxiliary load-balancing loss, backpropagation, Adam optimization, checkpoint serialization, and inference. The project is intentionally framework-independent and is designed to expose the underlying mechanics of sparse Transformer training at the systems level.</p>
 </div>
 
 <div class="proj">
 <h3><a href="https://github.com/cryogenicdeadfrost/ThreatWeave">ThreatWeave</a> (OCaml 5, C)</h3>
-<p>High-performance NIDS combining safe OCaml 5 orchestration with low-level C fast-paths. Implements our DNN&ndash;GNN paper: 99.64% accuracy on CIC-IDS-2017 with ~80K parameters. Deployed live at simulation labs.</p>
+<p>A high-throughput network intrusion detection system combining an OCaml 5 control layer with low-level C packet-processing paths. The system uses C-side packet buffering, OCaml ctypes integration, allocation-conscious threat matching, and GADT-based state tracking to model multi-stage attack lifecycles. Detection data is propagated asynchronously to ClickHouse for storage and analysis.</p>
 </div>
 
 <div class="proj">
-<h3><a href="https://github.com/cryogenicdeadfrost/PoisonIvy">PoisonIvy</a> (Python)</h3>
-<p>Adversarial ML dataset poisoning framework for robustness research. Modular corruption and perturbation pipelines with synthetic adversarial data generation.</p>
+<h3><a href="https://github.com/cryogenicdeadfrost/PoisonIvy">PoisonIvy</a> (C++17)</h3>
+<p>A configurable dataset-poisoning utility for adversarial machine-learning experiments and IDS benchmarking. It performs streaming CSV mutation and injection without loading complete datasets into memory, supports inject, mutate, label-flip, and mixed poisoning modes, and uses JSON profiles to control mutation parameters. The implementation also provides optional custom mutation plugins and configurable performance controls.</p>
 </div>
 
 <div class="proj">
-<h3><a href="https://github.com/cryogenicdeadfrost/MDCN-Military-Distributed-Communication-Network-">MDCN</a>(Solidity, Javascript, Hardhat</h3>
-<p>Military Distributed Communication Network simulation with decentralized routing and fault tolerance.</p>
+<h3><a href="https://github.com/cryogenicdeadfrost/MDCN-Military-Distributed-Communication-Network-">MDCN</a> (Solidity, JavaScript, React)</h3>
+<p>A local role-based communication simulation built around Solidity smart contracts and a React frontend. The system models strategic, operational, and tactical communication layers with on-chain role enforcement, command creation and acknowledgement, intelligence exchange, field-data records, and message-state tracking. Hardhat provides the local execution and deployment environment for repeatable protocol testing.</p>
 </div>
 
 <div class="proj">
-<h3><a href="https://github.com/cryogenicdeadfrost/SyncStream-Encrypted-Multi-Device-CCTV-Protocol">SyncStream</a> (C/C++)</h3>
-<p>Encrypted multi-device video streaming using GStreamer, libsrtp, OpenSSL, and pthreads.</p>
+<h3><a href="https://github.com/cryogenicdeadfrost/SyncStream-Encrypted-Multi-Device-CCTV-Protocol">SyncStream</a> (C++20, OpenSSL)</h3>
+<p>A security-oriented control layer for multi-device video systems. It implements AES-256-GCM authenticated encryption, strict payload validation, secure memory cleansing, command-envelope middleware, replay protection, clock-skew checks, and negative security tests for tampering and replay. The project also includes a CLI, mobile bridge example, and deployment documentation for Linux/WSL environments.</p>
 </div>
 
 <div class="proj">
-<h3><a href="https://github.com/cryogenicdeadfrost/Project_RedTooth">Project RedTooth</a> (Rust, C++)</h3>
-<p>Bluetooth management framework combining Rust and C++ with Win32/native systems integration.</p>
+<h3><a href="https://github.com/cryogenicdeadfrost/Project_RedTooth">Project RedTooth</a> (C++20, Rust)</h3>
+<p>A Windows Bluetooth management utility separating native device operations from application-level logic. A C++20 static library interfaces with Win32 Bluetooth APIs for discovery, pairing state, radio management, and connection handling, while a Rust frontend communicates through a C-compatible FFI layer. The design includes threaded scanning, exponential backoff, permission validation, connection pooling, and event-driven state handling.</p>
 </div>
 
 <div class="proj">
-<h3><a href="https://github.com/cryogenicdeadfrost/NexLog-Network-Extractor-And-Logger">NexLog</a> (C/C++)</h3>
-<p>High-performance network flow monitor processing 100,000+ packets/sec via raw sockets with inline anomaly detection.</p>
+<h3><a href="https://github.com/cryogenicdeadfrost/NexLog-Network-Extractor-And-Logger">NexLog</a> (C, Windows)</h3>
+<p>A lightweight network-flow monitoring service using raw socket inspection. It aggregates TCP, UDP, and ICMP traffic into structured flow records, tracks protocol and TCP-flag behavior, measures timing and payload entropy, extracts DNS queries, and emits JSON Lines telemetry. It also provides configurable rotation, remote synchronization, and heuristic anomaly detection for use as a lightweight NIDS data-collection layer.</p>
 </div>
 
 <div class="proj">
-<h3><a href="https://github.com/cryogenicdeadfrost/DirectoryNator">DirectoryNator</a> (C)</h3>
-<p>Filesystem traversal and directory indexing utility optimized around IO/syscall behavior.</p>
+<h3><a href="https://github.com/cryogenicdeadfrost/DirectoryNator">DirectoryNator</a> (Python)</h3>
+<p>A standard-library filesystem inventory and traversal utility supporting breadth-first search, depth-first search, Trie-based traversal, and multithreaded scanning. It benchmarks thread configurations, reports files-per-second and runtime, produces machine-readable JSON summaries, and supports scheduled automation for repeated filesystem health or IT-security scans.</p>
 </div>
 
 <h2 id="l-skills">Skills</h2>
