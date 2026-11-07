@@ -339,6 +339,66 @@ a {
 }
 
 /* ------------------------------------------------------------
+   SLOW SECTION COLOR TRANSITIONS
+   The section colors remain unchanged. Only the boundary and
+   ambient field blend slowly as the viewport moves between them.
+   ------------------------------------------------------------ */
+[data-theme="dark"] .dark-content {
+  --fluid-a: #00f0ff;
+  --fluid-b: #ff0055;
+  --fluid-c: #ffe600;
+}
+
+[data-theme="dark"] .d-section,
+[data-theme="dark"] .d-hero {
+  isolation: isolate;
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+}
+
+[data-theme="dark"] .d-section::after,
+[data-theme="dark"] .d-hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -96px;
+  height: 192px;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.92;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--fluid-a) 12%, transparent) 22%,
+      color-mix(in srgb, var(--fluid-b) 18%, transparent) 52%,
+      color-mix(in srgb, var(--fluid-c) 22%, transparent) 76%,
+      transparent 100%
+    );
+  filter: blur(18px);
+  transform: translate3d(0, calc(var(--section-distance, 0px) * -0.16), 0);
+  transition: opacity 1.2s ease, transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] .section-near-edge::after {
+  opacity: 0.58;
+}
+
+[data-theme="dark"] .section-active::after {
+  opacity: 0.96;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="dark"] .d-section::after,
+  [data-theme="dark"] .d-hero::after {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------
    MODERN MODE FOUNDATION & DYNAMIC ADAPTIVE CURSOR
    ------------------------------------------------------------ */
 [data-theme="dark"] body {
