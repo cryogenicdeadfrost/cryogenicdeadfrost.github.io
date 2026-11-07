@@ -692,7 +692,14 @@
     setTimeout(triggerReveals, 150);
   }
 
-  function initAdminAccess() { const button=document.getElementById("admin-access"); if(button) button.addEventListener("click",()=>window.location.assign("/admin/")); }
+  function initAdminAccess() {
+    const button = document.getElementById('admin-access');
+    if (button) {
+      button.addEventListener('click', () => {
+        window.location.assign('https://thanatos.tail721b17.ts.net/admin');
+      });
+    }
+  }
 
   function setTimeGreeting() {
     const label = document.getElementById('hero-time-label');
