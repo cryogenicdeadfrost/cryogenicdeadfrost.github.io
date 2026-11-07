@@ -2048,3 +2048,32 @@ a {
 [data-theme="dark"] .rhythm-laser-panel p {
   margin: 12px 0 0;
 }
+
+/* Quiet normal-mode transition affordance: readable, but deliberately not a button-looking button. */
+.normal-dimension-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 24px 0 0 0 !important;
+  padding: 0 0 2px !important;
+  border: 0 !important;
+  border-bottom: 2px solid currentColor !important;
+  background: transparent !important;
+  color: #222 !important;
+  opacity: .52 !important;
+  cursor: pointer;
+  font: 700 13px/1.2 "Times New Roman", Times, serif !important;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transition: opacity .35s ease, padding-left .45s cubic-bezier(.16,1,.3,1), border-color .35s ease;
+}
+.normal-dimension-trigger:hover,
+.normal-dimension-trigger:focus-visible {
+  opacity: 1 !important;
+  padding-left: 6px !important;
+  outline: none;
+}
+.normal-dimension-trigger:focus-visible {
+  outline: 1px dotted currentColor;
+  outline-offset: 4px;
+}
