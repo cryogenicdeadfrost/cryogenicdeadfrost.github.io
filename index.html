@@ -15,20 +15,20 @@
 </head>
 <body>
 
-<!-- Scroll progress bar -->
+
 <div id="scroll-progress"></div>
 
-<!-- Custom cursor (dark mode) -->
+
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
 
-<!-- Particle canvas -->
+
 <canvas id="particle-canvas"></canvas>
 
-<!-- Matrix rain canvas (easter egg) -->
+
 <canvas id="matrix-canvas"></canvas>
 
-<!-- Cinema / Anime Dimension Gate Overlay -->
+
 <div id="anime-gate-overlay">
   <div class="gate-strip gate-strip-top"></div>
   <div class="gate-strip gate-strip-bottom"></div>
@@ -39,15 +39,13 @@
   </div>
 </div>
 
-<!-- Ambient orbs -->
+
 <div class="d-orb d-orb-1"></div>
 <div class="d-orb d-orb-2"></div>
 <div class="d-orb d-orb-3"></div>
 
-<!-- Mode toggle: Tactile Terminal / Hardware Switch -->
-<!-- ================================================================
-     LIGHT MODE CONTENT
-     ================================================================ -->
+
+
 <div class="light-content">
 
 <table border="0" cellpadding="8" cellspacing="0" width="100%">
@@ -206,15 +204,13 @@ GPA: <b>8.46 / 10</b>
 
 </div>
   
-<!-- end light-content -->
 
 
-<!-- ================================================================
-     DARK MODE CONTENT
-     ================================================================ -->
+
+
 <div class="dark-content">
 
-<!-- Sticky nav -->
+
 <nav class="d-nav" id="d-nav">
   <a href="#d-hero" class="d-nav-brand">AB</a>
   <ul class="d-nav-links">
@@ -227,7 +223,7 @@ GPA: <b>8.46 / 10</b>
   </ul>
 </nav>
 
-<!-- Hero -->
+
 <section class="d-hero" id="d-hero">
   <div class="d-hero-bg-text">BASAK</div>
   <div class="d-hero-content">
@@ -254,14 +250,14 @@ GPA: <b>8.46 / 10</b>
   </div>
 </section>
 
-<!-- Wave divider -->
+
 <div class="wave-divider">
   <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
     <path d="M0,30 C200,60 400,0 600,30 C800,60 1000,0 1200,30 L1200,60 L0,60 Z" fill="#7c3aed"/>
   </svg>
 </div>
 
-<!-- About -->
+
 <section class="d-section" id="d-about">
   <div class="d-section-label reveal">01 — about</div>
   <div class="d-section-subtitle reveal">// warning: unhinged caffeine-fueled opinions</div>
@@ -307,7 +303,7 @@ GPA: <b>8.46 / 10</b>
   </div>
 </section>
 
-<!-- Education -->
+
 <section class="d-section" id="d-education" style="padding-top:0;">
   <div class="d-section-label reveal">02 — education</div>
   <div class="d-section-subtitle reveal">THE OG</div>
@@ -331,14 +327,14 @@ GPA: <b>8.46 / 10</b>
   </div>
 </section>
 
-<!-- Wave divider -->
+
 <div class="wave-divider">
   <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
     <path d="M0,30 C300,0 500,60 700,20 C900,0 1100,50 1200,30 L1200,60 L0,60 Z" fill="#2563eb"/>
   </svg>
 </div>
 
-<!-- Experience -->
+
 <section class="d-section" id="d-experience">
   <div class="d-section-label reveal">03 — experience</div>
   <div class="d-section-subtitle reveal">// survived the corporate machine</div>
@@ -382,14 +378,14 @@ GPA: <b>8.46 / 10</b>
   </div>
 </section>
 
-<!-- Wave divider -->
+
 <div class="wave-divider">
   <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
     <path d="M0,20 C150,50 350,0 600,40 C850,60 1050,10 1200,30 L1200,60 L0,60 Z" fill="#0ea5e9"/>
   </svg>
 </div>
 
-<!-- Publications -->
+
 
 <section class="d-section" id="d-publications">
   <div class="d-section-label reveal">04 — research</div>
@@ -439,25 +435,26 @@ GPA: <b>8.46 / 10</b>
   </div>
 </section>
 
-<!-- Wave divider -->
+
 <div class="wave-divider">
   <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
     <path d="M0,40 C200,10 400,50 600,20 C800,0 1000,40 1200,15 L1200,60 L0,60 Z" fill="#10b981"/>
   </svg>
 </div>
 
-<!-- Projects -->
+
 <section class="d-section" id="d-projects">
   <div class="d-section-label reveal">05 — projects</div>
   <div class="d-section-subtitle reveal">// things I built instead of sleeping</div>
   <h2 class="d-section-title reveal">What I Build</h2>
   <div class="d-proj-grid">
 
-    <!-- TinyMoE -->
+    
     <div class="d-proj-card reveal reveal-delay-1">
       <div class="d-proj-name">TinyMoE</div>
       <div class="d-proj-lang">C · OpenMP · BLAS</div>
-      <div class="d-proj-desc">A bare-metal, dependency-free Sparse Mixture-of-Experts transformer written entirely in C99. Implements custom softmax top-k gating, vectorized matrix-vector kernels, memory-mapped checkpoint loading, dynamic expert dispatch, and mini-batch backpropagation with Adam optimization without touching PyTorch or libtorch.</div>
+      <div class="d-proj-desc">Bare-metal Sparse Mixture-of-Experts transformer in C99.</div>
+      <div class="d-proj-detail-desc" aria-hidden="true">A bare-metal, dependency-free Sparse Mixture-of-Experts transformer written entirely in C99. Implements custom softmax top-k gating, vectorized matrix-vector kernels, memory-mapped checkpoint loading, dynamic expert dispatch, and mini-batch backpropagation with Adam optimization without touching PyTorch or libtorch.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">sparse-moe</span>
         <span class="d-proj-tag">systems-ml</span>
@@ -482,11 +479,12 @@ GPA: <b>8.46 / 10</b>
       </div>
     </div>
 
-    <!-- ThreatWeave -->
+    
     <div class="d-proj-card reveal reveal-delay-2">
       <div class="d-proj-name">ThreatWeave</div>
       <div class="d-proj-lang">OCaml 5 · C</div>
-      <div class="d-proj-desc">High-throughput Network Intrusion Detection System coupling functional OCaml 5 multicore domain orchestrators with low-level C fast-paths. Implements our published IEEE hybrid DNN-GNN architecture, hitting 99.64% detection accuracy on CIC-IDS-2017 using under 80,000 parameters for wire-speed edge deployment.</div>
+      <div class="d-proj-desc">High-throughput OCaml/C NIDS with hybrid DNN-GNN detection.</div>
+      <div class="d-proj-detail-desc" aria-hidden="true">High-throughput Network Intrusion Detection System coupling functional OCaml 5 multicore domain orchestrators with low-level C fast-paths. Implements the published hybrid DNN-GNN architecture, reaching 99.64% detection accuracy on CIC-IDS-2017 using under 80,000 parameters for edge deployment.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">nids</span>
         <span class="d-proj-tag">dnn-gnn</span>
@@ -510,11 +508,12 @@ GPA: <b>8.46 / 10</b>
       </div>
     </div>
 
-    <!-- PoisonIvy -->
+    
     <div class="d-proj-card reveal reveal-delay-3">
       <div class="d-proj-name">PoisonIvy</div>
       <div class="d-proj-lang">Python · ML Research</div>
-      <div class="d-proj-desc">Modular adversarial dataset poisoning and perturbation framework. Simulates targeted clean-label attacks, gradient-crafted noise injections, and label flips across tabular and graph datasets to measure real-world security degradation in industrial ML pipelines.</div>
+      <div class="d-proj-desc">Adversarial dataset poisoning framework for ML security research.</div>
+      <div class="d-proj-detail-desc" aria-hidden="true">Modular adversarial dataset poisoning and perturbation framework. Simulates targeted clean-label attacks, gradient-crafted noise injections, and label flips across tabular and graph datasets to measure security degradation in industrial ML pipelines.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">adversarial-ml</span>
         <span class="d-proj-tag">poisoning</span>
@@ -536,11 +535,12 @@ GPA: <b>8.46 / 10</b>
       </div>
     </div>
 
-    <!-- MDCN -->
+    
     <div class="d-proj-card reveal reveal-delay-4">
       <div class="d-proj-name">MDCN</div>
       <div class="d-proj-lang">Solidity · Hardhat · Distributed</div>
-      <div class="d-proj-desc">Military Distributed Communication Network architecture simulated over an EVM-orchestrated consensus mesh. Implements cryptographically verified peer discovery, multi-hop path recovery, and decentralized gossip propagation that remains resilient against single-node blackouts.</div>
+      <div class="d-proj-desc">Distributed military communication network simulation.</div>
+      <div class="d-proj-detail-desc" aria-hidden="true">Military Distributed Communication Network architecture simulated over an EVM-orchestrated consensus mesh. Implements cryptographically verified peer discovery, multi-hop path recovery, and decentralized gossip propagation that remains resilient against single-node blackouts.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">distributed</span>
         <span class="d-proj-tag">fault-tolerant</span>
@@ -563,11 +563,12 @@ GPA: <b>8.46 / 10</b>
       </div>
     </div>
 
-    <!-- SyncStream -->
+    
     <div class="d-proj-card reveal reveal-delay-5">
       <div class="d-proj-name">SyncStream</div>
       <div class="d-proj-lang">C/C++ · GStreamer · OpenSSL</div>
-      <div class="d-proj-desc">Synchronous, zero-trust multi-camera stream aggregator. Utilizes libsrtp for authenticated end-to-end payload encryption, OpenSSL TLS session controls over libwebsockets, and isolated POSIX thread pools per ingest pipeline to eliminate jitter across asynchronous capture devices.</div>
+      <div class="d-proj-desc">Encrypted, low-latency multi-camera streaming system.</div>
+      <div class="d-proj-detail-desc" aria-hidden="true">Synchronous, zero-trust multi-camera stream aggregator. Uses libsrtp for authenticated end-to-end payload encryption, OpenSSL TLS session controls over libwebsockets, and isolated POSIX thread pools per ingest pipeline to eliminate jitter across asynchronous capture devices.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">gstreamer</span>
         <span class="d-proj-tag">srtp</span>
@@ -591,11 +592,12 @@ GPA: <b>8.46 / 10</b>
       </div>
     </div>
 
-    <!-- Project RedTooth -->
+    
     <div class="d-proj-card reveal reveal-delay-1">
       <div class="d-proj-name">Project RedTooth</div>
       <div class="d-proj-lang">Rust · C++ · Win32</div>
-      <div class="d-proj-desc">High-performance native Bluetooth device orchestration suite. Provides safe Rust wrappers and zero-cost FFI bindings over raw Win32 Bluetooth API endpoints, exposing reliable socket pairing, automated service discovery, and low-latency serial communication without legacy driver crashes.</div>
+      <div class="d-proj-desc">Native Rust/C++ Bluetooth orchestration suite.</div>
+      <div class="d-proj-detail-desc" aria-hidden="true">High-performance native Bluetooth device orchestration suite. Provides safe Rust wrappers and zero-cost FFI bindings over raw Win32 Bluetooth API endpoints, exposing reliable socket pairing, automated service discovery, and low-latency serial communication without legacy driver crashes.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">bluetooth</span>
         <span class="d-proj-tag">rust</span>
@@ -619,11 +621,12 @@ GPA: <b>8.46 / 10</b>
       </div>
     </div>
 
-    <!-- NexLog -->
+    
     <div class="d-proj-card reveal reveal-delay-2">
       <div class="d-proj-name">NexLog</div>
       <div class="d-proj-lang">C/C++ · Raw Sockets</div>
-      <div class="d-proj-desc">High-throughput network flow sensor operating on raw AF_PACKET sockets. Capable of parsing 100,000+ packets/sec with zero copy, computing real-time Shannon entropy over TCP payload windows to catch encrypted C2 beacons and automated scanning attacks inline.</div>
+      <div class="d-proj-desc">Raw-socket network flow sensor with entropy-based detection.</div>
+      <div class="d-proj-detail-desc" aria-hidden="true">High-throughput network flow sensor operating on raw AF_PACKET sockets. Parses 100,000+ packets/sec with zero copy, computes real-time Shannon entropy over TCP payload windows to catch encrypted C2 beacons and automated scanning attacks inline.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">pcap</span>
         <span class="d-proj-tag">entropy</span>
@@ -646,11 +649,12 @@ GPA: <b>8.46 / 10</b>
       </div>
     </div>
 
-    <!-- DirectoryNator -->
+    
     <div class="d-proj-card reveal reveal-delay-3">
       <div class="d-proj-name">DirectoryNator</div>
       <div class="d-proj-lang">C · Syscalls · POSIX</div>
-      <div class="d-proj-desc">Sub-millisecond directory walker and recursive indexer written in pure C. Minimizes kernel transition overhead through direct getdents64 syscalls, branch-predicted path buffers, and lock-free thread queues, outperforming standard recursive traversal utilities across massive directory trees.</div>
+      <div class="d-proj-desc">High-performance filesystem traversal and indexing in C.</div>
+      <div class="d-proj-detail-desc" aria-hidden="true">Sub-millisecond directory walker and recursive indexer written in pure C. Minimizes kernel transition overhead through direct getdents64 syscalls, branch-predicted path buffers, and lock-free thread queues, outperforming standard recursive traversal utilities across massive directory trees.</div>
       <div class="d-proj-tags">
         <span class="d-proj-tag">filesystem</span>
         <span class="d-proj-tag">io</span>
@@ -676,14 +680,14 @@ GPA: <b>8.46 / 10</b>
   </div>
 </section>
 
-<!-- Wave divider -->
+
 <div class="wave-divider">
   <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
     <path d="M0,15 C200,50 400,0 600,35 C800,55 1000,10 1200,40 L1200,60 L0,60 Z" fill="#f59e0b"/>
   </svg>
 </div>
 
-<!-- Skills -->
+
 <section class="d-section" id="d-skills">
   <div class="d-section-label reveal">06 — skills</div>
   <div class="d-section-subtitle reveal">// tools of construction</div>
@@ -757,19 +761,19 @@ GPA: <b>8.46 / 10</b>
   </div>
 </section>
 
-<!-- Wave divider -->
+
 <div class="wave-divider">
   <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
     <path d="M0,30 C200,0 400,55 600,20 C800,0 1000,45 1200,25 L1200,60 L0,60 Z" fill="#ec4899"/>
   </svg>
 </div>
 
-<!-- GitHub Activity -->
+
 <section class="d-section d-github-section" id="d-github">
   <div class="d-section-label reveal">07 — github</div>
   <h2 class="d-section-title reveal">Open Source</h2>
 
-  <!-- Profile card -->
+  
   <div class="d-gh-profile reveal reveal-delay-1">
     <div class="d-gh-avatar">
       <img id="gh-avatar-img" src="" alt="GitHub Avatar" style="display:none;">
@@ -786,16 +790,16 @@ GPA: <b>8.46 / 10</b>
     </div>
   </div>
 
-  <!-- Contribution Heatmap -->
+  
   <div class="d-gh-heatmap-container reveal reveal-delay-2">
     <h4>Contribution Activity</h4>
     <img src="https://ghchart.rshah.org/7c3aed/cryogenicdeadfrost" alt="GitHub Contribution Graph" loading="lazy">
   </div>
 
-  <!-- Language chart + Repo grid -->
+  
   <div class="d-gh-bottom-row">
     <div class="d-gh-sidebar-col">
-      <!-- Languages Card -->
+      
       <div class="d-gh-lang-card reveal reveal-delay-3">
         <h4>Languages</h4>
         <div class="d-gh-donut-wrap">
@@ -810,7 +814,7 @@ GPA: <b>8.46 / 10</b>
         </div>
       </div>
 
-      <!-- Activity Stats Card -->
+      
       <div class="d-gh-stats-card reveal reveal-delay-3">
         <h4>Activity Stats</h4>
         <div class="d-gh-stats-list">
@@ -840,7 +844,7 @@ GPA: <b>8.46 / 10</b>
     </div>
 
     <div class="d-gh-repos-grid reveal reveal-delay-4" id="gh-repos-grid">
-      <!-- Populated by JS, fallback cards below -->
+      
       <a href="https://github.com/cryogenicdeadfrost/tinymoe.c" target="_blank" rel="noopener noreferrer" class="d-gh-repo-card">
         <div class="d-gh-repo-name">tinymoe.c</div>
         <div class="d-gh-repo-desc">Sparse MoE Transformer in pure C</div>
@@ -875,10 +879,9 @@ GPA: <b>8.46 / 10</b>
   </div>
 </section>
 
-<!-- Footer -->
+
 <footer class="d-footer">
   <div class="d-footer-brand">
-    <div class="d-footer-logo">AB<span>/</span>RESEARCH</div>
     <div class="d-footer-quote">
       Hardware-aware security, quantum communications, and bare-metal high-throughput engineering.
     </div>
@@ -893,7 +896,7 @@ GPA: <b>8.46 / 10</b>
   </div>
 </footer>
 
-</div><!-- end dark-content -->
+</div>
 
 <script src="main.js"></script>
 </body>
