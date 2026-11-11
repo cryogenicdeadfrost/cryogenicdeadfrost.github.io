@@ -668,6 +668,8 @@
     const thumb = wrap.querySelector('.modern-scroll-thumb');
     let dragging = false;
     let pointerOffset = 0;
+    let lastPointerY = 0;
+    let lastPointerTime = 0;
 
     function metrics() {
       const viewport = window.innerHeight;
@@ -694,13 +696,23 @@
       thumb.setPointerCapture(event.pointerId);
       const rect = thumb.getBoundingClientRect();
       pointerOffset = event.clientY - rect.top;
+      lastPointerY = event.clientY;
+      lastPointerTime = performance.now();
+      thumb.style.setProperty('--drag-stretch', '1');
       wrap.classList.add('dragging');
       document.body.classList.add('scrollbar-dragging');
     });
 
     thumb.addEventListener('pointermove', (event) => {
       if (!dragging) return;
+      const now = performance.now();
+      const dt = Math.max(8, now - lastPointerTime);
+      const speed = Math.abs(event.clientY - lastPointerY) / dt;
+      const stretch = Math.min(1.65, 1 + speed * 0.42);
+      thumb.style.setProperty('--drag-stretch', stretch.toFixed(2));
       setScrollFromPointer(event.clientY);
+      lastPointerY = event.clientY;
+      lastPointerTime = now;
     });
 
     function stopDrag(event) {
@@ -708,6 +720,7 @@
       dragging = false;
       try { thumb.releasePointerCapture(event.pointerId); } catch (_) {}
       wrap.classList.remove('dragging');
+      thumb.style.setProperty('--drag-stretch', '1');
       document.body.classList.remove('scrollbar-dragging');
     }
 
