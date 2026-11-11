@@ -1831,16 +1831,6 @@ a {
 }
 .dark-content .d-section::before { animation-duration: var(--fluid-speed, 19s); animation-delay: var(--fluid-delay, 0s); }
 .dark-content .d-section::after { animation-duration: var(--fluid-speed-alt, 27s); animation-delay: calc(var(--fluid-delay, 0s) * -0.65); }
-.rhythm-laser-beam {
-  left: 5%;
-  width: 24%;
-  clip-path: none;
-  transform: translate(-50%, -50%);
-  transform-origin: center;
-  transition: left .18s linear, width .18s linear, opacity .18s ease;
-}
-
-
 [data-theme="light"] body {
   padding: 18px 0 50px 38px !important;
   margin: 0 !important;
