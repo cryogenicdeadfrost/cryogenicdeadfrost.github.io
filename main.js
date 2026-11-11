@@ -508,10 +508,6 @@
       section.style.setProperty('--fluid-delay', (-Math.random() * 18).toFixed(1) + 's');
     });
 
-    const beam = document.querySelector('.rhythm-laser-beam');
-    const state = document.getElementById('rhythm-state');
-    const nodes = document.querySelectorAll('.rhythm-laser-node');
-
     function update() {
       const y = window.scrollY;
       velocity = velocity * 0.72 + (y - previousY) * 0.28;
@@ -540,32 +536,6 @@
         section.style.setProperty('--fluid-x', (wave * 2.6).toFixed(2) + '%');
         section.style.setProperty('--fluid-y', (Math.cos(distance * Math.PI * 2) * 2.2).toFixed(2) + '%');
       });
-
-      if (beam) {
-        const projects = document.getElementById('d-projects');
-        const rect = projects ? projects.getBoundingClientRect() : null;
-        const progress = rect
-          ? Math.max(0, Math.min(1, (viewportCenter - rect.top) / Math.max(rect.height, 1)))
-          : 0;
-        const intensity = Math.min(1, Math.abs(velocity) / 18);
-        beam.style.left = (5 + progress * 90).toFixed(2) + '%';
-        beam.style.opacity = (0.48 + intensity * 0.52).toFixed(2);
-        if (state) {
-          state.textContent = Math.abs(velocity) > 1.2
-            ? 'PULSE / SCROLL INPUT DETECTED'
-            : 'FLOW / POSITION TRACKING';
-        }
-
-        const now = performance.now();
-        if (Math.abs(velocity) > 1.5 && now - lastPulse > 95) {
-          lastPulse = now;
-          nodes.forEach(node => {
-            node.classList.remove('pulse');
-            void node.offsetWidth;
-            node.classList.add('pulse');
-          });
-        }
-      }
 
       rafPending = false;
     }
@@ -681,6 +651,81 @@
     window.addEventListener('resize', schedule, { passive: true });
     updatePalette();
   }
+
+  // ============================================================
+  // 9.7 CUSTOM MODERN SCROLLBAR
+  // ============================================================
+  let customScrollbarInitialized = false;
+  function initCustomModernScrollbar() {
+    if (customScrollbarInitialized) return;
+    customScrollbarInitialized = true;
+
+    const wrap = document.createElement('div');
+    wrap.id = 'modern-scrollbar';
+    wrap.innerHTML = '<span class="modern-scroll-track"></span><span class="modern-scroll-thumb"></span>';
+    document.body.appendChild(wrap);
+
+    const thumb = wrap.querySelector('.modern-scroll-thumb');
+    let dragging = false;
+    let pointerOffset = 0;
+
+    function metrics() {
+      const viewport = window.innerHeight;
+      const doc = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+      const track = Math.max(1, viewport - 24);
+      const thumbHeight = Math.max(56, track * Math.min(1, viewport / doc));
+      const maxTop = Math.max(0, track - thumbHeight);
+      const maxScroll = Math.max(1, doc - viewport);
+      const top = (window.scrollY / maxScroll) * maxTop;
+      thumb.style.height = thumbHeight + 'px';
+      thumb.style.top = top + 'px';
+      return { viewport, doc, track, thumbHeight, maxTop, maxScroll };
+    }
+
+    function setScrollFromPointer(clientY) {
+      const m = metrics();
+      const y = Math.max(0, Math.min(m.maxTop, clientY - 12 - pointerOffset));
+      const ratio = m.maxTop ? y / m.maxTop : 0;
+      window.scrollTo({ top: ratio * m.maxScroll, behavior: 'auto' });
+    }
+
+    thumb.addEventListener('pointerdown', (event) => {
+      dragging = true;
+      thumb.setPointerCapture(event.pointerId);
+      const rect = thumb.getBoundingClientRect();
+      pointerOffset = event.clientY - rect.top;
+      wrap.classList.add('dragging');
+      document.body.classList.add('scrollbar-dragging');
+    });
+
+    thumb.addEventListener('pointermove', (event) => {
+      if (!dragging) return;
+      setScrollFromPointer(event.clientY);
+    });
+
+    function stopDrag(event) {
+      if (!dragging) return;
+      dragging = false;
+      try { thumb.releasePointerCapture(event.pointerId); } catch (_) {}
+      wrap.classList.remove('dragging');
+      document.body.classList.remove('scrollbar-dragging');
+    }
+
+    thumb.addEventListener('pointerup', stopDrag);
+    thumb.addEventListener('pointercancel', stopDrag);
+    wrap.addEventListener('pointerdown', (event) => {
+      if (event.target === thumb) return;
+      const m = metrics();
+      const target = event.clientY - 12 - m.thumbHeight * .5;
+      const ratio = m.maxTop ? Math.max(0, Math.min(1, target / m.maxTop)) : 0;
+      window.scrollTo({ top: ratio * m.maxScroll, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', metrics, { passive: true });
+    window.addEventListener('resize', metrics, { passive: true });
+    metrics();
+  }
+
   function initModernSystems() {
     initCursor();
     initLavaLamp();
@@ -689,6 +734,8 @@
     initTilt();
     initSectionMotion();
     initScrollSpeedBreaker();
+    initCustomModernScrollbar();
+    initCustomModernScrollbar();
     initProjectDetails();
     initFluidSectionPalette();
     setTimeout(triggerReveals, 150);
@@ -854,6 +901,16 @@
     projectDetailsInitialized = true;
 
     const cards = document.querySelectorAll('#d-projects .d-proj-card');
+    const cardPalettes = [
+      ['#ff3b30', '#ff9500'],
+      ['#00f0ff', '#7c3aed'],
+      ['#39ff14', '#00f0ff'],
+      ['#ff007f', '#ffe600'],
+      ['#ff9500', '#ff2d55'],
+      ['#5ac8fa', '#af52de'],
+      ['#34c759', '#30d158'],
+      ['#bf5af2', '#64d2ff']
+    ];
     if (!cards.length) return;
 
     const overlay = document.createElement('div');
@@ -910,6 +967,9 @@
       const architecture = card.querySelector('.d-proj-arch')?.textContent.trim() || 'Architecture details unavailable.';
       const quote = card.querySelector('.d-proj-quip')?.textContent.trim() || '';
       const link = card.querySelector('.d-proj-link')?.href || '#';
+      const palette = cardPalettes[Array.from(cards).indexOf(card) % cardPalettes.length];
+      overlay.style.setProperty('--card-accent', palette[0]);
+      overlay.style.setProperty('--card-secondary', palette[1]);
 
       title.textContent = name;
       lang.textContent = language;
