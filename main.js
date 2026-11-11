@@ -735,7 +735,6 @@
     initSectionMotion();
     initScrollSpeedBreaker();
     initCustomModernScrollbar();
-    initCustomModernScrollbar();
     initProjectDetails();
     initFluidSectionPalette();
     setTimeout(triggerReveals, 150);
