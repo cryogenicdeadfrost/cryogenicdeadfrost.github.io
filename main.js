@@ -688,6 +688,8 @@
     initTypedText();
     initTilt();
     initSectionMotion();
+    initScrollSpeedBreaker();
+    initProjectDetails();
     initFluidSectionPalette();
     setTimeout(triggerReveals, 150);
   }
@@ -783,4 +785,186 @@
   });
 
   window.toggleMode = toggleMode;
+
+  // ============================================================
+  // 9.8 SCROLL SPEED BREAKER
+  // ============================================================
+  let scrollSpeedInitialized = false;
+  function initScrollSpeedBreaker() {
+    if (scrollSpeedInitialized) return;
+    scrollSpeedInitialized = true;
+
+    const layer = document.createElement('div');
+    layer.id = 'scroll-speed-layer';
+    layer.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(layer);
+
+    let previousY = window.scrollY;
+    let velocity = 0;
+    let lastTime = performance.now();
+    let fastTimer = null;
+    let spawnTimer = null;
+
+    function spawnStreak(intensity) {
+      if (html.getAttribute('data-theme') !== 'dark') return;
+      const streak = document.createElement('span');
+      streak.className = 'scroll-speed-streak';
+      streak.style.top = (8 + Math.random() * 84).toFixed(2) + '%';
+      streak.style.setProperty('--streak-width', (10 + intensity * 28 + Math.random() * 18).toFixed(1) + 'vw');
+      streak.style.setProperty('--streak-duration', Math.max(.18, .42 - intensity * .16).toFixed(2) + 's');
+      layer.appendChild(streak);
+      setTimeout(() => streak.remove(), 600);
+    }
+
+    function update() {
+      const now = performance.now();
+      const dt = Math.max(16, now - lastTime);
+      const dy = window.scrollY - previousY;
+      const instant = Math.abs(dy) / dt * 16.67;
+      velocity = velocity * .72 + instant * .28;
+      previousY = window.scrollY;
+      lastTime = now;
+
+      const intensity = Math.min(1, velocity / 42);
+      if (velocity > 8) {
+        document.body.classList.add('scrolling-fast');
+        clearTimeout(fastTimer);
+        fastTimer = setTimeout(() => document.body.classList.remove('scrolling-fast'), 120);
+      } else if (velocity < 2) {
+        document.body.classList.remove('scrolling-fast');
+      }
+
+      if (velocity > 10 && !spawnTimer) {
+        spawnStreak(intensity);
+        spawnTimer = setTimeout(() => { spawnTimer = null; }, Math.max(24, 90 - intensity * 55));
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    requestAnimationFrame(update);
+  }
+
+  // ============================================================
+  // 9.9 PERSONA-STYLE PROJECT DETAILS
+  // ============================================================
+  let projectDetailsInitialized = false;
+  function initProjectDetails() {
+    if (projectDetailsInitialized) return;
+    projectDetailsInitialized = true;
+
+    const cards = document.querySelectorAll('#d-projects .d-proj-card');
+    if (!cards.length) return;
+
+    const overlay = document.createElement('div');
+    overlay.id = 'project-detail-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.innerHTML = `
+      <div class="project-detail-panel" role="dialog" aria-modal="true" aria-labelledby="project-detail-title">
+        <div class="project-detail-top">
+          <div>
+            <div class="project-detail-kicker">PROJECT // DETAIL VIEW</div>
+            <h2 class="project-detail-title" id="project-detail-title"></h2>
+          </div>
+          <button class="project-detail-close" type="button" aria-label="Close project details">ESC / CLOSE</button>
+        </div>
+        <div class="project-detail-body">
+          <div class="project-detail-lang"></div>
+          <p class="project-detail-summary"></p>
+          <div class="project-detail-grid">
+            <div class="project-detail-box">
+              <h4>Architecture</h4>
+              <div class="project-detail-arch"></div>
+            </div>
+            <div class="project-detail-box">
+              <h4>Signal</h4>
+              <div class="project-detail-quip"></div>
+              <div class="project-detail-tags"></div>
+            </div>
+          </div>
+          <div class="project-detail-actions">
+            <a class="project-detail-github" target="_blank" rel="noopener noreferrer">OPEN GITHUB ↗</a>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    const panel = overlay.querySelector('.project-detail-panel');
+    const title = overlay.querySelector('.project-detail-title');
+    const lang = overlay.querySelector('.project-detail-lang');
+    const summary = overlay.querySelector('.project-detail-summary');
+    const arch = overlay.querySelector('.project-detail-arch');
+    const quip = overlay.querySelector('.project-detail-quip');
+    const tags = overlay.querySelector('.project-detail-tags');
+    const github = overlay.querySelector('.project-detail-github');
+    const close = overlay.querySelector('.project-detail-close');
+
+    let lastFocused = null;
+
+    function openCard(card) {
+      lastFocused = document.activeElement;
+      const name = card.querySelector('.d-proj-name')?.textContent.trim() || 'Project';
+      const language = card.querySelector('.d-proj-lang')?.textContent.trim() || '';
+      const description = card.querySelector('.d-proj-desc')?.textContent.trim() || '';
+      const architecture = card.querySelector('.d-proj-arch')?.textContent.trim() || 'Architecture details unavailable.';
+      const quote = card.querySelector('.d-proj-quip')?.textContent.trim() || '';
+      const link = card.querySelector('.d-proj-link')?.href || '#';
+
+      title.textContent = name;
+      lang.textContent = language;
+      summary.textContent = description;
+      arch.textContent = architecture;
+      quip.textContent = quote;
+      github.href = link;
+      tags.replaceChildren();
+
+      card.querySelectorAll('.d-proj-tag').forEach(tag => {
+        const chip = document.createElement('span');
+        chip.textContent = tag.textContent.trim();
+        tags.appendChild(chip);
+      });
+
+      overlay.classList.add('active');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      close.focus();
+    }
+
+    function closeCard() {
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    }
+
+    cards.forEach(card => {
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-haspopup', 'dialog');
+
+      card.addEventListener('click', (event) => {
+        if (event.target.closest('a, button')) return;
+        openCard(card);
+      });
+
+      card.addEventListener('keydown', (event) => {
+        if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('a, button')) {
+          event.preventDefault();
+          openCard(card);
+        }
+      });
+    });
+
+    close.addEventListener('click', closeCard);
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) closeCard();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && overlay.classList.contains('active')) closeCard();
+    });
+    panel.addEventListener('click', (event) => event.stopPropagation());
+  }
+
+
 })();
