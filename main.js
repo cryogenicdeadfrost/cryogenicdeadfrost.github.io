@@ -1,7 +1,7 @@
-// ============================================================
-// PORTFOLIO — main.js
-// Cinema Gate, Lava-Lamp Physics & Interactive Protocol Engine
-// ============================================================
+
+
+
+
 
 (function () {
   'use strict';
@@ -23,9 +23,9 @@
   let sectionMotionInitialized = false;
   let lavaAnimationId = null;
 
-  // ============================================================
-  // 1. THEME SWITCH & CINEMATIC ANIME GATE TRANSITION
-  // ============================================================
+  
+  
+  
   function updateThemeUI(isModern) {
     if (toggleLabel) {
       toggleLabel.textContent = isModern ? 'MODERN VIEW' : 'NORMAL VIEW';
@@ -105,9 +105,9 @@
     });
   }
 
-  // ============================================================
-  // 2. ADAPTIVE CURSOR THAT CHANGES LOOK PER SECTION
-  // ============================================================
+  
+  
+  
   let mouseX = -100, mouseY = -100;
   let ringX = -100, ringY = -100;
 
@@ -132,7 +132,7 @@
     }
     requestAnimationFrame(renderRing);
 
-    // Dynamic cursor changes across sections
+    
     const sections = document.querySelectorAll('.d-section, .d-hero');
     window.addEventListener('scroll', () => {
       if (html.getAttribute('data-theme') !== 'dark') return;
@@ -143,7 +143,7 @@
           activeSectionId = sec.id;
         }
       });
-      // Style cursor specifically for section theme
+      
       cursor.className = '';
       ring.className = '';
       if (activeSectionId) {
@@ -152,7 +152,7 @@
       }
     }, { passive: true });
 
-    // Hover interactive elements
+    
     const hoverTargets = 'a, button, .d-stat-card, .d-pub-card, .d-proj-card, .d-skill-item, .d-gh-repo-card, .d-edu-card';
     document.querySelectorAll(hoverTargets).forEach((el) => {
       el.addEventListener('mouseenter', () => {
@@ -166,9 +166,9 @@
     });
   }
 
-  // ============================================================
-  // 3. ORGANIC LAVA-LAMP FLUID CANVAS
-  // ============================================================
+  
+  
+  
   function initLavaLamp() {
     if (lavaInitialized || !particleCanvas) return;
     lavaInitialized = true;
@@ -185,13 +185,13 @@
     resize();
     window.addEventListener('resize', resize, { passive: true });
 
-    // Lava colors: Electric Cyan, Neon Magenta, Amber Gold, Acid Lime
+    
     const colors = [
-      'rgba(0, 240, 255,',   // Cyan
-      'rgba(255, 0, 85,',    // Neon Pink
-      'rgba(255, 230, 0,',   // Yellow
-      'rgba(57, 255, 20,',   // Acid Lime
-      'rgba(255, 0, 127,'    // Magenta
+      'rgba(0, 240, 255,',   
+      'rgba(255, 0, 85,',    
+      'rgba(255, 230, 0,',   
+      'rgba(57, 255, 20,',   
+      'rgba(255, 0, 127,'    
     ];
 
     for (let i = 0; i < BLOB_COUNT; i++) {
@@ -217,7 +217,7 @@
       for (let i = 0; i < blobs.length; i++) {
         const b = blobs[i];
 
-        // Soft cursor attraction/interaction
+        
         const dx = mouseX - b.x;
         const dy = mouseY - b.y;
         const dist = Math.hypot(dx, dy);
@@ -237,7 +237,7 @@
         if (b.y < -b.radius) b.y = h + b.radius;
         if (b.y > h + b.radius) b.y = -b.radius;
 
-        // Render soft fluid gradient blob
+        
         const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.radius);
         grad.addColorStop(0, b.color + b.alpha + ')');
         grad.addColorStop(0.6, b.color + (b.alpha * 0.4) + ')');
@@ -255,9 +255,9 @@
     renderLava();
   }
 
-  // ============================================================
-  // 4. PARALLAX EFFECTS
-  // ============================================================
+  
+  
+  
   function initParallax() {
     if (parallaxInitialized) return;
     parallaxInitialized = true;
@@ -292,9 +292,9 @@
     requestAnimationFrame(tick);
   }
 
-  // ============================================================
-  // 5. 3D TACTILE CARD TILT
-  // ============================================================
+  
+  
+  
   function initTilt() {
     if (tiltInitialized || window.matchMedia('(hover: none)').matches) return;
     tiltInitialized = true;
@@ -317,9 +317,9 @@
     });
   }
 
-  // ============================================================
-  // 6. TYPEWRITER (Grenoble / Systems Focused)
-  // ============================================================
+  
+  
+  
   let typedStarted = false;
   function initTypedText() {
     if (typedStarted) return;
@@ -367,9 +367,9 @@
     loop();
   }
 
-  // ============================================================
-  // 7. SCROLL REVEALS
-  // ============================================================
+  
+  
+  
   function initRevealObserver() {
     const reveals = document.querySelectorAll('.reveal');
     if (!reveals.length) return;
@@ -396,9 +396,9 @@
     });
   }
 
-  // ============================================================
-  // 8. SCROLL PROGRESS & AUTO-HIDE NAV
-  // ============================================================
+  
+  
+  
   let lastY = 0;
   const nav = document.getElementById('d-nav');
 
@@ -418,9 +418,9 @@
     lastY = curY;
   }, { passive: true });
 
-  // ============================================================
-  // 9. DYNAMIC GITHUB API LOADER
-  // ============================================================
+  
+  
+  
   async function fetchGitHubData() {
     try {
       const username = 'cryogenicdeadfrost';
@@ -488,9 +488,9 @@
     }
   }
 
-  // ============================================================
-  // 9.5 SECTION LIQUID MOTION + SCROLL RHYTHM VISUALIZER
-  // ============================================================
+  
+  
+  
   function initSectionMotion() {
     if (sectionMotionInitialized) return;
     const sections = document.querySelectorAll('.dark-content .d-section, .dark-content .d-hero');
@@ -550,9 +550,9 @@
     window.addEventListener('resize', update, { passive: true });
     update();
   }
-  // ============================================================
-  // 10. SYSTEM INIT
-  // ============================================================
+  
+  
+  
   function initFluidSectionPalette() {
     const sections = document.querySelectorAll('.dark-content .d-hero, .dark-content .d-section');
     const darkContent = document.querySelector('.dark-content');
@@ -652,9 +652,9 @@
     updatePalette();
   }
 
-  // ============================================================
-  // 9.7 CUSTOM MODERN SCROLLBAR
-  // ============================================================
+  
+  
+  
   let customScrollbarInitialized = false;
   function initCustomModernScrollbar() {
     if (customScrollbarInitialized) return;
@@ -670,6 +670,34 @@
     let pointerOffset = 0;
     let lastPointerY = 0;
     let lastPointerTime = 0;
+    let lastSectionIndex = -1;
+    const sectionPalettes = ['#00f0ff','#ffe600','#ff007f','#ff0033','#39ff14','#00f0ff','#ff007f','#7c3aed'];
+    const modernSections = Array.from(document.querySelectorAll('.dark-content .d-hero, .dark-content .d-section'));
+
+    function triggerSectionBarrier(sectionIndex) {
+      if (sectionIndex < 0) return;
+      const burst = document.createElement('span');
+      burst.className = 'section-speed-breaker';
+      burst.style.setProperty('--breaker-color', sectionPalettes[sectionIndex % sectionPalettes.length]);
+      document.body.appendChild(burst);
+      setTimeout(() => burst.remove(), 520);
+    }
+
+    function sectionAtScroll() {
+      if (!modernSections.length) return -1;
+      const center = window.innerHeight * .5;
+      let best = -1;
+      let distance = Infinity;
+      modernSections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        const d = Math.abs(rect.top + rect.height * .5 - center);
+        if (d < distance) {
+          distance = d;
+          best = index;
+        }
+      });
+      return best;
+    }
 
     function metrics() {
       const viewport = window.innerHeight;
@@ -698,6 +726,7 @@
       pointerOffset = event.clientY - rect.top;
       lastPointerY = event.clientY;
       lastPointerTime = performance.now();
+      lastSectionIndex = sectionAtScroll();
       thumb.style.setProperty('--drag-stretch', '1');
       wrap.classList.add('dragging');
       document.body.classList.add('scrollbar-dragging');
@@ -711,6 +740,13 @@
       const stretch = Math.min(1.65, 1 + speed * 0.42);
       thumb.style.setProperty('--drag-stretch', stretch.toFixed(2));
       setScrollFromPointer(event.clientY);
+      if (modernSections.length) {
+        const sectionIndex = sectionAtScroll();
+        if (sectionIndex !== lastSectionIndex) {
+          if (lastSectionIndex !== -1) triggerSectionBarrier(sectionIndex);
+          lastSectionIndex = sectionIndex;
+        }
+      }
       lastPointerY = event.clientY;
       lastPointerTime = now;
     });
@@ -775,7 +811,7 @@
     label.textContent = text;
   }
 
-  // Konami code Matrix rain
+  
   const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
   let kIdx = 0;
   document.addEventListener('keydown', (e) => {
@@ -845,9 +881,9 @@
 
   window.toggleMode = toggleMode;
 
-  // ============================================================
-  // 9.8 SCROLL SPEED BREAKER
-  // ============================================================
+  
+  
+  
   let scrollSpeedInitialized = false;
   function initScrollSpeedBreaker() {
     if (scrollSpeedInitialized) return;
@@ -904,9 +940,9 @@
     requestAnimationFrame(update);
   }
 
-  // ============================================================
-  // 9.9 PERSONA-STYLE PROJECT DETAILS
-  // ============================================================
+  
+  
+  
   let projectDetailsInitialized = false;
   function initProjectDetails() {
     if (projectDetailsInitialized) return;
