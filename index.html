@@ -215,7 +215,7 @@ GPA: <b>8.46 / 10</b>
 </p>
 <p class="small" style="text-align:center;">Last updated: November 2026 &nbsp;|&nbsp; abhradeepbasak03 [at] gmail.com</p>
 <p style="text-align:center;"><button class="normal-admin-button" type="button" id="admin-access-normal" aria-label="Open private admin control panel">ADMIN</button></p>
-<button class="normal-dimension-trigger" type="button" onclick="event.stopPropagation(); window.toggleMode()" aria-label="Open the alternate portfolio view" title="Switch to modern view"><span>WANT MORE</span><span aria-hidden="true"> &rarr;</span></button>
+<button class="normal-dimension-trigger" type="button" aria-label="Open the alternate portfolio view" title="Switch to modern view"><span>WANT MORE</span><span aria-hidden="true"> &rarr;</span></button>
 
 </div>
   
@@ -949,6 +949,28 @@ GPA: <b>8.46 / 10</b>
 
 </div>
 
+<script>
+  window.toggleMode = window.toggleMode || function () {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    const gate = document.getElementById('anime-gate-overlay');
+
+    const apply = () => {
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      const label = document.getElementById('toggle-label');
+      if (label) label.textContent = isDark ? 'NORMAL VIEW' : 'MODERN VIEW';
+    };
+
+    if (!gate) {
+      apply();
+      return;
+    }
+
+    gate.classList.add('active');
+    setTimeout(apply, 720);
+    setTimeout(() => gate.classList.remove('active'), 1680);
+  };
+</script>
 <script src="main.js"></script>
 </body>
 </html>
