@@ -534,7 +534,7 @@
 
             card.append(name, desc, meta);
             grid.append(card);
-          }
+          });
         }
 
         const totals = {};
@@ -961,25 +961,22 @@
     render();
   }
 
-  function initModeSwitch() {
-    document.addEventListener('click', (event) => {
-      const trigger = event.target.closest('.normal-dimension-trigger');
-      if (!trigger) return;
-
-      event.preventDefault();
-      toggleMode();
-    });
-  }
-
   document.addEventListener('DOMContentLoaded', () => {
-    initModeSwitch();
+    const normalDimensionTrigger = document.querySelector('.normal-dimension-trigger');
+    if (normalDimensionTrigger) {
+      normalDimensionTrigger.addEventListener('click', toggleMode);
+    }
+
     initRevealObserver();
     initNormalNavigation();
     initAdminAccess();
     setTimeGreeting();
 
-    html.setAttribute('data-theme', 'light');
-    updateThemeUI(false);
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    updateThemeUI(isDark);
+    if (isDark) {
+      initModernSystems();
+    }
 
     setTimeout(fetchGitHubData, 800);
   });

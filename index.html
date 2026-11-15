@@ -949,28 +949,7 @@ GPA: <b>8.46 / 10</b>
 
 </div>
 
-<script>
-  window.toggleMode = window.toggleMode || function () {
-    const html = document.documentElement;
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    const gate = document.getElementById('anime-gate-overlay');
 
-    const apply = () => {
-      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      const label = document.getElementById('toggle-label');
-      if (label) label.textContent = isDark ? 'NORMAL VIEW' : 'MODERN VIEW';
-    };
-
-    if (!gate) {
-      apply();
-      return;
-    }
-
-    gate.classList.add('active');
-    setTimeout(apply, 720);
-    setTimeout(() => gate.classList.remove('active'), 1680);
-  };
-</script>
 <script src="main.js"></script>
 </body>
 </html>
