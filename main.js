@@ -961,12 +961,18 @@
     render();
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const normalDimensionTrigger = document.querySelector('.normal-dimension-trigger');
-    if (normalDimensionTrigger) {
-      normalDimensionTrigger.addEventListener('click', toggleMode);
-    }
+  function initModeSwitch() {
+    document.addEventListener('click', (event) => {
+      const trigger = event.target.closest('.normal-dimension-trigger');
+      if (!trigger) return;
 
+      event.preventDefault();
+      toggleMode();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initModeSwitch();
     initRevealObserver();
     initNormalNavigation();
     initAdminAccess();
