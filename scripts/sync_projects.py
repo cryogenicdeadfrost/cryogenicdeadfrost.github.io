@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-import base64, hashlib, html, json, os, re, urllib.request
+import base64, hashlib, html, json, os, re, sys, urllib.request
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -9,6 +8,7 @@ OWNER=os.getenv("PORTFOLIO_OWNER","cryogenicdeadfrost")
 TOKEN=os.getenv("GITHUB_TOKEN","")
 OV=ROOT/"data/project-overrides.json"
 MANIFEST=ROOT/"data/project-list.json"
+STATE=ROOT/"data/github-repo-state.json"
 OUT=ROOT/"generated/projects.json"
 COLORS=[("#ff3b30","#ff9500"),("#00f0ff","#7c3aed"),("#39ff14","#00f0ff"),("#ff007f","#ffe600"),("#ff9500","#ff2d55"),("#5ac8fa","#af52de"),("#34c759","#30d158"),("#bf5af2","#64d2ff")]
 
@@ -20,6 +20,32 @@ def get(path):
     if TOKEN: req.add_header("Authorization","Bearer "+TOKEN)
     with urllib.request.urlopen(req,timeout=20) as r: return json.loads(r.read().decode())
 
+def repos():
+    out=[]
+    page=1
+    while True:
+        batch=get(f"/users/{OWNER}/repos?per_page=100&page={page}&type=owner&sort=updated")
+        if not batch: break
+        out += batch
+        page += 1
+    return [r for r in out if r["name"] not in {"cryogenicdeadfrost","cryogenicdeadfrost.github.io"} and not r.get("fork") and not r.get("archived") and r.get("visibility")=="public"]
+
+def state(rs):
+    return {r["name"]:{"updated_at":r.get("updated_at",""),"pushed_at":r.get("pushed_at","")} for r in rs}
+
+def read_state():
+    if not STATE.exists(): return {}
+    try: return json.loads(STATE.read_text()).get("repos",{})
+    except Exception: return {}
+
+def readme(name):
+    try: return base64.b64decode(get(f"/repos/{OWNER}/{name}/readme")["content"]).decode("utf-8","replace")
+    except Exception: return ""
+
+def langs(name):
+    try: return get(f"/repos/{OWNER}/{name}/languages")
+    except Exception: return {}
+
 def clean(s):
     s=re.sub(r"<!--.*?-->"," ",s,flags=re.S)
     s=re.sub(r"\x60\x60\x60.*?\x60\x60\x60"," ",s,flags=re.S)
@@ -29,14 +55,6 @@ def clean(s):
     s=re.sub(r"<[^>]+>"," ",s)
     s=re.sub(r"^\s*#+\s*","",s,flags=re.M)
     return re.sub(r"\s+"," ",s).strip()
-
-def readme(name):
-    try: return base64.b64decode(get(f"/repos/{OWNER}/{name}/readme")["content"]).decode("utf-8","replace")
-    except Exception: return ""
-
-def langs(name):
-    try: return get(f"/repos/{OWNER}/{name}/languages")
-    except Exception: return {}
 
 def build(repo,ov):
     name=repo["name"]
@@ -61,8 +79,7 @@ def normal(p):
     return f'<div class="proj">\n<h3><a href="{esc(p["url"])}">{esc(p["name"])}</a> ({esc(p["language_line"])})</h3>\n<p>{esc(p["details"])}</p>\n</div>'
 
 def modern(p,i):
-    cs=["#555555","#f59e0b","#00f0ff","#ff007f","#39ff14","#7c3aed"]
-    bars="".join(f'<span style="width:{x["percent"]}%;background:{cs[j%6]};"></span>' for j,x in enumerate(p["languages"][:4]))
+    bars="".join(f'<span style="width:{x["percent"]}%;background:{esc(p["accent"])};"></span>' for x in p["languages"][:4])
     tags="".join(f'<span class="d-proj-tag">{esc(x)}</span>' for x in p["tags"])
     return f'''<div class="d-proj-card reveal reveal-delay-{i%4+1}" style="--card-accent:{esc(p["accent"])};--card-secondary:{esc(p["secondary"])};">
 <div class="d-proj-name">{esc(p["name"])}</div><div class="d-proj-lang">{esc(p["language_line"])}</div>
@@ -71,56 +88,78 @@ def modern(p,i):
 <div class="d-proj-lang-bar">{bars}</div><div class="d-proj-quip">"{esc(p["quip"])}"</div></div>
 <div class="d-proj-footer"><a href="{esc(p["url"])}" class="d-proj-link" target="_blank" rel="noopener noreferrer">github ↗</a></div></div>'''
 
+def gh_card(p):
+    lang=p["languages"][0]["name"] if p["languages"] else "—"
+    return f'''<a href="{esc(p["url"])}" target="_blank" rel="noopener noreferrer" class="d-gh-repo-card">
+<div class="d-gh-repo-name">{esc(p["name"])}</div>
+<div class="d-gh-repo-desc">{esc(p["description"])}</div>
+<div class="d-gh-repo-meta"><span style="color:{esc(p["accent"])}">● {esc(lang)}</span></div>
+</a>'''
+
+def gh_langs(projects):
+    totals={}
+    for p in projects:
+        for x in p["languages"]: totals[x["name"]]=totals.get(x["name"],0)+x["bytes"]
+    total=sum(totals.values()) or 1
+    palette=["#555","#dea584","#3572A5","#3be133","#00ADD8","#7c3aed","#ff9500","#ff007f"]
+    rows=[]
+    for i,(name,bytes_) in enumerate(sorted(totals.items(),key=lambda x:x[1],reverse=True)[:6]):
+        pct=round(bytes_*100/total)
+        rows.append(f'<div class="d-gh-lang-item"><span class="d-gh-lang-dot" style="background:{palette[i%len(palette)]}"></span> {esc(name)} <span style="color:#4b5563">{pct}%</span></div>')
+    stops=[]; at=0
+    for i,(name,bytes_) in enumerate(sorted(totals.items(),key=lambda x:x[1],reverse=True)[:6]):
+        pct=bytes_*100/total
+        stops.append(f'{palette[i%len(palette)]} {at:.1f}% {at+pct:.1f}%')
+        at+=pct
+    return ",".join(stops),"
+".join(rows)
+
 def slot(page,start,end,body):
-    a=page.index(start)+len(start); b=page.index(end,a)
+    a=page.index(start)+len(start)
+    b=page.index(end,a)
     return page[:a]+"\n"+body+"\n"+page[b:]
 
-def main():
-    ov=json.loads(OV.read_text()) if OV.exists() else {}
+def sync():
+    rs=repos()
+    now=state(rs)
+    old=read_state()
+    current=set(now)
     tracked=set(json.loads(MANIFEST.read_text()).get("projects",[])) if MANIFEST.exists() else set()
-    repos=[]
-    page=1
-    while True:
-        batch=get(f"/users/{OWNER}/repos?per_page=100&page={page}&type=owner&sort=updated")
-        if not batch: break
-        repos+=batch
-        page+=1
+    added=sorted(current-set(old))
+    tracked.update(added)
+    tracked.intersection_update(current)
 
-    cutoff=datetime.now(timezone.utc)-timedelta(days=30)
-    public={}
-    for repo in repos:
-        name=repo["name"]
-        if name in {"cryogenicdeadfrost","cryogenicdeadfrost.github.io"}: continue
-        if repo.get("fork") or repo.get("archived") or repo.get("visibility")!="public": continue
-        public[name]=repo
-        created=repo.get("created_at","")
-        if "portfolio" in repo.get("topics",[]) or (created and datetime.fromisoformat(created.replace("Z","+00:00")) >= cutoff):
-            tracked.add(name)
-
-    missing=sorted(tracked-set(public))
-    previous=set()
-    if OUT.exists():
-        try: previous={x["name"] for x in json.loads(OUT.read_text())}
-        except Exception: pass
-    added=sorted(tracked-previous)
-    repos=[public[name] for name in sorted(tracked) if name in public]
-
+    ov=json.loads(OV.read_text()) if OV.exists() else {}
+    wanted=[r for r in rs if r["name"] in tracked]
     with ThreadPoolExecutor(max_workers=8) as pool:
-        projects=list(pool.map(lambda r:build(r,ov),repos))
+        projects=list(pool.map(lambda r:build(r,ov),wanted))
     projects.sort(key=lambda p:p["name"].lower())
 
     MANIFEST.parent.mkdir(exist_ok=True)
-    MANIFEST.write_text(json.dumps({"projects":sorted(tracked)},indent=2)+"\n")
+    MANIFEST.write_text(json.dumps({"projects":[p["name"] for p in projects]},indent=2)+"\n")
+    STATE.write_text(json.dumps({"repos":now},indent=2,sort_keys=True)+"\n")
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(json.dumps(projects,indent=2,ensure_ascii=False)+"\n")
 
     path=ROOT/"index.html"
     page=path.read_text()
-    page=slot(page,'<div data-projects="normal">','</div><!-- projects-normal-end -->','\n'.join(normal(p) for p in projects))
-    page=slot(page,'<div class="d-proj-grid" data-projects="modern">','</div><!-- projects-modern-end -->','\n'.join(modern(p,i) for i,p in enumerate(projects)))
+    page=slot(page,'<div data-projects="normal">','</div><!-- projects-normal-end -->',"\n".join(normal(p) for p in projects))
+    page=slot(page,'<div class="d-proj-grid" data-projects="modern">','</div><!-- projects-modern-end -->',"\n".join(modern(p,i) for i,p in enumerate(projects)))
+    page=slot(page,'<!-- github-repos-start -->','<!-- github-repos-end -->',"\n".join(gh_card(p) for p in projects))
+    donut,legend=gh_langs(projects)
+    page=re.sub(r'(<div class="d-gh-donut" id="gh-donut" style="background: )[^"]*(")',r'\1conic-gradient('+donut+r')\2',page)
+    page=slot(page,'<!-- github-langs-start -->','<!-- github-langs-end -->',legend)
     path.write_text(page)
+    print(f"portfolio sync: {len(projects)} projects, {len(added)} new repos")
 
-    print(f"portfolio sync: {len(projects)} projects")
-    print(f"cross-check: {len(tracked)} tracked, {len(missing)} unavailable, {len(added)} newly discovered")
+def main():
+    rs=repos()
+    current=state(rs)
+    old=read_state()
+    changed=current != old
+    if "--check" in sys.argv:
+        print(f"changed={'true' if changed else 'false'}")
+        return
+    sync()
 
 if __name__=="__main__": main()

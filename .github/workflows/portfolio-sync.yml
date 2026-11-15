@@ -21,9 +21,16 @@ jobs:
       - name: Python
         uses: actions/setup-python@v6
         with: {python-version: "3.12"}
-      - name: Sync projects
+      - name: Compare GitHub state
+        id: state
         env:
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PORTFOLIO_OWNER: cryogenicdeadfrost
+        run: python scripts/sync_projects.py --check >> "$GITHUB_OUTPUT"
+      - name: Sync projects
+        if: steps.state.outputs.changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PORTFOLIO_OWNER: cryogenicdeadfrost
         run: python scripts/sync_projects.py
       - name: Check generated site
@@ -38,14 +45,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -B bot/portfolio-sync
-          git add index.html generated/projects.json data/project-list.json
+          git add index.html generated/projects.json data/project-list.json data/github-repo-state.json
           git commit -m "chore(portfolio): sync projects from GitHub"
           git push --force-with-lease origin bot/portfolio-sync
       - name: Open or refresh PR
         if: steps.diff.outputs.changed == 'true'
         env:
-          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
-        run: gh pr create --repo cryogenicdeadfrost/cryogenicdeadfrost.github.io --base main --head bot/portfolio-sync --title "chore(portfolio): sync projects from GitHub" --body "Automated portfolio sync. GitHub metadata, README descriptions, and language data were refreshed by CI." 2>/dev/null || true
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr create --repo cryogenicdeadfrost/cryogenicdeadfrost.github.io --base main --head bot/portfolio-sync --title "chore(portfolio): sync projects from GitHub" --body "Automated portfolio cross-check. Existing projects, new repositories, README descriptions, and language data were refreshed by CI." 2>/dev/null || true
       - name: Nothing changed
         if: steps.diff.outputs.changed == 'false'
         run: echo "Portfolio is already in sync."

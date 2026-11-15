@@ -424,9 +424,10 @@
   async function fetchGitHubData() {
     try {
       const username = 'cryogenicdeadfrost';
-      const [userRes, reposRes] = await Promise.all([
+      const [userRes, reposRes, projectsRes] = await Promise.all([
         fetch(`https://api.github.com/users/${username}`),
-        fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=pushed`)
+        fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=pushed`),
+        fetch('generated/projects.json')
       ]);
 
       if (userRes.ok) {
@@ -441,7 +442,7 @@
 
         const statsContainer = document.getElementById('gh-stats-dynamic');
         if (statsContainer) {
-          const repoCount = Number.isFinite(Number(user.public_repos)) ? Number(user.public_repos) : 8;
+          const repoCount = Number.isFinite(Number(user.public_repos)) ? Number(user.public_repos) : 0;
           const followerCount = Number.isFinite(Number(user.followers)) ? Number(user.followers) : 0;
           const githubUrl = typeof user.html_url === 'string' && /^https:\/\/github\.com\/cryogenicdeadfrost\/?$/i.test(user.html_url)
             ? user.html_url
@@ -451,10 +452,9 @@
 
           const reposStat = document.createElement('span');
           reposStat.className = 'd-gh-stat';
-          reposStat.append(document.createTextNode(' '));
           const reposStrong = document.createElement('strong');
           reposStrong.textContent = String(repoCount);
-          reposStat.replaceChildren(reposStrong, document.createTextNode(' repos'));
+          reposStat.append(reposStrong, document.createTextNode(' repos'));
 
           const followersStat = document.createElement('span');
           followersStat.className = 'd-gh-stat';
@@ -474,20 +474,119 @@
         }
       }
 
+      let projects = [];
+      if (projectsRes.ok) {
+        const data = await projectsRes.json();
+        if (Array.isArray(data)) projects = data;
+      }
+
       if (reposRes.ok) {
         const repos = await reposRes.json();
-        if (Array.isArray(repos) && repos.length > 0) {
-          const commitsEl = document.getElementById('gh-stat-commits');
-          if (commitsEl) commitsEl.textContent = `${repos.length} Repos`;
-          const streakEl = document.getElementById('gh-stat-streak');
-          if (streakEl) streakEl.textContent = 'Active (2026)';
+        const publicRepos = Array.isArray(repos)
+          ? repos.filter(repo => !repo.fork && !repo.archived && repo.name !== 'cryogenicdeadfrost.github.io' && repo.name !== 'cryogenicdeadfrost')
+          : [];
+
+        const known = new Map(projects.map(project => [project.name, project]));
+        publicRepos.forEach(repo => {
+          if (!known.has(repo.name) && repo.description) {
+            known.set(repo.name, {
+              name: repo.name,
+              url: repo.html_url,
+              description: repo.description,
+              language_line: repo.language || '—',
+              languages: [],
+              accent: '#00f0ff',
+              secondary: '#7c3aed'
+            });
+          }
+        });
+
+        projects = [...known.values()];
+        const commitsEl = document.getElementById('gh-stat-commits');
+        if (commitsEl) commitsEl.textContent = `${projects.length} tracked projects`;
+        const streakEl = document.getElementById('gh-stat-streak');
+        if (streakEl) streakEl.textContent = 'Live';
+
+        const grid = document.getElementById('gh-repos-grid');
+        if (grid) {
+          grid.replaceChildren();
+          projects.forEach(project => {
+            const card = document.createElement('a');
+            card.href = project.url;
+            card.target = '_blank';
+            card.rel = 'noopener noreferrer';
+            card.className = 'd-gh-repo-card';
+
+            const name = document.createElement('div');
+            name.className = 'd-gh-repo-name';
+            name.textContent = project.name;
+
+            const desc = document.createElement('div');
+            desc.className = 'd-gh-repo-desc';
+            desc.textContent = project.description || 'GitHub project';
+
+            const meta = document.createElement('div');
+            meta.className = 'd-gh-repo-meta';
+            const lang = document.createElement('span');
+            lang.style.color = project.accent || '#00f0ff';
+            lang.textContent = `● ${project.language_line || '—'}`;
+            meta.append(lang);
+
+            card.append(name, desc, meta);
+            grid.append(card);
+          }
         }
+
+        const totals = {};
+        projects.forEach(project => {
+          (project.languages || []).forEach(lang => {
+            totals[lang.name] = (totals[lang.name] || 0) + Number(lang.bytes || 0);
+          });
+        });
+
+        const ordered = Object.entries(totals).sort((a, b) => b[1] - a[1]).slice(0, 6);
+        const total = ordered.reduce((sum, [, bytes]) => sum + bytes, 0) || 1;
+        const palette = ['#555', '#dea584', '#3572A5', '#3be133', '#00ADD8', '#7c3aed'];
+
+        const donut = document.getElementById('gh-donut');
+        const legend = document.getElementById('gh-lang-legend');
+        if (donut && ordered.length) {
+          let cursor = 0;
+          const stops = ordered.map(([name, bytes], index) => {
+            const pct = bytes * 100 / total;
+            const stop = `${palette[index % palette.length]} ${cursor.toFixed(1)}% ${(cursor + pct).toFixed(1)}%`;
+            cursor += pct;
+            return stop;
+          });
+          donut.style.background = `conic-gradient(${stops.join(', ')})`;
+        }
+
+        if (legend) {
+          legend.replaceChildren();
+          ordered.forEach(([name, bytes], index) => {
+            const row = document.createElement('div');
+            row.className = 'd-gh-lang-item';
+
+            const dot = document.createElement('span');
+            dot.className = 'd-gh-lang-dot';
+            dot.style.background = palette[index % palette.length];
+
+            const pct = document.createElement('span');
+            pct.style.color = '#4b5563';
+            pct.textContent = `${Math.round(bytes * 100 / total)}%`;
+
+            row.append(dot, document.createTextNode(` ${name} `), pct);
+            legend.append(row);
+          });
+        }
+
+        const primary = document.getElementById('gh-stat-most-used');
+        if (primary && ordered.length) primary.textContent = ordered[0][0];
       }
     } catch (e) {
-      console.log('GitHub API offline / rate limited; using fallback UI');
+      console.log('GitHub API offline / rate limited; using generated portfolio data');
     }
   }
-
   
   
   
