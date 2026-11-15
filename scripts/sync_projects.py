@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 import base64, hashlib, html, json, os, re, urllib.request
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 OWNER=os.getenv("PORTFOLIO_OWNER","cryogenicdeadfrost")
 TOKEN=os.getenv("GITHUB_TOKEN","")
 OV=ROOT/"data/project-overrides.json"
+MANIFEST=ROOT/"data/project-list.json"
 OUT=ROOT/"generated/projects.json"
 COLORS=[("#ff3b30","#ff9500"),("#00f0ff","#7c3aed"),("#39ff14","#00f0ff"),("#ff007f","#ffe600"),("#ff9500","#ff2d55"),("#5ac8fa","#af52de"),("#34c759","#30d158"),("#bf5af2","#64d2ff")]
 
@@ -29,17 +31,19 @@ def clean(s):
     return re.sub(r"\s+"," ",s).strip()
 
 def readme(name):
-    try:return base64.b64decode(get(f"/repos/{OWNER}/{name}/readme")["content"]).decode("utf-8","replace")
-    except Exception:return ""
+    try: return base64.b64decode(get(f"/repos/{OWNER}/{name}/readme")["content"]).decode("utf-8","replace")
+    except Exception: return ""
 
 def langs(name):
-    try:return get(f"/repos/{OWNER}/{name}/languages")
-    except Exception:return {}
+    try: return get(f"/repos/{OWNER}/{name}/languages")
+    except Exception: return {}
 
 def build(repo,ov):
-    name=repo["name"]; md=readme(name)
+    name=repo["name"]
+    md=readme(name)
     bits=[clean(x) for x in re.split(r"\n\s*\n+",md) if len(clean(x))>25]
-    raw=langs(name); total=sum(raw.values()) or 1
+    raw=langs(name)
+    total=sum(raw.values()) or 1
     ls=[{"name":k,"bytes":v,"percent":round(v*100/total,1)} for k,v in sorted(raw.items(),key=lambda x:x[1],reverse=True)][:6]
     short=(repo.get("description") or "").strip() or (bits[0] if bits else "A project from the lab.")
     detail=" ".join(x for x in bits if x.lower()!=short.lower())[:900].rstrip() or short
@@ -51,7 +55,7 @@ def build(repo,ov):
             "architecture":meta.get("architecture","README → implementation → output"),"quip":meta.get("quip","Built, tested, pushed."),
             "accent":colors[0],"secondary":colors[1]}
 
-def esc(x):return html.escape(str(x),quote=True)
+def esc(x): return html.escape(str(x),quote=True)
 
 def normal(p):
     return f'<div class="proj">\n<h3><a href="{esc(p["url"])}">{esc(p["name"])}</a> ({esc(p["language_line"])})</h3>\n<p>{esc(p["details"])}</p>\n</div>'
@@ -73,19 +77,50 @@ def slot(page,start,end,body):
 
 def main():
     ov=json.loads(OV.read_text()) if OV.exists() else {}
-    repos=[]; page=1
+    tracked=set(json.loads(MANIFEST.read_text()).get("projects",[])) if MANIFEST.exists() else set()
+    repos=[]
+    page=1
     while True:
         batch=get(f"/users/{OWNER}/repos?per_page=100&page={page}&type=owner&sort=updated")
-        if not batch:break
-        repos+=batch; page+=1
-    repos=[r for r in repos if r["name"]!="cryogenicdeadfrost.github.io" and not r.get("fork") and not r.get("archived") and r.get("visibility")=="public" and ("portfolio" in r.get("topics",[]) or r["name"] in ov)]
-    with ThreadPoolExecutor(max_workers=8) as pool: projects=list(pool.map(lambda r:build(r,ov),repos))
+        if not batch: break
+        repos+=batch
+        page+=1
+
+    cutoff=datetime.now(timezone.utc)-timedelta(days=30)
+    public={}
+    for repo in repos:
+        name=repo["name"]
+        if name in {"cryogenicdeadfrost","cryogenicdeadfrost.github.io"}: continue
+        if repo.get("fork") or repo.get("archived") or repo.get("visibility")!="public": continue
+        public[name]=repo
+        created=repo.get("created_at","")
+        if "portfolio" in repo.get("topics",[]) or (created and datetime.fromisoformat(created.replace("Z","+00:00")) >= cutoff):
+            tracked.add(name)
+
+    missing=sorted(tracked-set(public))
+    previous=set()
+    if OUT.exists():
+        try: previous={x["name"] for x in json.loads(OUT.read_text())}
+        except Exception: pass
+    added=sorted(tracked-previous)
+    repos=[public[name] for name in sorted(tracked) if name in public]
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        projects=list(pool.map(lambda r:build(r,ov),repos))
     projects.sort(key=lambda p:p["name"].lower())
-    OUT.parent.mkdir(exist_ok=True); OUT.write_text(json.dumps(projects,indent=2,ensure_ascii=False)+"\n")
-    path=ROOT/"index.html"; page=path.read_text()
+
+    MANIFEST.parent.mkdir(exist_ok=True)
+    MANIFEST.write_text(json.dumps({"projects":sorted(tracked)},indent=2)+"\n")
+    OUT.parent.mkdir(exist_ok=True)
+    OUT.write_text(json.dumps(projects,indent=2,ensure_ascii=False)+"\n")
+
+    path=ROOT/"index.html"
+    page=path.read_text()
     page=slot(page,'<div data-projects="normal">','</div><!-- projects-normal-end -->','\n'.join(normal(p) for p in projects))
     page=slot(page,'<div class="d-proj-grid" data-projects="modern">','</div><!-- projects-modern-end -->','\n'.join(modern(p,i) for i,p in enumerate(projects)))
     path.write_text(page)
-    print(f"portfolio sync: {len(projects)} projects")
 
-if __name__=="__main__":main()
+    print(f"portfolio sync: {len(projects)} projects")
+    print(f"cross-check: {len(tracked)} tracked, {len(missing)} unavailable, {len(added)} newly discovered")
+
+if __name__=="__main__": main()
