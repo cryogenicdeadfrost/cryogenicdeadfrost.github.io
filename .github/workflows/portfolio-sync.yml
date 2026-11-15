@@ -3,7 +3,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: "17 */6 * * *"
+    - cron: "17 */2 * * *"
   workflow_dispatch:
 concurrency:
   group: portfolio-sync
@@ -38,7 +38,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -B bot/portfolio-sync
-          git add index.html generated/projects.json
+          git add index.html generated/projects.json data/project-list.json
           git commit -m "chore(portfolio): sync projects from GitHub"
           git push --force-with-lease origin bot/portfolio-sync
       - name: Open or refresh PR
