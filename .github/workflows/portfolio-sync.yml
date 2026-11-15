@@ -1,0 +1,51 @@
+name: Portfolio Sync
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+concurrency:
+  group: portfolio-sync
+  cancel-in-progress: true
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with: {fetch-depth: 0}
+      - name: Python
+        uses: actions/setup-python@v6
+        with: {python-version: "3.12"}
+      - name: Sync projects
+        env:
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          PORTFOLIO_OWNER: cryogenicdeadfrost
+        run: python scripts/sync_projects.py
+      - name: Check generated site
+        run: python scripts/check_site.py
+      - name: Detect changes
+        id: diff
+        run: |
+          if git diff --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; else echo "changed=true" >> "$GITHUB_OUTPUT"; git diff --stat; fi
+      - name: Push sync branch
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B bot/portfolio-sync
+          git add index.html generated/projects.json
+          git commit -m "chore(portfolio): sync projects from GitHub"
+          git push --force-with-lease origin bot/portfolio-sync
+      - name: Open or refresh PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+        run: gh pr create --repo cryogenicdeadfrost/cryogenicdeadfrost.github.io --base main --head bot/portfolio-sync --title "chore(portfolio): sync projects from GitHub" --body "Automated portfolio sync. GitHub metadata, README descriptions, and language data were refreshed by CI." 2>/dev/null || true
+      - name: Nothing changed
+        if: steps.diff.outputs.changed == 'false'
+        run: echo "Portfolio is already in sync."
