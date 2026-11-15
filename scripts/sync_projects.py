@@ -91,7 +91,8 @@ def main():
             wanted.add(name)
 
     missing=sorted(wanted-set(public))
-    added=sorted(set(public)-set(json.loads(OUT.read_text()).__iter__()) if OUT.exists() else set())
+    previous={x["name"] for x in json.loads(OUT.read_text())} if OUT.exists() else set()
+    added=sorted(set(public)-previous)
     repos=[public[name] for name in sorted(wanted) if name in public]
 
     with ThreadPoolExecutor(max_workers=8) as pool: projects=list(pool.map(lambda r:build(r,ov),repos))
