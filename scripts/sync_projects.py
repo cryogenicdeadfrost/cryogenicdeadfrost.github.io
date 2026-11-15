@@ -73,19 +73,37 @@ def slot(page,start,end,body):
 
 def main():
     ov=json.loads(OV.read_text()) if OV.exists() else {}
+    manifest=ROOT/"data/project-list.json"
+    wanted=set(json.loads(manifest.read_text()).get("projects",[])) if manifest.exists() else set()
     repos=[]; page=1
     while True:
         batch=get(f"/users/{OWNER}/repos?per_page=100&page={page}&type=owner&sort=updated")
         if not batch:break
         repos+=batch; page+=1
-    repos=[r for r in repos if r["name"]!="cryogenicdeadfrost.github.io" and not r.get("fork") and not r.get("archived") and r.get("visibility")=="public" and ("portfolio" in r.get("topics",[]) or r["name"] in ov)]
+
+    public={r["name"]:r for r in repos if r["name"]!="cryogenicdeadfrost.github.io" and not r.get("fork") and not r.get("archived") and r.get("visibility")=="public"}
+    from datetime import datetime, timedelta, timezone
+    fresh=datetime.now(timezone.utc)-timedelta(days=30)
+
+    for name,repo in public.items():
+        created=repo.get("created_at","")
+        if name in wanted or "portfolio" in repo.get("topics",[]) or (created and datetime.fromisoformat(created.replace("Z","+00:00")) >= fresh):
+            wanted.add(name)
+
+    missing=sorted(wanted-set(public))
+    added=sorted(set(public)-set(json.loads(OUT.read_text()).__iter__()) if OUT.exists() else set())
+    repos=[public[name] for name in sorted(wanted) if name in public]
+
     with ThreadPoolExecutor(max_workers=8) as pool: projects=list(pool.map(lambda r:build(r,ov),repos))
     projects.sort(key=lambda p:p["name"].lower())
+
+    manifest.write_text(json.dumps({"projects":sorted(wanted)},indent=2)+"\n")
     OUT.parent.mkdir(exist_ok=True); OUT.write_text(json.dumps(projects,indent=2,ensure_ascii=False)+"\n")
     path=ROOT/"index.html"; page=path.read_text()
     page=slot(page,'<div data-projects="normal">','</div><!-- projects-normal-end -->','\n'.join(normal(p) for p in projects))
     page=slot(page,'<div class="d-proj-grid" data-projects="modern">','</div><!-- projects-modern-end -->','\n'.join(modern(p,i) for i,p in enumerate(projects)))
     path.write_text(page)
     print(f"portfolio sync: {len(projects)} projects")
+    print(f"cross-check: {len(wanted)} tracked, {len(missing)} unavailable, {len(added)} newly discovered")
 
 if __name__=="__main__":main()
