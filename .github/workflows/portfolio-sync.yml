@@ -24,13 +24,13 @@ jobs:
       - name: Compare GitHub state
         id: state
         env:
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PORTFOLIO_OWNER: cryogenicdeadfrost
         run: python scripts/sync_projects.py --check >> "$GITHUB_OUTPUT"
       - name: Sync projects
         if: steps.state.outputs.changed == 'true'
         env:
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PORTFOLIO_OWNER: cryogenicdeadfrost
         run: python scripts/sync_projects.py
       - name: Check generated site
@@ -51,7 +51,7 @@ jobs:
       - name: Open or refresh PR
         if: steps.diff.outputs.changed == 'true'
         env:
-          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh pr create --repo cryogenicdeadfrost/cryogenicdeadfrost.github.io --base main --head bot/portfolio-sync --title "chore(portfolio): sync projects from GitHub" --body "Automated portfolio cross-check. Existing projects, new repositories, README descriptions, and language data were refreshed by CI." 2>/dev/null || true
       - name: Nothing changed
         if: steps.diff.outputs.changed == 'false'
