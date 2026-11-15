@@ -1,0 +1,10 @@
+{
+"TinyMoE":{"tags":["sparse-moe","systems-ml","bare-metal"],"architecture":"Tokenizer → Embed → Gating → Top-K Experts → Output","quip":"No frameworks. No excuses. Just raw malloc, cache lines, and ambition.","colors":["#ff3b30","#ff9500"]},
+"ThreatWeave":{"tags":["nids","dnn-gnn","ieee"],"architecture":"Packets → C Fast-Path → DNN-GNN → OCaml Orchestrator","quip":"99.64% accuracy. The remaining 0.36% keeps me awake in the lab.","colors":["#00f0ff","#7c3aed"]},
+"PoisonIvy":{"tags":["adversarial-ml","poisoning"],"architecture":"Dataset → Corrupt → Perturb → Evaluate","quip":"Teaching neural nets that their training data is actively hostile.","colors":["#39ff14","#00f0ff"]},
+"MDCN-Military-Distributed-Communication-Network-":{"tags":["distributed","fault-tolerant"],"architecture":"Discovery → Mesh → Encrypt → Route","quip":"If one node gets wiped out, the topology doesn't flinch. As intended.","colors":["#ff007f","#ffe600"]},
+"SyncStream":{"tags":["gstreamer","srtp","low-latency"],"architecture":"Cameras → GStreamer → SRTP → TLS Sync","quip":"End-to-end encrypted, pthreads-isolated, clean valgrind memcheck.","colors":["#ff9500","#ff2d55"]},
+"Project_RedTooth":{"tags":["bluetooth","rust","systems"],"architecture":"Rust API → FFI → C++ Win32 → BT Stack","quip":"Making Bluetooth slightly less painful, one memory-safe FFI at a time.","colors":["#5ac8fa","#af52de"]},
+"NexLog-Network-Extractor-And-Logger":{"tags":["pcap","entropy","100k-pps"],"architecture":"Raw Socket → Parse → Entropy → Alert","quip":"100K packets/sec with zero drops. Shannon would approve.","colors":["#34c759","#30d158"]},
+"DirectoryNator":{"tags":["filesystem","io","syscalls"],"architecture":"Syscalls → Scanner → Index → Output","quip":"Because waiting for standard recursive tools is a waste of CPU cycles.","colors":["#bf5af2","#64d2ff"]}
+}
