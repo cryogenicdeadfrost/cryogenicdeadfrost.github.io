@@ -81,7 +81,7 @@ def main():
         if not batch:break
         repos+=batch; page+=1
 
-    public={r["name"]:r for r in repos if r["name"]!="cryogenicdeadfrost.github.io" and not r.get("fork") and not r.get("archived") and r.get("visibility")=="public"}
+    public={r["name"]:r for r in repos if r["name"] not in {"cryogenicdeadfrost","cryogenicdeadfrost.github.io"} and not r.get("fork") and not r.get("archived") and r.get("visibility")=="public"}
     from datetime import datetime, timedelta, timezone
     fresh=datetime.now(timezone.utc)-timedelta(days=30)
 
